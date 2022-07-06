@@ -1,11 +1,10 @@
-package org.erlik.payMyBuddy.core;
+package org.erlik.payMyBuddy.domains.models;
 
 import java.util.Locale;
 import javax.money.Monetary;
 import javax.money.MonetaryException;
 import javax.money.UnknownCurrencyException;
 import javax.money.format.AmountFormatQueryBuilder;
-import org.erlik.payMyBuddy.domains.models.Amount;
 import org.javamoney.moneta.format.CurrencyStyle;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -16,13 +15,13 @@ public class AmountUnitTest {
 
     @Test
     @DisplayName("when I init an Amount then it use euros by default")
-    public void useEurosByDefault() {
+    public void useEurosByDefaultTest() {
         //GIVEN
-        var amountValue = 5.0;
-        var currencyCode = "EUR";
+        final var amountValue = 5.0;
+        final var currencyCode = "EUR";
 
         //WHEN
-        var response = new Amount(amountValue);
+        final var response = new Amount(amountValue);
 
         //THEN
         Assertions.assertEquals(amountValue, response.numericAmount());
@@ -32,13 +31,13 @@ public class AmountUnitTest {
 
     @Test
     @DisplayName("given I init an Amount when I specify a currency then it use this currency")
-    public void initAmountWithSpecificCurrency() {
+    public void initAmountWithSpecificCurrencyTest() {
         //GIVEN
-        var amountValue = 5.0;
-        var currencyCode = "USD";
+        final var amountValue = 5.0;
+        final var currencyCode = "USD";
 
         //WHEN
-        var response = new Amount(amountValue, currencyCode);
+        final var response = new Amount(amountValue, currencyCode);
 
         //THEN
         Assertions.assertEquals(amountValue, response.numericAmount());
@@ -48,10 +47,10 @@ public class AmountUnitTest {
 
     @Test
     @DisplayName("given I init an Amount when I specify an invalid currency then it throw an UnknownCurrencyException")
-    public void initAmountWithInvalidCurrencyThrowException() {
+    public void initAmountWithInvalidCurrencyThrowExceptionTest() {
         //GIVEN
-        var amountValue = 5.0;
-        var invalidCurrencyCode = "AAA";
+        final var amountValue = 5.0;
+        final var invalidCurrencyCode = "AAA";
 
         //WHEN
         Executable executable = () -> new Amount(amountValue, invalidCurrencyCode);
@@ -62,16 +61,16 @@ public class AmountUnitTest {
 
     @Test
     @DisplayName("given I init an Amount when I specify a custom format then it is correctly formated")
-    public void initAmountWithSpecificLocale() {
+    public void initAmountWithSpecificLocaleTest() {
         //GIVEN
-        var amountValue = 55.0;
-        var currencyCode = "EUR";
-        var customFormat = AmountFormatQueryBuilder.
+        final var amountValue = 55.0;
+        final var currencyCode = "EUR";
+        final var customFormat = AmountFormatQueryBuilder.
             of(Locale.US).set(CurrencyStyle.NAME).set("pattern", "000.00 ¤").build();
 
         //WHEN
-        var response = new Amount(amountValue);
-        var formattedResponse = response.format(customFormat);
+        final var response = new Amount(amountValue);
+        final var formattedResponse = response.format(customFormat);
 
         //THEN
         Assertions.assertEquals(amountValue, response.numericAmount());
@@ -82,14 +81,14 @@ public class AmountUnitTest {
 
     @Test
     @DisplayName("given I init an Amount when I subtract an amount then it is correctly calculated")
-    public void subtractAmount() {
+    public void subtractAmountTest() {
         //GIVEN
-        var initialAmount = new Amount(50);
-        var subtractAmount = new Amount(5);
-        var expectedAmount = new Amount(45);
+        final var initialAmount = new Amount(50);
+        final var subtractAmount = new Amount(5);
+        final var expectedAmount = new Amount(45);
 
         //WHEN
-        var response = initialAmount.subtract(subtractAmount);
+        final var response = initialAmount.subtract(subtractAmount);
 
         //THEN
         Assertions.assertEquals(expectedAmount.toString(), response.toString());
@@ -97,14 +96,14 @@ public class AmountUnitTest {
 
     @Test
     @DisplayName("given I init an Amount when I add an amount then it is correctly calculated")
-    public void addAmount() {
+    public void addAmountTest() {
         //GIVEN
-        var initialAmount = new Amount(50);
-        var subtractAmount = new Amount(5);
-        var expectedAmount = new Amount(55);
+        final var initialAmount = new Amount(50);
+        final var subtractAmount = new Amount(5);
+        final var expectedAmount = new Amount(55);
 
         //WHEN
-        var response = initialAmount.add(subtractAmount);
+        final var response = initialAmount.add(subtractAmount);
 
         //THEN
         Assertions.assertEquals(expectedAmount.toString(), response.toString());
@@ -112,10 +111,10 @@ public class AmountUnitTest {
 
     @Test
     @DisplayName("given I init an Amount when I subtract an amount with a different currency then it throw a MonetaryException")
-    public void throwMonetaryException() {
+    public void throwMonetaryExceptionTest() {
         //GIVEN
-        var initialAmount = new Amount(50, "EUR");
-        var subtractAmount = new Amount(5, "USD");
+        final var initialAmount = new Amount(50, "EUR");
+        final var subtractAmount = new Amount(5, "USD");
 
         //WHEN
         Executable subtractExecutable = () -> initialAmount.subtract(subtractAmount);
@@ -130,14 +129,14 @@ public class AmountUnitTest {
     @DisplayName(
         "given I init a negative Amount when I test if it's negative then it's return true " +
             "MonetaryException")
-    public void amountIsNegative() {
+    public void amountIsNegativeTest() {
         //GIVEN
-        var positiveAmount = new Amount(5);
-        var negativeAmount = new Amount(-5);
+        final var positiveAmount = new Amount(5);
+        final var negativeAmount = new Amount(-5);
 
         //WHEN
-        var positiveAmountResult = positiveAmount.isNegative();
-        var negativeAmountResult = negativeAmount.isNegative();
+        final var positiveAmountResult = positiveAmount.isNegative();
+        final var negativeAmountResult = negativeAmount.isNegative();
 
         //THEN
         Assertions.assertFalse(positiveAmountResult);

@@ -5,22 +5,23 @@ import org.junit.jupiter.api.Assertions;
 
 public class ConsumerMock {
 
+    public static Consumer create() {
+        return new Consumer(TestFaker.fake().name().firstName(),
+            TestFaker.fake().name().lastName(),
+            TestFaker.fake().internet().emailAddress(),
+            TestFaker.randomAlphaNumericString());
+    }
+
     public static Consumer inactive() {
-      var consumer = new Consumer(TestFaker.fake().name().firstName(),
-          TestFaker.fake().name().lastName(),
-          TestFaker.fake().internet().emailAddress(),
-          TestFaker.randomAlphaNumericString());
+        var consumer = create();
 
         Assertions.assertFalse(consumer.isActive());
         return consumer;
     }
 
     public static Consumer active() {
-      var consumer = new Consumer(TestFaker.fake().name().firstName(),
-          TestFaker.fake().name().lastName(),
-          TestFaker.fake().internet().emailAddress(),
-          TestFaker.randomAlphaNumericString())
-          .active();
+
+        var consumer = create().active();
 
         Assertions.assertTrue(consumer.isActive());
         return consumer;

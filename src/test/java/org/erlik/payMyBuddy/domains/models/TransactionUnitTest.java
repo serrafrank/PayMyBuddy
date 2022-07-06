@@ -1,11 +1,9 @@
-package org.erlik.payMyBuddy.core;
+package org.erlik.payMyBuddy.domains.models;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 import org.erlik.payMyBuddy.domains.exceptions.AmountCouldNotBeNegativeException;
 import org.erlik.payMyBuddy.domains.exceptions.ConsumerNotActivateException;
-import org.erlik.payMyBuddy.domains.models.Amount;
-import org.erlik.payMyBuddy.domains.models.Transaction;
 import org.erlik.payMyBuddy.mock.ConsumerMock;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -16,15 +14,15 @@ public class TransactionUnitTest {
 
     @Test
     @DisplayName("a transaction is correctly init")
-    public void initTransaction() {
+    public void initTransactionTest() {
 
         //GIVEN
-        var debtor = ConsumerMock.active();
-        var creditor = ConsumerMock.active();
-        var amount = new Amount(1);
+        final var debtor = ConsumerMock.active();
+        final var creditor = ConsumerMock.active();
+        final var amount = new Amount(1);
 
         //WHEN
-        var response = new Transaction(amount, debtor, creditor);
+        final var response = new Transaction(amount, debtor, creditor);
 
         //THEN
         Assertions.assertEquals(debtor, response.debtor());
@@ -40,12 +38,12 @@ public class TransactionUnitTest {
 
     @Test
     @DisplayName("when amount is negative then throws AmountCouldNotBeNegativeException")
-    public void negativeTransactionAmountThrowsAmountCouldNotBeNegativeException() {
+    public void negativeTransactionAmountThrowsAmountCouldNotBeNegativeExceptionTest() {
 
         //GIVEN
-        var debtor = ConsumerMock.active();
-        var creditor = ConsumerMock.active();
-        var amount = new Amount(-1, "USD");
+        final var debtor = ConsumerMock.active();
+        final var creditor = ConsumerMock.active();
+        final var amount = new Amount(-1, "USD");
 
         //WHEN
         Executable executable = () -> new Transaction(amount, debtor, creditor);
@@ -59,12 +57,12 @@ public class TransactionUnitTest {
 
     @Test
     @DisplayName("when debtor is not active then throws ConsumerNotActivateException")
-    public void inactiveDebtorThrowsConsumerNotActivateException() {
+    public void inactiveDebtorThrowsConsumerNotActivateExceptionTest() {
 
         //GIVEN
-        var debtor = ConsumerMock.inactive();
-        var creditor = ConsumerMock.active();
-        var amount = new Amount(1);
+        final var debtor = ConsumerMock.inactive();
+        final var creditor = ConsumerMock.active();
+        final var amount = new Amount(1);
 
         //WHEN
         Executable executable = () -> new Transaction(amount, debtor, creditor);
@@ -78,12 +76,12 @@ public class TransactionUnitTest {
 
     @Test
     @DisplayName("when creditor is not active than throws ConsumerNotActivateException")
-    public void inactiveCreditorThrowsConsumerNotActivateException() {
+    public void inactiveCreditorThrowsConsumerNotActivateExceptionTest() {
 
         //GIVEN
-        var debtor = ConsumerMock.active();
-        var creditor = ConsumerMock.inactive();
-        var amount = new Amount(1);
+        final var debtor = ConsumerMock.active();
+        final var creditor = ConsumerMock.inactive();
+        final var amount = new Amount(1);
 
         //WHEN
         Executable executable = () -> new Transaction(amount, debtor, creditor);

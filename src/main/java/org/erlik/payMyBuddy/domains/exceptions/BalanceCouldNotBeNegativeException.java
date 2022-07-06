@@ -1,11 +1,14 @@
 package org.erlik.payMyBuddy.domains.exceptions;
 
+import lombok.NonNull;
+import org.erlik.payMyBuddy.core.BadRequestException;
 import org.erlik.payMyBuddy.domains.models.Amount;
 
 public class BalanceCouldNotBeNegativeException
-    extends DomainException {
+    extends BadRequestException {
 
-    public BalanceCouldNotBeNegativeException(Amount balance, Amount transactionAmount) {
+    public BalanceCouldNotBeNegativeException(@NonNull Amount balance,
+                                              @NonNull Amount transactionAmount) {
         super("Balance could not be negative. Current balance : "
             + balance
             + " , Transaction amount"

@@ -1,7 +1,9 @@
 package org.erlik.payMyBuddy.domains.exceptions;
 
+import org.erlik.payMyBuddy.core.BadRequestException;
+
 public class InvalidEmailAddressException
-    extends DomainException {
+    extends BadRequestException {
 
     public InvalidEmailAddressException(String email) {
         super("Email locale is invalide : " + email);

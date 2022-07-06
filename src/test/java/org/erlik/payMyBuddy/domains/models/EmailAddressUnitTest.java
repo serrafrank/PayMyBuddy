@@ -1,8 +1,7 @@
-package org.erlik.payMyBuddy.core;
+package org.erlik.payMyBuddy.domains.models;
 
 import org.erlik.payMyBuddy.domains.exceptions.ExcludeDomainNameException;
 import org.erlik.payMyBuddy.domains.exceptions.InvalidEmailAddressException;
-import org.erlik.payMyBuddy.domains.models.EmailAddress;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,7 +10,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 public class EmailAddressUnitTest {
 
-    private static Object[][] validEmailsProvider() {
+    private static Object[][] validEmailsProviderTest() {
         return new Object[][]{
             {"username@domain.com"},
             {"username@domain.co.in"},
@@ -21,7 +20,7 @@ public class EmailAddressUnitTest {
             };
     }
 
-    private static Object[][] invalidEmailProvider() {
+    private static Object[][] invalidEmailProviderTest() {
         return new Object[][]{
             {"username@domain"},
             {".username@domain.com"},
@@ -49,7 +48,7 @@ public class EmailAddressUnitTest {
 
     @Test
     @DisplayName("when I use an exclude domainName then it throws an ExcludeDomainNameException")
-    public void initWithExcludDomainNameThrowExcludeDomainNameException() {
+    public void initWithExcludDomainNameThrowExcludeDomainNameExceptionTest() {
         Assertions.assertThrows(ExcludeDomainNameException.class,
             () -> new EmailAddress("email@domain.org", "domain.org"));
     }

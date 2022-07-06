@@ -1,9 +1,12 @@
 package org.erlik.payMyBuddy.domains.exceptions;
 
-public class ConsumerNotActivateException
-    extends DomainException {
+import lombok.NonNull;
+import org.erlik.payMyBuddy.core.BadRequestException;
 
-    public ConsumerNotActivateException(String msg) {
+public class ConsumerNotActivateException
+    extends BadRequestException {
+
+    public ConsumerNotActivateException(@NonNull String msg) {
         super(msg);
     }
 }

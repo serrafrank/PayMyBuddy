@@ -1,8 +1,6 @@
-package org.erlik.payMyBuddy.core;
+package org.erlik.payMyBuddy.domains.models;
 
 import org.erlik.payMyBuddy.domains.exceptions.InvalidEmailAddressException;
-import org.erlik.payMyBuddy.domains.models.Account;
-import org.erlik.payMyBuddy.domains.models.Consumer;
 import org.erlik.payMyBuddy.mock.ConsumerMock;
 import org.erlik.payMyBuddy.mock.TestFaker;
 import org.junit.jupiter.api.Assertions;
@@ -14,7 +12,7 @@ public class ConsumerUnitTest {
 
     @Test
     @DisplayName("when I create a new consumer then it is inactive")
-    public void newConsumerIsInactive() {
+    public void newConsumerIsInactiveTest() {
         //GIVEN
         String firstname = TestFaker.fake().name().firstName();
         String lastname = TestFaker.fake().name().lastName();
@@ -22,7 +20,7 @@ public class ConsumerUnitTest {
         String password = TestFaker.randomAlphaNumericString();
 
         //WHEN
-        var consumer = new Consumer(firstname, lastname, login, password);
+        final var consumer = new Consumer(firstname, lastname, login, password);
 
         //THEN
         Assertions.assertEquals(firstname, consumer.firstname());
@@ -30,18 +28,19 @@ public class ConsumerUnitTest {
         Assertions.assertEquals(login, consumer.emailAddress().toString());
         Assertions.assertEquals(password, consumer.password());
         Assertions.assertEquals(new Account(), consumer.account());
+        Assertions.assertTrue(consumer.friends().isEmpty());
         Assertions.assertFalse(consumer.isActive());
     }
 
     @Test
     @DisplayName("when I update an inactive consumer then it is active")
-    public void updateConsumerToActive() {
+    public void updateConsumerToActiveTest() {
         //GIVEN
-        var consumer = ConsumerMock.inactive();
+        final var consumer = ConsumerMock.inactive();
         Assertions.assertFalse(consumer.isActive());
 
         //WHEN
-        var activatedConsumer = consumer.active();
+        final var activatedConsumer = consumer.active();
 
         //THEN
         Assertions.assertEquals(consumer.firstname(), activatedConsumer.firstname());
@@ -49,18 +48,19 @@ public class ConsumerUnitTest {
         Assertions.assertEquals(consumer.emailAddress(), activatedConsumer.emailAddress());
         Assertions.assertEquals(consumer.password(), activatedConsumer.password());
         Assertions.assertEquals(consumer.account(), activatedConsumer.account());
+        Assertions.assertTrue(consumer.friends().isEmpty());
         Assertions.assertTrue(activatedConsumer.isActive());
     }
 
     @Test
     @DisplayName("when I update an active consumer then it is inactive")
-    public void updateConsumerToInactive() {
+    public void updateConsumerToInactiveTest() {
         //GIVEN
-        var consumer = ConsumerMock.active();
+        final var consumer = ConsumerMock.active();
         Assertions.assertTrue(consumer.isActive());
 
         //WHEN
-        var inactivatedConsumer = consumer.inactive();
+        final var inactivatedConsumer = consumer.inactive();
 
         //THEN
         Assertions.assertEquals(consumer.firstname(), inactivatedConsumer.firstname());
@@ -68,14 +68,15 @@ public class ConsumerUnitTest {
         Assertions.assertEquals(consumer.emailAddress(), inactivatedConsumer.emailAddress());
         Assertions.assertEquals(consumer.password(), inactivatedConsumer.password());
         Assertions.assertEquals(consumer.account(), inactivatedConsumer.account());
+        Assertions.assertTrue(consumer.friends().isEmpty());
         Assertions.assertFalse(inactivatedConsumer.isActive());
     }
 
     @Test
     @DisplayName("when I use an invalid email then it throws an InvalidEmailAddressException")
-    public void initConsumerWithInvalidEmailThrowInvalidEmailAddressException() {
+    public void initConsumerWithInvalidEmailThrowInvalidEmailAddressExceptionTest() {
         //GIVEN
-        var invalidEmail = "invalid@email";
+        final var invalidEmail = "invalid@email";
 
         //WHEN
         Executable executable = () -> new Consumer("firstname",

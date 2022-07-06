@@ -4,8 +4,10 @@ import org.erlik.payMyBuddy.domains.exceptions.BalanceCouldNotBeNegativeExceptio
 
 public record Account(Amount balance) {
 
+    private static final Number DEFAULT_ACCOUNT_AMOUNT = 0;
+
     public Account() {
-        this(new Amount(0));
+        this(new Amount(DEFAULT_ACCOUNT_AMOUNT));
     }
 
     public Account debit(Amount debitAmount) {
