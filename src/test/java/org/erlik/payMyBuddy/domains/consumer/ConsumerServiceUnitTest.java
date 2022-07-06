@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.Optional;
 import java.util.UUID;
+import org.erlik.payMyBuddy.domains.ConsumerRepository;
 import org.erlik.payMyBuddy.domains.consumer.events.CreateNewConsumerEvent;
 import org.erlik.payMyBuddy.domains.consumer.events.FindConsumerByEmailEvent;
 import org.erlik.payMyBuddy.domains.consumer.events.FindConsumerByIdEvent;
@@ -52,14 +53,14 @@ public class ConsumerServiceUnitTest {
             email,
             password);
 
-        final ArgumentCaptor<Consumer> consumerCaptor = ArgumentCaptor.forClass(Consumer.class);
+        final ArgumentCaptor<Consumer> consumerArgumentCaptor = ArgumentCaptor.forClass(Consumer.class);
 
         //WHEN
         when(consumerRepository.emailExists(any())).thenReturn(false);
         final var createdConsumer = consumerService.createConsumer(createNewConsumerEvent);
 
         //THEN
-        verify(consumerRepository, times(1)).createNewConsumer(consumerCaptor.capture());
+        verify(consumerRepository, times(1)).createNewConsumer(consumerArgumentCaptor.capture());
 
         Assertions.assertNotNull(createdConsumer);
         Assertions.assertInstanceOf(UUID.class, createdConsumer);

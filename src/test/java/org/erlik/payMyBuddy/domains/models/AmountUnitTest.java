@@ -142,4 +142,18 @@ public class AmountUnitTest {
         Assertions.assertFalse(positiveAmountResult);
         Assertions.assertTrue(negativeAmountResult);
     }
+
+    @Test
+    @DisplayName("when an amount exists then I can get the currency code")
+    public void getCurrencyCode() {
+        //GIVEN
+        final var expectedCurrencyCode = "USD";
+        final var amount = new Amount(5, expectedCurrencyCode);
+
+        //WHEN
+        final var response = amount.currencyCode();
+
+        //THEN
+        Assertions.assertEquals(expectedCurrencyCode, response);
+    }
 }

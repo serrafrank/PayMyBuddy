@@ -22,7 +22,7 @@ public class TransactionUnitTest {
         final var amount = new Amount(1);
 
         //WHEN
-        final var response = new Transaction(amount, debtor, creditor);
+        final var response = new Transaction(debtor, creditor, amount);
 
         //THEN
         Assertions.assertEquals(debtor, response.debtor());
@@ -46,7 +46,7 @@ public class TransactionUnitTest {
         final var amount = new Amount(-1, "USD");
 
         //WHEN
-        Executable executable = () -> new Transaction(amount, debtor, creditor);
+        Executable executable = () -> new Transaction(debtor, creditor, amount);
 
         //THEN
         Assertions.assertThrows(
@@ -65,7 +65,7 @@ public class TransactionUnitTest {
         final var amount = new Amount(1);
 
         //WHEN
-        Executable executable = () -> new Transaction(amount, debtor, creditor);
+        Executable executable = () -> new Transaction(debtor, creditor, amount);
 
         //THEN
         Assertions.assertThrows(
@@ -84,7 +84,7 @@ public class TransactionUnitTest {
         final var amount = new Amount(1);
 
         //WHEN
-        Executable executable = () -> new Transaction(amount, debtor, creditor);
+        Executable executable = () -> new Transaction(debtor, creditor, amount);
 
         //THEN
         Assertions.assertThrows(

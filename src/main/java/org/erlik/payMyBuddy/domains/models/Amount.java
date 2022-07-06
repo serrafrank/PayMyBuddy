@@ -58,6 +58,10 @@ public record Amount(Number numericAmount,
         return monetaryAmount().isNegative();
     }
 
+    public String currencyCode() {
+        return currency.getCurrencyCode();
+    }
+
     @Override
     public String toString() {
         var amountFormatQuery =

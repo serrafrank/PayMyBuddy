@@ -2,6 +2,7 @@ package org.erlik.payMyBuddy.domains.consumer;
 
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.erlik.payMyBuddy.domains.ConsumerRepository;
 import org.erlik.payMyBuddy.domains.consumer.events.CreateNewConsumerEvent;
 import org.erlik.payMyBuddy.domains.consumer.events.FindConsumerByEmailEvent;
 import org.erlik.payMyBuddy.domains.consumer.events.FindConsumerByIdEvent;

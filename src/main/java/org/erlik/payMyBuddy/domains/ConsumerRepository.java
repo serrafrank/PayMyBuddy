@@ -1,4 +1,4 @@
-package org.erlik.payMyBuddy.domains.consumer;
+package org.erlik.payMyBuddy.domains;
 
 import java.util.Optional;
 import java.util.UUID;

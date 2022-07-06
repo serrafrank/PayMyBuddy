@@ -6,9 +6,9 @@ import org.erlik.payMyBuddy.domains.exceptions.AmountCouldNotBeNegativeException
 import org.erlik.payMyBuddy.domains.exceptions.ConsumerNotActivateException;
 
 public record Transaction(UUID id,
-                          Amount amount,
                           Consumer debtor,
                           Consumer creditor,
+                          Amount amount,
                           LocalDateTime creationDate)
     implements ValueObject {
 
@@ -25,7 +25,7 @@ public record Transaction(UUID id,
         }
     }
 
-    public Transaction(Amount amount, Consumer creditor, Consumer debtor) {
-        this(UUID.randomUUID(), amount, creditor, debtor, LocalDateTime.now());
+    public Transaction(Consumer creditor, Consumer debtor, Amount amount) {
+        this(UUID.randomUUID(), creditor, debtor, amount, LocalDateTime.now());
     }
 }

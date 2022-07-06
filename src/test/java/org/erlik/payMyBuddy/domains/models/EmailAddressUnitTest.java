@@ -10,7 +10,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 public class EmailAddressUnitTest {
 
-    private static Object[][] validEmailsProviderTest() {
+    private static Object[][] validEmailsProvider() {
         return new Object[][]{
             {"username@domain.com"},
             {"username@domain.co.in"},
@@ -20,7 +20,7 @@ public class EmailAddressUnitTest {
             };
     }
 
-    private static Object[][] invalidEmailProviderTest() {
+    private static Object[][] invalidEmailProvider() {
         return new Object[][]{
             {"username@domain"},
             {".username@domain.com"},
