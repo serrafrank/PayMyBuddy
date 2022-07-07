@@ -11,7 +11,7 @@ import org.junit.jupiter.api.function.Executable;
 public class ConsumerUnitTest {
 
     @Test
-    @DisplayName("when I create a new consumer then it is inactive")
+    @DisplayName("when I create a new consumerId then it is inactive")
     public void newConsumerIsInactiveTest() {
         //GIVEN
         String firstname = TestFaker.fake().name().firstName();
@@ -33,7 +33,7 @@ public class ConsumerUnitTest {
     }
 
     @Test
-    @DisplayName("when I update an inactive consumer then it is active")
+    @DisplayName("when I update an inactive consumerId then it is active")
     public void updateConsumerToActiveTest() {
         //GIVEN
         final var consumer = ConsumerMock.inactive();
@@ -53,7 +53,7 @@ public class ConsumerUnitTest {
     }
 
     @Test
-    @DisplayName("when I update an active consumer then it is inactive")
+    @DisplayName("when I update an active consumerId then it is inactive")
     public void updateConsumerToInactiveTest() {
         //GIVEN
         final var consumer = ConsumerMock.active();

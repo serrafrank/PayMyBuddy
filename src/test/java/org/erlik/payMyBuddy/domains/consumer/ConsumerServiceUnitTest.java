@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 import java.util.Optional;
 import java.util.UUID;
 import org.erlik.payMyBuddy.domains.ConsumerRepository;
+import org.erlik.payMyBuddy.domains.consumer.events.AddFriendEvent;
 import org.erlik.payMyBuddy.domains.consumer.events.CreateNewConsumerEvent;
 import org.erlik.payMyBuddy.domains.consumer.events.FindConsumerByEmailEvent;
 import org.erlik.payMyBuddy.domains.consumer.events.FindConsumerByIdEvent;
@@ -40,7 +41,7 @@ public class ConsumerServiceUnitTest {
     }
 
     @Test
-    @DisplayName("When I create a new consumer then the consumer is saved")
+    @DisplayName("When I create a new consumerId then the consumerId is saved")
     public void createANewConsumerTest() {
         //GIVEN
         final var firstname = TestFaker.fake().name().firstName();
@@ -67,7 +68,7 @@ public class ConsumerServiceUnitTest {
     }
 
     @Test
-    @DisplayName("When I create a new consumer with an existing email then it throws a EmailAlreadyExistsException")
+    @DisplayName("When I create a new consumerId with an existing email then it throws a EmailAlreadyExistsException")
     public void createANewConsumerWithExistingEmailThrowsEmailAlreadyExistsExceptionTest() {
         //GIVEN
         final var firstname = TestFaker.fake().name().firstName();
@@ -93,7 +94,7 @@ public class ConsumerServiceUnitTest {
     }
 
     @Test
-    @DisplayName("Given a consumer exist when I get this consumer by id then the consumer is returned")
+    @DisplayName("Given a consumerId exist when I get this consumerId by id then the consumerId is returned")
     public void getAConsumerByIdTest() {
         //GIVEN
         final var consumer = ConsumerMock.create();
@@ -115,7 +116,7 @@ public class ConsumerServiceUnitTest {
     }
 
     @Test
-    @DisplayName("Given a consumer exist when I get a consumer with non existing id then it throws a ConsumerNotFoundException")
+    @DisplayName("Given a consumerId exist when I get a consumerId with non existing id then it throws a ConsumerNotFoundException")
     public void getAConsumerByNonExistsIdThrowsAConsumerNotFoundExceptionTest() {
         //GIVEN
         final var getConsumerByIdEvent = new FindConsumerByIdEvent(UUID.randomUUID());
@@ -130,7 +131,7 @@ public class ConsumerServiceUnitTest {
     }
 
     @Test
-    @DisplayName("Given a consumer exist when I get this consumer by emailAddress then the consumer is returned")
+    @DisplayName("Given a consumerId exist when I get this consumerId by emailAddress then the consumerId is returned")
     public void getAConsumerByEmailTest() {
         //GIVEN
         final var consumer = ConsumerMock.create();
@@ -153,7 +154,7 @@ public class ConsumerServiceUnitTest {
     }
 
     @Test
-    @DisplayName("Given a consumer exist when I get a consumer with non existing emailAddress then it throws a ConsumerNotFoundException")
+    @DisplayName("Given a consumerId exist when I get a consumerId with non existing emailAddress then it throws a ConsumerNotFoundException")
     public void getAConsumerByNonExistsEmailThrowsAConsumerNotFoundExceptionTest() {
         //GIVEN
         final var getConsumerByEmailEvent = new FindConsumerByEmailEvent(TestFaker.fake()
@@ -168,5 +169,35 @@ public class ConsumerServiceUnitTest {
 
         //THEN
         Assertions.assertThrows(ConsumerNotFoundException.class, executable);
+    }
+
+    @Test
+    @DisplayName("Given a friend exists when I add his email address then his add to my friends list")
+    public void addFriend() {
+        //GIVEN
+        var consumer = ConsumerMock.active();
+        var friend = ConsumerMock.active();
+        Assertions.assertTrue(friend.friends().isEmpty());
+
+        var addFriendEvent = new AddFriendEvent(consumer.id(), friend.emailAddress().email());
+
+        final ArgumentCaptor<Consumer> consumerCaptor = ArgumentCaptor.forClass(Consumer.class);
+
+        //WHEN
+        when(consumerRepository.getConsumerById(consumer.id())).thenReturn(Optional.of(consumer));
+        when(consumerRepository.getConsumerByEmail(friend.emailAddress())).thenReturn(Optional.of(
+            friend));
+
+        consumerService.addFriend(addFriendEvent);
+
+        //THEN
+        verify(consumerRepository, times(1)).updateConsumer(consumerCaptor.capture());
+
+        var updatedConsumer = consumerCaptor.getValue();
+        Assertions.assertNotNull(updatedConsumer);
+        Assertions.assertFalse(updatedConsumer.friends().isEmpty());
+        Assertions.assertTrue(updatedConsumer.friends()
+                                             .stream()
+                                             .anyMatch(f -> f.id().equals(friend.id())));
     }
 }

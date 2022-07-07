@@ -4,6 +4,7 @@ import java.util.Optional;
 import java.util.UUID;
 import org.erlik.payMyBuddy.domains.models.Consumer;
 import org.erlik.payMyBuddy.domains.models.EmailAddress;
+import org.erlik.payMyBuddy.domains.models.Friend;
 
 public interface ConsumerRepository {
 
@@ -15,4 +16,7 @@ public interface ConsumerRepository {
 
     Optional<Consumer> getConsumerByEmail(EmailAddress emailAddress);
 
+    Optional<Friend> getFriendByEmail(EmailAddress friendEmailAddress);
+
+    void updateConsumer(Consumer consumer);
 }

@@ -3,6 +3,7 @@ package org.erlik.payMyBuddy.domains.models;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import org.erlik.payMyBuddy.domains.exceptions.FriendAlreadyExists;
 
 public record Consumer(UUID id,
                        String firstname,
@@ -10,7 +11,7 @@ public record Consumer(UUID id,
                        EmailAddress emailAddress,
                        String password,
                        Account account,
-                       List<Consumer> friends,
+                       List<Friend> friends,
                        boolean isActive)
     implements ValueObject {
 
@@ -39,5 +40,23 @@ public record Consumer(UUID id,
             account,
             friends,
             false);
+    }
+
+
+    public Consumer addFriend(Friend friend) {
+        if (friends.stream().anyMatch(c -> c.id().equals(friend.id()))) {
+            throw new FriendAlreadyExists(this, friend);
+        }
+
+        friends.add(friend);
+
+        return new Consumer(id,
+            firstname,
+            lastname,
+            emailAddress,
+            password,
+            account,
+            friends,
+            isActive);
     }
 }
