@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 import java.util.Optional;
 import java.util.UUID;
 import org.erlik.pay_my_buddy.domains.ConsumerRepository;
+import org.erlik.pay_my_buddy.domains.consumer.events.AddFriendEvent;
 import org.erlik.pay_my_buddy.domains.consumer.events.CreateNewConsumerEvent;
 import org.erlik.pay_my_buddy.domains.consumer.events.FindConsumerByEmailEvent;
 import org.erlik.pay_my_buddy.domains.consumer.events.FindConsumerByIdEvent;
@@ -168,5 +169,35 @@ public class ConsumerServiceUnitTest {
 
         //THEN
         Assertions.assertThrows(ConsumerNotFoundException.class, executable);
+    }
+
+    @Test
+    @DisplayName("Given a friend exists when I add his email address then his add to my friends list")
+    public void addFriend() {
+        //GIVEN
+        var consumer = ConsumerMock.active();
+        var friend = ConsumerMock.active();
+        Assertions.assertTrue(friend.friends().isEmpty());
+
+        var addFriendEvent = new AddFriendEvent(consumer.id(), friend.emailAddress().email());
+
+        final ArgumentCaptor<Consumer> consumerCaptor = ArgumentCaptor.forClass(Consumer.class);
+
+        //WHEN
+        when(consumerRepository.getConsumerById(consumer.id())).thenReturn(Optional.of(consumer));
+        when(consumerRepository.getConsumerByEmail(friend.emailAddress())).thenReturn(Optional.of(
+            friend));
+
+        consumerService.addFriend(addFriendEvent);
+
+        //THEN
+        verify(consumerRepository, times(1)).updateConsumer(consumerCaptor.capture());
+
+        var updatedConsumer = consumerCaptor.getValue();
+        Assertions.assertNotNull(updatedConsumer);
+        Assertions.assertFalse(updatedConsumer.friends().isEmpty());
+        Assertions.assertTrue(updatedConsumer.friends()
+                                             .stream()
+                                             .anyMatch(f -> f.id().equals(friend.id())));
     }
 }

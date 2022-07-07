@@ -34,7 +34,7 @@ class ConsumerUnitTest {
 
     @Test
     @DisplayName("when I update an inactive consumer then it is active")
-    void updateConsumerToActiveTest() {
+    public void updateConsumerToActiveTest() {
         //GIVEN
         final var consumer = ConsumerMock.inactive();
         Assertions.assertFalse(consumer.isActive());
@@ -54,7 +54,7 @@ class ConsumerUnitTest {
 
     @Test
     @DisplayName("when I update an active consumer then it is inactive")
-    void updateConsumerToInactiveTest() {
+    public void updateConsumerToInactiveTest() {
         //GIVEN
         final var consumer = ConsumerMock.active();
         Assertions.assertTrue(consumer.isActive());

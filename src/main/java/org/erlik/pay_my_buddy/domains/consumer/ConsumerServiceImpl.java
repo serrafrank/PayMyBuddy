@@ -3,6 +3,7 @@ package org.erlik.pay_my_buddy.domains.consumer;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.erlik.pay_my_buddy.domains.ConsumerRepository;
+import org.erlik.pay_my_buddy.domains.consumer.events.AddFriendEvent;
 import org.erlik.pay_my_buddy.domains.consumer.events.CreateNewConsumerEvent;
 import org.erlik.pay_my_buddy.domains.consumer.events.FindConsumerByEmailEvent;
 import org.erlik.pay_my_buddy.domains.consumer.events.FindConsumerByIdEvent;
@@ -10,6 +11,7 @@ import org.erlik.pay_my_buddy.domains.exceptions.ConsumerNotFoundException;
 import org.erlik.pay_my_buddy.domains.exceptions.EmailAlreadyExistsException;
 import org.erlik.pay_my_buddy.domains.models.Consumer;
 import org.erlik.pay_my_buddy.domains.models.EmailAddress;
+import org.erlik.pay_my_buddy.domains.models.Friend;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -36,15 +38,46 @@ public class ConsumerServiceImpl
 
     @Override
     public Consumer findConsumerById(FindConsumerByIdEvent findConsumerByIdEvent) {
-        final var id = findConsumerByIdEvent.id();
-        return consumerRepository.getConsumerById(id)
-            .orElseThrow(() -> new ConsumerNotFoundException(id));
+        final var consumerId = findConsumerByIdEvent.id();
+        return getConsumerByIdOrThrowConsumerNotFoundException(consumerId);
     }
 
     @Override
     public Consumer findConsumerByEmail(FindConsumerByEmailEvent findConsumerByEmailEvent) {
-        final var email = new EmailAddress(findConsumerByEmailEvent.email());
-        return consumerRepository.getConsumerByEmail(email)
-            .orElseThrow(() -> new ConsumerNotFoundException(email));
+        final var emailAddress = findConsumerByEmailEvent.email();
+        return getConsumerByEmailOrThrowConsumerNotFoundException(emailAddress);
     }
+
+
+    @Override
+    public void addFriend(AddFriendEvent addFriendEvent) {
+        final var friendEmailAddress = addFriendEvent.friendEmailAddress();
+        final var friend = getFriendByEmailOrThrowConsumerNotFoundException(friendEmailAddress);
+
+        final var consumerId = addFriendEvent.consumerId();
+        final var consumer = getConsumerByIdOrThrowConsumerNotFoundException(consumerId)
+            .addFriend(friend);
+
+        consumerRepository.updateConsumer(consumer);
+    }
+
+    private Friend getFriendByEmailOrThrowConsumerNotFoundException(String emailAddress) {
+        final var friendEmailAddress = new EmailAddress(emailAddress);
+        return consumerRepository.getFriendByEmail(friendEmailAddress)
+                                 .orElseThrow(() -> new ConsumerNotFoundException(friendEmailAddress));
+    }
+
+    private Consumer getConsumerByIdOrThrowConsumerNotFoundException(UUID consumer) {
+        return consumerRepository.getConsumerById(consumer)
+                                 .orElseThrow(() -> new ConsumerNotFoundException(consumer));
+    }
+
+    private Consumer getConsumerByEmailOrThrowConsumerNotFoundException(String emailAddress) {
+        final var consumerEmailAddress = new EmailAddress(emailAddress);
+        return consumerRepository.getConsumerByEmail(consumerEmailAddress)
+                                 .orElseThrow(() -> new ConsumerNotFoundException(
+                                     consumerEmailAddress));
+    }
+
+
 }
