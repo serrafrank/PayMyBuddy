@@ -1,8 +1,8 @@
-package org.erlik.payMyBuddy.domains.exceptions;
+package org.erlik.pay_my_buddy.domains.exceptions;
 
-import org.erlik.payMyBuddy.core.BadRequestException;
-import org.erlik.payMyBuddy.domains.models.Consumer;
-import org.erlik.payMyBuddy.domains.models.Friend;
+import org.erlik.pay_my_buddy.core.BadRequestException;
+import org.erlik.pay_my_buddy.domains.models.Consumer;
+import org.erlik.pay_my_buddy.domains.models.Friend;
 
 public class FriendAlreadyExists
     extends BadRequestException {

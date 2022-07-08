@@ -17,6 +17,16 @@ public record Amount(Number numericAmount,
     public static final String DEFAULT_CURRENCY = "EUR";
     public static final Locale DEFAULT_LOCALE = Locale.FRENCH;
 
+    public Amount {
+        if (numericAmount == null) {
+            throw new IllegalArgumentException("numericAmount could not be null");
+        }
+
+        if (currency == null) {
+            throw new IllegalArgumentException("currency could not be null");
+        }
+    }
+
     public Amount(Number amount) {
         this(amount, DEFAULT_CURRENCY);
     }

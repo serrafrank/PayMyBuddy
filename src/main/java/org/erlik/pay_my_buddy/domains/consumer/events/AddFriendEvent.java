@@ -1,4 +1,4 @@
-package org.erlik.payMyBuddy.domains.consumer.events;
+package org.erlik.pay_my_buddy.domains.consumer.events;
 
 import java.util.UUID;
 

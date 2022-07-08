@@ -1,4 +1,4 @@
-package org.erlik.payMyBuddy.domains.models;
+package org.erlik.pay_my_buddy.domains.models;
 
 import java.util.UUID;
 

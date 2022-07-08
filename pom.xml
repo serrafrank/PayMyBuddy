@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>org.erlik</groupId>
-	<artifactId>payMyBuddy</artifactId>
+	<artifactId>pay_my_buddy</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>payMyBuddy</name>
+	<name>pay_my_buddy</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>17</java.version>

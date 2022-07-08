@@ -1,5 +1,6 @@
 package org.erlik.pay_my_buddy.domains.models;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.erlik.pay_my_buddy.domains.exceptions.InvalidEmailAddressException;
 
@@ -9,6 +10,10 @@ public record EmailAddress(String email)
     private static final EmailValidator emailValidator = EmailValidator.getInstance();
 
     public EmailAddress {
+        if (StringUtils.isBlank(email)) {
+            throw new IllegalArgumentException("Email is null, empty or blank");
+        }
+
         if (!emailValidator.isValid(email)) {
             throw new InvalidEmailAddressException(email);
         }
