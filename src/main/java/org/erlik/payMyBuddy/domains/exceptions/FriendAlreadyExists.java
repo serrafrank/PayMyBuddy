@@ -1,6 +1,6 @@
 package org.erlik.payMyBuddy.domains.exceptions;
 
-import org.erlik.payMyBuddy.core.BadRequestException;
+import org.erlik.payMyBuddy.core.exceptions.BadRequestException;
 import org.erlik.payMyBuddy.domains.models.Consumer;
 import org.erlik.payMyBuddy.domains.models.Friend;
 

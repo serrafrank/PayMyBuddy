@@ -9,13 +9,16 @@ public record Consumer(UUID id,
                        String firstname,
                        String lastname,
                        EmailAddress emailAddress,
-                       String password,
+                       HashedPassword password,
                        Account account,
                        List<Friend> friends,
                        boolean isActive)
     implements ValueObject {
 
-    public Consumer(String firstname, String lastname, String emailAddress, String password) {
+    public Consumer(String firstname,
+                    String lastname,
+                    String emailAddress,
+                    HashedPassword password) {
         this(UUID.randomUUID(), firstname, lastname, new EmailAddress(emailAddress), password,
             new Account(), new ArrayList<>(), false);
     }

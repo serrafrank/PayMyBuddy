@@ -12,6 +12,7 @@ import org.erlik.payMyBuddy.domains.exceptions.EmailAlreadyExistsException;
 import org.erlik.payMyBuddy.domains.models.Consumer;
 import org.erlik.payMyBuddy.domains.models.EmailAddress;
 import org.erlik.payMyBuddy.domains.models.Friend;
+import org.erlik.payMyBuddy.domains.models.HashedPassword;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,10 +24,11 @@ public class ConsumerServiceImpl
 
     @Override
     public UUID createConsumer(CreateNewConsumerEvent consumerEvent) {
+        var hashedPassword = HashedPassword.fromPlainText(consumerEvent.password());
         final var newConsumer = new Consumer(consumerEvent.firstname(),
             consumerEvent.lastname(),
             consumerEvent.emailAddress(),
-            consumerEvent.password());
+            hashedPassword);
 
         if (consumerRepository.emailExists(newConsumer.emailAddress())) {
             throw new EmailAlreadyExistsException();

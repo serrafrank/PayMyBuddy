@@ -1,7 +1,7 @@
 package org.erlik.payMyBuddy.domains.exceptions;
 
 import lombok.NonNull;
-import org.erlik.payMyBuddy.core.BadRequestException;
+import org.erlik.payMyBuddy.core.exceptions.BadRequestException;
 import org.erlik.payMyBuddy.domains.models.Amount;
 
 public class AmountCouldNotBeNegativeException

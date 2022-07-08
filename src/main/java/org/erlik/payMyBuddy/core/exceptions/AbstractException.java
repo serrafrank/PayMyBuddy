@@ -1,4 +1,4 @@
-package org.erlik.payMyBuddy.core;
+package org.erlik.payMyBuddy.core.exceptions;
 
 
 public abstract class AbstractException

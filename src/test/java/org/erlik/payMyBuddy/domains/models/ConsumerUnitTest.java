@@ -17,16 +17,18 @@ public class ConsumerUnitTest {
         String firstname = TestFaker.fake().name().firstName();
         String lastname = TestFaker.fake().name().lastName();
         String login = TestFaker.fake().internet().emailAddress();
-        String password = TestFaker.randomAlphaNumericString();
+        String password = TestFaker.validPassword();
+        HashedPassword hashedPassword = HashedPassword.fromPlainText(password);
 
         //WHEN
-        final var consumer = new Consumer(firstname, lastname, login, password);
+        final var consumer = new Consumer(firstname, lastname, login, hashedPassword);
 
         //THEN
         Assertions.assertEquals(firstname, consumer.firstname());
         Assertions.assertEquals(lastname, consumer.lastname());
         Assertions.assertEquals(login, consumer.emailAddress().toString());
-        Assertions.assertEquals(password, consumer.password());
+        Assertions.assertEquals(hashedPassword, consumer.password());
+        Assertions.assertTrue(hashedPassword.matchWith(password));
         Assertions.assertEquals(new Account(), consumer.account());
         Assertions.assertTrue(consumer.friends().isEmpty());
         Assertions.assertFalse(consumer.isActive());
@@ -79,10 +81,10 @@ public class ConsumerUnitTest {
         final var invalidEmail = "invalid@email";
 
         //WHEN
-        Executable executable = () -> new Consumer("firstname",
-            "lastname",
+        Executable executable = () -> new Consumer(TestFaker.randomString(),
+            TestFaker.randomString(),
             invalidEmail,
-            "password");
+            HashedPassword.fromPlainText(TestFaker.validPassword()));
 
         //THEN
         Assertions.assertThrows(InvalidEmailAddressException.class, executable);

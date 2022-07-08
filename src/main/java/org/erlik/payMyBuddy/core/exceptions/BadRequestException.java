@@ -1,4 +1,4 @@
-package org.erlik.payMyBuddy.core;
+package org.erlik.payMyBuddy.core.exceptions;
 
 public class BadRequestException
     extends AbstractException {
