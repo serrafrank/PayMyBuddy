@@ -6,6 +6,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.erlik.pay_my_buddy.core.PasswordEncoder;
 import org.erlik.pay_my_buddy.domains.exceptions.PasswordFormatNotValidException;
 
+/**
+ *
+ * @param hashedPassword The hashed password.
+ */
 public record HashedPassword(String hashedPassword) {
 
     private static final Integer MIN_LENGTH = 8;
@@ -105,13 +109,27 @@ public record HashedPassword(String hashedPassword) {
             "Password must have at least one special character from " + SPECIAL_CHARS)
     );
 
+    /**
+     * Generates a HashedPassword object from a hashed password.
+     * @param hashedPassword The hashed password.
+     */
     public HashedPassword {
         if (StringUtils.isBlank(hashedPassword)) {
             throw new IllegalArgumentException("Hashed password could not be blank");
         }
     }
 
+    /**
+     * Generates a HashedPassword object from a plain password.
+     *
+     * @param plainTextPassword The plain text password.
+     * @return The HashedPassword object.
+     */
     public static HashedPassword fromPlainText(String plainTextPassword) {
+        if (StringUtils.isBlank(plainTextPassword)) {
+            throw new IllegalArgumentException("Hashed password could not be blank");
+        }
+
         var errors = getValidationErrors(plainTextPassword);
         if (!errors.isEmpty()) {
             throw new PasswordFormatNotValidException(plainTextPassword, errors);
@@ -119,34 +137,52 @@ public record HashedPassword(String hashedPassword) {
         return new HashedPassword(PasswordEncoder.encode(plainTextPassword));
     }
 
-    private static List<String> getValidationErrors(String password) {
-        return rules.stream().filter(r -> !r.isValid(password))
-            .map(Rule::error)
-            .toList();
-    }
-
+    /**
+     * @return The list of acceptable lowercase characters.
+     */
     public static List<CharSequence> getAcceptedLowerCaseChars() {
         return LOWER_CASE_CHARS;
     }
 
+    /**
+     * @return The list of acceptable uppercase characters.
+     */
     public static List<CharSequence> getAcceptedUpperCaseChars() {
         return UPPER_CASE_CHARS;
     }
 
+    /**
+     * @return The list of acceptable numbers.
+     */
     public static List<CharSequence> getAcceptedDigits() {
         return NUMBERS;
     }
 
+    /**
+     * @return The list of acceptable special characters.
+     */
     public static List<CharSequence> getAcceptedSpecialChars() {
         return SPECIAL_CHARS;
     }
 
+    /**
+     * @return The minimum length of a password.
+     */
     public static Integer getMinLength() {
         return MIN_LENGTH;
     }
 
+    /**
+     * @return The maximum length of a password.
+     */
     public static Integer getMaxLength() {
         return MAX_LENGTH;
+    }
+
+    private static List<String> getValidationErrors(String password) {
+        return rules.stream().filter(r -> !r.isValid(password))
+            .map(Rule::error)
+            .toList();
     }
 
     private static boolean stringContainsAtLeastOneChar(String string, List<CharSequence> chars) {

@@ -6,17 +6,26 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
+import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 class HashedPasswordUnitTest {
 
-    private static Object[][] invalidPlainTextPasswordProvider() {
+    private static Object[][] blankProvider() {
         return new Object[][]{
             {null},
             {""},
             {" "},
-            {"     "},
-            {"     "},
+            {"     "}
+        };
+    }
+
+    private static Object[][] invalidPasswordProvider() {
+        return new Object[][]{
+            {"aA0"},
+            {"aa0!"},
+            {"aAA!"},
+            {"aA00"}
         };
     }
 
@@ -35,15 +44,40 @@ class HashedPasswordUnitTest {
         Assertions.assertTrue(response.matchWith(password));
     }
 
-    @MethodSource("invalidPlainTextPasswordProvider")
+    @ParameterizedTest
+    @MethodSource("blankProvider")
     @DisplayName("given a plain text password when the password is hashed then the hashed password match with plain text password")
-    void initWithInvalidTextThrowPasswordFormatNotValidException(String invalidPassword) {
+    void initWithNullOrBlankTextThrowIllegalArgumentExceptionException(String invalidPassword) {
+
+        //WHEN
+        Executable executable = () -> HashedPassword.fromPlainText(invalidPassword);
+
+        //THEN
+        Assertions.assertThrows(IllegalArgumentException.class, executable);
+    }
+
+    @ParameterizedTest
+    @MethodSource("invalidPasswordProvider")
+    @DisplayName("given a plain text password when the password is hashed then the hashed password match with plain text password")
+    void initWithInvalidTextThrowIllegalArgumentExceptionException(String invalidPassword) {
 
         //WHEN
         Executable executable = () -> HashedPassword.fromPlainText(invalidPassword);
 
         //THEN
         Assertions.assertThrows(PasswordFormatNotValidException.class, executable);
+    }
+
+    @ParameterizedTest
+    @MethodSource("blankProvider")
+    @DisplayName("given a hashed password when the password is hashed then the hashed password match with plain text password")
+    void initWithInvalidHashedPasswordThrowIllegalArgumentExceptionException(String invalidPassword) {
+
+        //WHEN
+        Executable executable = () -> new HashedPassword(invalidPassword);
+
+        //THEN
+        Assertions.assertThrows(IllegalArgumentException.class, executable);
     }
 
 }
