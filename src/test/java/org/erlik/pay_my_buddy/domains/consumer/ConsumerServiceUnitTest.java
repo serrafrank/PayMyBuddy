@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.Optional;
 import java.util.UUID;
+import org.erlik.payMyBuddy.mock.FriendMock;
 import org.erlik.pay_my_buddy.domains.ConsumerRepository;
 import org.erlik.pay_my_buddy.domains.consumer.events.AddFriendEvent;
 import org.erlik.pay_my_buddy.domains.consumer.events.CreateNewConsumerEvent;
@@ -47,7 +48,7 @@ public class ConsumerServiceUnitTest {
         final var firstname = TestFaker.fake().name().firstName();
         final var lastname = TestFaker.fake().name().lastName();
         final var email = TestFaker.fake().internet().emailAddress();
-        final var password = TestFaker.randomAlphaNumericString();
+        final var password = TestFaker.validPassword();
 
         final var createNewConsumerEvent = new CreateNewConsumerEvent(firstname,
             lastname,
@@ -74,7 +75,7 @@ public class ConsumerServiceUnitTest {
         final var firstname = TestFaker.fake().name().firstName();
         final var lastname = TestFaker.fake().name().lastName();
         final var email = TestFaker.fake().internet().emailAddress();
-        final var password = TestFaker.randomAlphaNumericString();
+        final var password = TestFaker.validPassword();
 
         final var createNewConsumerEvent = new CreateNewConsumerEvent(firstname,
             lastname,
@@ -176,8 +177,9 @@ public class ConsumerServiceUnitTest {
     public void addFriend() {
         //GIVEN
         var consumer = ConsumerMock.active();
-        var friend = ConsumerMock.active();
-        Assertions.assertTrue(friend.friends().isEmpty());
+        Assertions.assertTrue(consumer.friends().isEmpty());
+
+        var friend = FriendMock.create();
 
         var addFriendEvent = new AddFriendEvent(consumer.id(), friend.emailAddress().email());
 
@@ -185,7 +187,7 @@ public class ConsumerServiceUnitTest {
 
         //WHEN
         when(consumerRepository.getConsumerById(consumer.id())).thenReturn(Optional.of(consumer));
-        when(consumerRepository.getConsumerByEmail(friend.emailAddress())).thenReturn(Optional.of(
+        when(consumerRepository.getFriendByEmail(friend.emailAddress())).thenReturn(Optional.of(
             friend));
 
         consumerService.addFriend(addFriendEvent);

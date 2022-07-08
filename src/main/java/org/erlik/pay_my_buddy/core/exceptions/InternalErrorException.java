@@ -1,4 +1,4 @@
-package org.erlik.pay_my_buddy.core;
+package org.erlik.pay_my_buddy.core.exceptions;
 
 public class InternalErrorException
     extends AbstractException {

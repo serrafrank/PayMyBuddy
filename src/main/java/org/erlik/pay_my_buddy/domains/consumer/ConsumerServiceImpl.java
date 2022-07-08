@@ -12,6 +12,7 @@ import org.erlik.pay_my_buddy.domains.exceptions.EmailAlreadyExistsException;
 import org.erlik.pay_my_buddy.domains.models.Consumer;
 import org.erlik.pay_my_buddy.domains.models.EmailAddress;
 import org.erlik.pay_my_buddy.domains.models.Friend;
+import org.erlik.pay_my_buddy.domains.models.HashedPassword;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,10 +24,11 @@ public class ConsumerServiceImpl
 
     @Override
     public UUID createConsumer(CreateNewConsumerEvent consumerEvent) {
+        var hashedPassword = HashedPassword.fromPlainText(consumerEvent.password());
         final var newConsumer = new Consumer(consumerEvent.firstname(),
             consumerEvent.lastname(),
             consumerEvent.emailAddress(),
-            consumerEvent.password());
+            hashedPassword);
 
         if (consumerRepository.emailExists(newConsumer.emailAddress())) {
             throw new EmailAlreadyExistsException();
@@ -48,7 +50,6 @@ public class ConsumerServiceImpl
         return getConsumerByEmailOrThrowConsumerNotFoundException(emailAddress);
     }
 
-
     @Override
     public void addFriend(AddFriendEvent addFriendEvent) {
         final var friendEmailAddress = addFriendEvent.friendEmailAddress();
@@ -64,20 +65,19 @@ public class ConsumerServiceImpl
     private Friend getFriendByEmailOrThrowConsumerNotFoundException(String emailAddress) {
         final var friendEmailAddress = new EmailAddress(emailAddress);
         return consumerRepository.getFriendByEmail(friendEmailAddress)
-                                 .orElseThrow(() -> new ConsumerNotFoundException(friendEmailAddress));
+            .orElseThrow(() -> new ConsumerNotFoundException(friendEmailAddress));
     }
 
     private Consumer getConsumerByIdOrThrowConsumerNotFoundException(UUID consumer) {
         return consumerRepository.getConsumerById(consumer)
-                                 .orElseThrow(() -> new ConsumerNotFoundException(consumer));
+            .orElseThrow(() -> new ConsumerNotFoundException(consumer));
     }
 
     private Consumer getConsumerByEmailOrThrowConsumerNotFoundException(String emailAddress) {
         final var consumerEmailAddress = new EmailAddress(emailAddress);
         return consumerRepository.getConsumerByEmail(consumerEmailAddress)
-                                 .orElseThrow(() -> new ConsumerNotFoundException(
-                                     consumerEmailAddress));
+            .orElseThrow(() -> new ConsumerNotFoundException(
+                consumerEmailAddress));
     }
-
 
 }

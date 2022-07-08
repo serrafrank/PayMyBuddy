@@ -10,79 +10,79 @@ public record Consumer(UUID id,
                        String firstname,
                        String lastname,
                        EmailAddress emailAddress,
-                       String password,
+                       HashedPassword password,
                        Account account,
                        List<Friend> friends,
                        boolean isActive)
     implements ValueObject {
 
+    public Consumer(String firstname,
+                    String lastname,
+                    String emailAddress,
+                    HashedPassword password) {
     public Consumer {
 
-        if (StringUtils.isBlank(firstname)) {
-            throw new IllegalArgumentException("Firstname is null, empty or blank");
+            if (StringUtils.isBlank(firstname)) {
+                throw new IllegalArgumentException("Firstname is null, empty or blank");
+            }
+            if (StringUtils.isBlank(lastname)) {
+                throw new IllegalArgumentException("Lastname is null, empty or blank");
+            }
+            if (emailAddress == null) {
+                throw new IllegalArgumentException("EmailAddress is null");
+            }
+            if (account == null) {
+                throw new IllegalArgumentException("Account is null");
+            }
+            if (friends == null) {
+                throw new IllegalArgumentException("Friends is null");
+            }
         }
-        if (StringUtils.isBlank(lastname)) {
-            throw new IllegalArgumentException("Lastname is null, empty or blank");
-        }
-        if (StringUtils.isBlank(password)) {
-            throw new IllegalArgumentException("Password is null, empty or blank");
-        }
-        if (emailAddress == null) {
-            throw new IllegalArgumentException("EmailAddress is null");
-        }
-        if (account == null) {
-            throw new IllegalArgumentException("Account is null");
-        }
-        if (friends == null) {
-            throw new IllegalArgumentException("Friends is null");
-        }
-    }
 
     public Consumer(String firstname, String lastname, String emailAddress, String password) {
-        this(UUID.randomUUID(), firstname, lastname, new EmailAddress(emailAddress), password,
-            new Account(), new ArrayList<>(), false);
-    }
-
-    /**
-     * Return an activate Consumer with isActive set to true
-     */
-    public Consumer activate() {
-        return new Consumer(id,
-            firstname,
-            lastname,
-            emailAddress,
-            password,
-            account,
-            friends,
-            true);
-    }
-
-    public Consumer inactivate() {
-        return new Consumer(id,
-            firstname,
-            lastname,
-            emailAddress,
-            password,
-            account,
-            friends,
-            false);
-    }
-
-
-    public Consumer addFriend(Friend friend) {
-        if (friends.stream().anyMatch(c -> c.id().equals(friend.id()))) {
-            throw new FriendAlreadyExists(this, friend);
+            this(UUID.randomUUID(), firstname, lastname, new EmailAddress(emailAddress), password,
+                new Account(), new ArrayList<>(), false);
         }
 
-        friends.add(friend);
+        /**
+         * Return an activate Consumer with isActive set to true
+         */
+        public Consumer activate () {
+            return new Consumer(id,
+                firstname,
+                lastname,
+                emailAddress,
+                password,
+                account,
+                friends,
+                true);
+        }
 
-        return new Consumer(id,
-            firstname,
-            lastname,
-            emailAddress,
-            password,
-            account,
-            friends,
-            isActive);
+        public Consumer inactivate () {
+            return new Consumer(id,
+                firstname,
+                lastname,
+                emailAddress,
+                password,
+                account,
+                friends,
+                false);
+        }
+
+        public Consumer addFriend (Friend friend){
+            if (friends.stream().anyMatch(c -> c.id().equals(friend.id()))) {
+                throw new FriendAlreadyExists(this, friend);
+            }
+
+            friends.add(friend);
+
+            return new Consumer(id,
+                firstname,
+                lastname,
+                emailAddress,
+                password,
+                account,
+                friends,
+                isActive);
+        }
     }
-}

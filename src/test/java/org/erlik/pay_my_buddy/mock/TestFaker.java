@@ -8,11 +8,11 @@ public class TestFaker {
         return new Faker();
     }
 
-    public static String randomAlphaNumericString() {
-        return randomAlphaNumericString(10);
+    public static String randomString() {
+        return randomString(10);
     }
 
-    public static String randomAlphaNumericString(int nbr) {
-        return fake().regexify("[a-z1-9]{" + nbr + "}");
+    public static String randomString(int nbr) {
+        return fake().regexify("[a-zA-Z0-9]{" + nbr + "}");
     }
 }

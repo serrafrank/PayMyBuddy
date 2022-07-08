@@ -1,15 +1,18 @@
 package org.erlik.pay_my_buddy.mock;
 
+import org.erlik.payMyBuddy.domains.models.HashedPassword;
 import org.erlik.pay_my_buddy.domains.models.Consumer;
 import org.junit.jupiter.api.Assertions;
 
 public class ConsumerMock {
 
     public static Consumer create() {
-        return new Consumer(TestFaker.fake().name().firstName(),
+        final var hashedPassword = HashedPassword.fromPlainText(TestFaker.validPassword());
+        return new Consumer(
+            TestFaker.fake().name().firstName(),
             TestFaker.fake().name().lastName(),
             TestFaker.fake().internet().emailAddress(),
-            TestFaker.randomAlphaNumericString());
+            hashedPassword);
     }
 
     public static Consumer inactive() {

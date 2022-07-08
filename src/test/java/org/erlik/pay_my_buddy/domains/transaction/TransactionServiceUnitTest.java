@@ -26,7 +26,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class TransactionServiceUnitTest {
+class TransactionServiceUnitTest {
 
     @Mock
     private TransactionRepository transactionRepository;
@@ -36,13 +36,13 @@ public class TransactionServiceUnitTest {
     private TransactionService transactionService;
 
     @BeforeEach
-    public void init() {
+    void init() {
         transactionService = new TransactionServiceImpl(transactionRepository, consumerRepository);
     }
 
     @Test
-    @DisplayName("given a debtor and a creditor exist when I create a new transaction then the transaction is saved")
-    public void createANewTransactionTest() {
+    @DisplayName("given a debtor and a creditor exists when I create a new transaction then the transaction is saved")
+    void createANewTransactionTest() {
         //GIVEN
         final var debtor = ConsumerMock.active();
         final var creditor = ConsumerMock.active();
@@ -56,11 +56,11 @@ public class TransactionServiceUnitTest {
 
         //WHEN
         lenient().when(consumerRepository.getConsumerById(createNewTransactionEvent.debtor()))
-                 .thenReturn(
-                     Optional.of(debtor));
+            .thenReturn(
+                Optional.of(debtor));
         lenient().when(consumerRepository.getConsumerById(createNewTransactionEvent.creditor()))
-                 .thenReturn(
-                     Optional.of(creditor));
+            .thenReturn(
+                Optional.of(creditor));
 
         final var createdTransaction = transactionService.createNewTransaction(
             createNewTransactionEvent);
@@ -78,7 +78,7 @@ public class TransactionServiceUnitTest {
 
     @Test
     @DisplayName("given a creditor exists when I create a new transaction with non existing debtor then it throws a ConsumerNotFoundException")
-    public void createATransactionWithNonExistingDebtorThrowsConsumerNotFoundExceptionTest() {
+    void createATransactionWithNonExistingDebtorThrowsConsumerNotFoundExceptionTest() {
         //GIVEN
         final var creditor = ConsumerMock.active();
         final var amount = new Amount(5);
@@ -91,11 +91,11 @@ public class TransactionServiceUnitTest {
 
         //WHEN
         lenient().when(consumerRepository.getConsumerById(createNewTransactionEvent.debtor()))
-                 .thenReturn(
-                     Optional.empty());
+            .thenReturn(
+                Optional.empty());
         lenient().when(consumerRepository.getConsumerById(createNewTransactionEvent.creditor()))
-                 .thenReturn(
-                     Optional.of(creditor));
+            .thenReturn(
+                Optional.of(creditor));
 
         final Executable executable = () -> transactionService.createNewTransaction(
             createNewTransactionEvent);
@@ -106,7 +106,7 @@ public class TransactionServiceUnitTest {
 
     @Test
     @DisplayName("given a debtor exists when I create a new transaction with non existing creditor then it throws a ConsumerNotFoundException")
-    public void createATransactionWithNonExistingCreditorThrowsConsumerNotFoundExceptionTest() {
+    void createATransactionWithNonExistingCreditorThrowsConsumerNotFoundExceptionTest() {
         //GIVEN
         final var debtor = ConsumerMock.active();
         final var amount = new Amount(5);
@@ -132,7 +132,7 @@ public class TransactionServiceUnitTest {
 
     @Test
     @DisplayName("given an active creditor  when I create a new transaction with inactive debtor then it throws a ConsumerNotFoundException")
-    public void createATransactionWithInactiveDebtorThrowsConsumerNotFoundExceptionTest() {
+    void createATransactionWithInactiveDebtorThrowsConsumerNotFoundExceptionTest() {
         //GIVEN
         final var debtor = ConsumerMock.inactive();
         final var creditor = ConsumerMock.active();
@@ -146,11 +146,11 @@ public class TransactionServiceUnitTest {
 
         //WHEN
         lenient().when(consumerRepository.getConsumerById(createNewTransactionEvent.debtor()))
-                 .thenReturn(
-                     Optional.of(debtor));
+            .thenReturn(
+                Optional.of(debtor));
         lenient().when(consumerRepository.getConsumerById(createNewTransactionEvent.creditor()))
-                 .thenReturn(
-                     Optional.of(creditor));
+            .thenReturn(
+                Optional.of(creditor));
 
         final Executable executable = () -> transactionService.createNewTransaction(
             createNewTransactionEvent);
@@ -161,7 +161,7 @@ public class TransactionServiceUnitTest {
 
     @Test
     @DisplayName("given an active debtor when I create a new transaction with inactive creditor then it throws a ConsumerNotFoundException")
-    public void createATransactionWithInactiveCreditorThrowsConsumerNotFoundExceptionTest() {
+    void createATransactionWithInactiveCreditorThrowsConsumerNotFoundExceptionTest() {
         //GIVEN
         final var debtor = ConsumerMock.active();
         final var creditor = ConsumerMock.inactive();
