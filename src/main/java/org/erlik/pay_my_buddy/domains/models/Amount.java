@@ -10,6 +10,10 @@ import javax.money.format.MonetaryAmountFormat;
 import javax.money.format.MonetaryFormats;
 import org.javamoney.moneta.format.CurrencyStyle;
 
+/**
+ * @param numericAmount - numeric amount of the amount
+ * @param currency      - currency of the amount
+ */
 public record Amount(Number numericAmount,
                      CurrencyUnit currency)
     implements ValueObject {
@@ -17,6 +21,10 @@ public record Amount(Number numericAmount,
     public static final String DEFAULT_CURRENCY = "EUR";
     public static final Locale DEFAULT_LOCALE = Locale.FRENCH;
 
+    /**
+     * @param numericAmount - numeric amount of the amount
+     * @param currency      - currency of the amount
+     */
     public Amount {
         if (numericAmount == null) {
             throw new IllegalArgumentException("numericAmount could not be null");
@@ -27,18 +35,31 @@ public record Amount(Number numericAmount,
         }
     }
 
-    public Amount(Number amount) {
-        this(amount, DEFAULT_CURRENCY);
+    /**
+     * @param numericAmount - numeric amount of the amount
+     */
+    public Amount(Number numericAmount) {
+        this(numericAmount, DEFAULT_CURRENCY);
     }
 
+    /**
+     * @param monetaryAmount - monetary amount to convert to amount
+     */
     public Amount(MonetaryAmount monetaryAmount) {
         this(monetaryAmount.getNumber(), monetaryAmount.getCurrency());
     }
 
-    public Amount(Number amount, String currency) {
-        this(amount, Monetary.getCurrency(currency));
+    /**
+     * @param numericAmount - numeric amount of the amount
+     * @param currency      - currency of the amount
+     */
+    public Amount(Number numericAmount, String currency) {
+        this(numericAmount, Monetary.getCurrency(currency));
     }
 
+    /**
+     * @return - numeric amount of the amount
+     */
     public MonetaryAmount monetaryAmount() {
         return Monetary.getDefaultAmountFactory()
             .setCurrency(currency)
@@ -46,28 +67,46 @@ public record Amount(Number numericAmount,
             .create();
     }
 
+    /**
+     * @param amountFormatQuery - amount format query
+     * @return - formatted amount
+     */
     public String format(AmountFormatQuery amountFormatQuery) {
         MonetaryAmountFormat monetaryAmountFormat = MonetaryFormats.getAmountFormat(
             amountFormatQuery);
         return monetaryAmountFormat
             .format(monetaryAmount())
-            .replaceAll(" ", " ");
+            .replace("\u00A0", " ");
     }
 
+    /**
+     * @param amount - amount to add
+     * @return - new amount with added amount
+     */
     public Amount add(Amount amount) {
         var result = monetaryAmount().add(amount.monetaryAmount());
         return new Amount(result);
     }
 
+    /**
+     * @param amount - amount to subtract
+     * @return - new amount with subtracted amount
+     */
     public Amount subtract(Amount amount) {
         var result = monetaryAmount().subtract(amount.monetaryAmount());
         return new Amount(result);
     }
 
+    /**
+     * @return - true if amount is negative
+     */
     public boolean isNegative() {
         return monetaryAmount().isNegative();
     }
 
+    /**
+     * @return - currency code of the amount
+     */
     public String currencyCode() {
         return currency.getCurrencyCode();
     }

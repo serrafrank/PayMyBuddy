@@ -1,10 +1,10 @@
 package org.erlik.pay_my_buddy.domains.transaction.events;
 
-import java.util.UUID;
 import org.erlik.pay_my_buddy.domains.Event;
+import org.erlik.pay_my_buddy.domains.models.Id;
 
-public record CreateNewTransactionEvent(UUID debtor,
-                                        UUID creditor,
+public record CreateNewTransactionEvent(Id debtor,
+                                        Id creditor,
                                         Number amount,
                                         String currency)
     implements Event {

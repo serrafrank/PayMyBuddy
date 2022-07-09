@@ -1,11 +1,11 @@
 package org.erlik.pay_my_buddy.domains.transaction;
 
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.erlik.pay_my_buddy.domains.ConsumerRepository;
 import org.erlik.pay_my_buddy.domains.TransactionRepository;
 import org.erlik.pay_my_buddy.domains.exceptions.ConsumerNotFoundException;
 import org.erlik.pay_my_buddy.domains.models.Amount;
+import org.erlik.pay_my_buddy.domains.models.Id;
 import org.erlik.pay_my_buddy.domains.models.Transaction;
 import org.erlik.pay_my_buddy.domains.transaction.events.CreateNewTransactionEvent;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ public class TransactionServiceImpl
     private final ConsumerRepository consumerRepository;
 
     @Override
-    public UUID createNewTransaction(CreateNewTransactionEvent createNewTransactionEvent) {
+    public Id createNewTransaction(CreateNewTransactionEvent createNewTransactionEvent) {
         final var debtorId = createNewTransactionEvent.debtor();
         final var debtor = consumerRepository.getConsumerById(debtorId)
             .orElseThrow(() -> new ConsumerNotFoundException(debtorId));

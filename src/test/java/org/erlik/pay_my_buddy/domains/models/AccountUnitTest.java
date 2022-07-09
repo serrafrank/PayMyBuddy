@@ -1,7 +1,9 @@
 package org.erlik.pay_my_buddy.domains.models;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import org.erlik.pay_my_buddy.domains.exceptions.BalanceCouldNotBeNegativeException;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
@@ -15,7 +17,7 @@ class AccountUnitTest {
         final var account = new Account();
 
         //THEN
-        Assertions.assertEquals(0, account.balance().numericAmount());
+        assertThat(account.balance().numericAmount()).isEqualTo(0);
     }
 
     @Test
@@ -28,7 +30,7 @@ class AccountUnitTest {
         final var account = new Account(amount);
 
         //THEN
-        Assertions.assertEquals(amount, account.balance());
+        assertThat(account.balance()).isEqualTo(amount);
     }
 
     @Test
@@ -43,7 +45,7 @@ class AccountUnitTest {
         final var result = initialAccount.credit(subtractAmount);
 
         //THEN
-        Assertions.assertEquals(result.balance().toString(), expectedAmount.toString());
+        assertThat(expectedAmount.toString()).hasToString(result.balance().toString());
     }
 
     @Test
@@ -58,7 +60,7 @@ class AccountUnitTest {
         final var result = initialAccount.debit(subtractAmount);
 
         //THEN
-        Assertions.assertEquals(result.balance().toString(), expectedAmount.toString());
+        assertThat(expectedAmount.toString()).hasToString(result.balance().toString());
     }
 
     @Test
@@ -72,9 +74,6 @@ class AccountUnitTest {
         Executable executable = () -> initialAccount.debit(subtractAmount);
 
         //THEN
-        Assertions.assertThrows(
-            BalanceCouldNotBeNegativeException.class,
-            executable
-        );
+        assertThrows(BalanceCouldNotBeNegativeException.class, executable);
     }
 }

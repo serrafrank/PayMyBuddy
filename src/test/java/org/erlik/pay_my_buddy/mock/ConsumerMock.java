@@ -1,13 +1,16 @@
 package org.erlik.pay_my_buddy.mock;
 
-import org.erlik.payMyBuddy.domains.models.HashedPassword;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.erlik.pay_my_buddy.domains.models.Consumer;
-import org.junit.jupiter.api.Assertions;
+import org.erlik.pay_my_buddy.domains.models.HashedPassword;
 
 public class ConsumerMock {
 
     public static Consumer create() {
-        final var hashedPassword = HashedPassword.fromPlainText(TestFaker.validPassword());
+
+        final var hashedPassword = HashedPassword.fromPlainText(HashedPasswordMock.generateValidPlainTextPassword());
+
         return new Consumer(
             TestFaker.fake().name().firstName(),
             TestFaker.fake().name().lastName(),
@@ -16,17 +19,16 @@ public class ConsumerMock {
     }
 
     public static Consumer inactive() {
-        var consumer = create();
+        final var consumer = create();
 
-        Assertions.assertFalse(consumer.isActive());
+        assertThat(consumer.isActive()).isFalse();
         return consumer;
     }
 
     public static Consumer active() {
+        final var consumer = create().activate();
 
-        var consumer = create().activate();
-
-        Assertions.assertTrue(consumer.isActive());
+        assertThat(consumer.isActive()).isTrue();
         return consumer;
     }
 }

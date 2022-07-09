@@ -1,13 +1,13 @@
 package org.erlik.pay_my_buddy.domains.consumer;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
-import java.util.UUID;
-import org.erlik.payMyBuddy.mock.FriendMock;
 import org.erlik.pay_my_buddy.domains.ConsumerRepository;
 import org.erlik.pay_my_buddy.domains.consumer.events.AddFriendEvent;
 import org.erlik.pay_my_buddy.domains.consumer.events.CreateNewConsumerEvent;
@@ -16,9 +16,11 @@ import org.erlik.pay_my_buddy.domains.consumer.events.FindConsumerByIdEvent;
 import org.erlik.pay_my_buddy.domains.exceptions.ConsumerNotFoundException;
 import org.erlik.pay_my_buddy.domains.exceptions.EmailAlreadyExistsException;
 import org.erlik.pay_my_buddy.domains.models.Consumer;
+import org.erlik.pay_my_buddy.domains.models.Id;
 import org.erlik.pay_my_buddy.mock.ConsumerMock;
+import org.erlik.pay_my_buddy.mock.FriendMock;
+import org.erlik.pay_my_buddy.mock.HashedPasswordMock;
 import org.erlik.pay_my_buddy.mock.TestFaker;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,7 +31,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class ConsumerServiceUnitTest {
+class ConsumerServiceUnitTest {
 
     @Mock
     private ConsumerRepository consumerRepository;
@@ -37,18 +39,18 @@ public class ConsumerServiceUnitTest {
     private ConsumerService consumerService;
 
     @BeforeEach
-    public void init() {
+    void init() {
         consumerService = new ConsumerServiceImpl(consumerRepository);
     }
 
     @Test
     @DisplayName("When I create a new consumer then the consumer is saved")
-    public void createANewConsumerTest() {
+    void createANewConsumerTest() {
         //GIVEN
         final var firstname = TestFaker.fake().name().firstName();
         final var lastname = TestFaker.fake().name().lastName();
         final var email = TestFaker.fake().internet().emailAddress();
-        final var password = TestFaker.validPassword();
+        final var password = HashedPasswordMock.generateValidPlainTextPassword();
 
         final var createNewConsumerEvent = new CreateNewConsumerEvent(firstname,
             lastname,
@@ -64,18 +66,18 @@ public class ConsumerServiceUnitTest {
         //THEN
         verify(consumerRepository, times(1)).createNewConsumer(consumerArgumentCaptor.capture());
 
-        Assertions.assertNotNull(createdConsumer);
-        Assertions.assertInstanceOf(UUID.class, createdConsumer);
+        assertThat(createdConsumer).isNotNull()
+            .isInstanceOf(Id.class);
     }
 
     @Test
     @DisplayName("When I create a new consumer with an existing email then it throws a EmailAlreadyExistsException")
-    public void createANewConsumerWithExistingEmailThrowsEmailAlreadyExistsExceptionTest() {
+    void createANewConsumerWithExistingEmailThrowsEmailAlreadyExistsExceptionTest() {
         //GIVEN
         final var firstname = TestFaker.fake().name().firstName();
         final var lastname = TestFaker.fake().name().lastName();
         final var email = TestFaker.fake().internet().emailAddress();
-        final var password = TestFaker.validPassword();
+        final var password = HashedPasswordMock.generateValidPlainTextPassword();
 
         final var createNewConsumerEvent = new CreateNewConsumerEvent(firstname,
             lastname,
@@ -90,13 +92,13 @@ public class ConsumerServiceUnitTest {
         final Executable executable = () -> consumerService.createConsumer(createNewConsumerEvent);
 
         //THEN
-        Assertions.assertThrows(EmailAlreadyExistsException.class, executable);
+        assertThrows(EmailAlreadyExistsException.class, executable);
         verify(consumerRepository, times(0)).createNewConsumer(consumerCaptor.capture());
     }
 
     @Test
     @DisplayName("Given a consumer exist when I get this consumer by id then the consumer is returned")
-    public void getAConsumerByIdTest() {
+    void getAConsumerByIdTest() {
         //GIVEN
         final var consumer = ConsumerMock.create();
         final var findConsumerByIdEvent = new FindConsumerByIdEvent(consumer.id());
@@ -106,21 +108,21 @@ public class ConsumerServiceUnitTest {
         final var response = consumerService.findConsumerById(findConsumerByIdEvent);
 
         //THEN
-        Assertions.assertNotNull(response);
-        Assertions.assertEquals(consumer.firstname(), response.firstname());
-        Assertions.assertEquals(consumer.lastname(), response.lastname());
-        Assertions.assertEquals(consumer.emailAddress(), response.emailAddress());
-        Assertions.assertEquals(consumer.password(), response.password());
-        Assertions.assertEquals(consumer.account(), response.account());
-        Assertions.assertEquals(consumer.friends(), response.friends());
-        Assertions.assertEquals(consumer.isActive(), response.isActive());
+        assertThat(response).isNotNull();
+        assertThat(response.firstname()).isEqualTo(consumer.firstname());
+        assertThat(response.lastname()).isEqualTo(consumer.lastname());
+        assertThat(response.emailAddress()).isEqualTo(consumer.emailAddress());
+        assertThat(response.password()).isEqualTo(consumer.password());
+        assertThat(response.account()).isEqualTo(consumer.account());
+        assertThat(response.friends()).isEqualTo(consumer.friends());
+        assertThat(response.isActive()).isEqualTo(consumer.isActive());
     }
 
     @Test
     @DisplayName("Given a consumer exist when I get a consumer with non existing id then it throws a ConsumerNotFoundException")
-    public void getAConsumerByNonExistsIdThrowsAConsumerNotFoundExceptionTest() {
+    void getAConsumerByNonExistsIdThrowsAConsumerNotFoundExceptionTest() {
         //GIVEN
-        final var getConsumerByIdEvent = new FindConsumerByIdEvent(UUID.randomUUID());
+        final var getConsumerByIdEvent = new FindConsumerByIdEvent(new Id());
 
         //WHEN
         when(consumerRepository.getConsumerById(any())).thenReturn(Optional.empty());
@@ -128,39 +130,39 @@ public class ConsumerServiceUnitTest {
         final Executable executable = () -> consumerService.findConsumerById(getConsumerByIdEvent);
 
         //THEN
-        Assertions.assertThrows(ConsumerNotFoundException.class, executable);
+        assertThrows(ConsumerNotFoundException.class, executable);
     }
 
     @Test
     @DisplayName("Given a consumer exist when I get this consumer by emailAddress then the consumer is returned")
-    public void getAConsumerByEmailTest() {
+    void getAConsumerByEmailTest() {
         //GIVEN
         final var consumer = ConsumerMock.create();
         final var findConsumerByEmailEvent = new FindConsumerByEmailEvent(consumer.emailAddress()
-                                                                                  .email());
+            .email());
 
         //WHEN
         when(consumerRepository.getConsumerByEmail(any())).thenReturn(Optional.of(consumer));
         final var response = consumerService.findConsumerByEmail(findConsumerByEmailEvent);
 
         //THEN
-        Assertions.assertNotNull(response);
-        Assertions.assertEquals(consumer.firstname(), response.firstname());
-        Assertions.assertEquals(consumer.lastname(), response.lastname());
-        Assertions.assertEquals(consumer.emailAddress(), response.emailAddress());
-        Assertions.assertEquals(consumer.password(), response.password());
-        Assertions.assertEquals(consumer.account(), response.account());
-        Assertions.assertEquals(consumer.friends(), response.friends());
-        Assertions.assertEquals(consumer.isActive(), response.isActive());
+        assertThat(response).isNotNull();
+        assertThat(response.firstname()).isEqualTo(consumer.firstname());
+        assertThat(response.lastname()).isEqualTo(consumer.lastname());
+        assertThat(response.emailAddress()).isEqualTo(consumer.emailAddress());
+        assertThat(response.password()).isEqualTo(consumer.password());
+        assertThat(response.account()).isEqualTo(consumer.account());
+        assertThat(response.friends()).isEqualTo(consumer.friends());
+        assertThat(response.isActive()).isEqualTo(consumer.isActive());
     }
 
     @Test
     @DisplayName("Given a consumer exist when I get a consumer with non existing emailAddress then it throws a ConsumerNotFoundException")
-    public void getAConsumerByNonExistsEmailThrowsAConsumerNotFoundExceptionTest() {
+    void getAConsumerByNonExistsEmailThrowsAConsumerNotFoundExceptionTest() {
         //GIVEN
         final var getConsumerByEmailEvent = new FindConsumerByEmailEvent(TestFaker.fake()
-                                                                                  .internet()
-                                                                                  .emailAddress());
+            .internet()
+            .emailAddress());
 
         //WHEN
         when(consumerRepository.getConsumerByEmail(any())).thenReturn(Optional.empty());
@@ -169,15 +171,15 @@ public class ConsumerServiceUnitTest {
             getConsumerByEmailEvent);
 
         //THEN
-        Assertions.assertThrows(ConsumerNotFoundException.class, executable);
+        assertThrows(ConsumerNotFoundException.class, executable);
     }
 
     @Test
     @DisplayName("Given a friend exists when I add his email address then his add to my friends list")
-    public void addFriend() {
+    void addFriend() {
         //GIVEN
         var consumer = ConsumerMock.active();
-        Assertions.assertTrue(consumer.friends().isEmpty());
+        assertThat(consumer.friends()).isEmpty();
 
         var friend = FriendMock.create();
 
@@ -196,10 +198,12 @@ public class ConsumerServiceUnitTest {
         verify(consumerRepository, times(1)).updateConsumer(consumerCaptor.capture());
 
         var updatedConsumer = consumerCaptor.getValue();
-        Assertions.assertNotNull(updatedConsumer);
-        Assertions.assertFalse(updatedConsumer.friends().isEmpty());
-        Assertions.assertTrue(updatedConsumer.friends()
-                                             .stream()
-                                             .anyMatch(f -> f.id().equals(friend.id())));
+        assertThat(updatedConsumer).isNotNull();
+        assertThat(updatedConsumer.friends()).isNotEmpty();
+
+        var friendIsAdded = updatedConsumer.friends()
+            .stream()
+            .anyMatch(f -> f.id().equals(friend.id()));
+        assertThat(friendIsAdded).isTrue();
     }
 }

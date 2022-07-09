@@ -1,21 +1,22 @@
 package org.erlik.pay_my_buddy.domains.transaction;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
-import java.util.UUID;
 import org.erlik.pay_my_buddy.domains.ConsumerRepository;
 import org.erlik.pay_my_buddy.domains.TransactionRepository;
 import org.erlik.pay_my_buddy.domains.exceptions.ConsumerNotActivateException;
 import org.erlik.pay_my_buddy.domains.exceptions.ConsumerNotFoundException;
 import org.erlik.pay_my_buddy.domains.models.Amount;
+import org.erlik.pay_my_buddy.domains.models.Id;
 import org.erlik.pay_my_buddy.domains.models.Transaction;
 import org.erlik.pay_my_buddy.domains.transaction.events.CreateNewTransactionEvent;
 import org.erlik.pay_my_buddy.mock.ConsumerMock;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -72,8 +73,8 @@ class TransactionServiceUnitTest {
         verify(transactionRepository,
             times(1)).createNewTransaction(transactionArgumentCaptor.capture());
 
-        Assertions.assertNotNull(createdTransaction);
-        Assertions.assertInstanceOf(UUID.class, createdTransaction);
+        assertThat(createdTransaction).isNotNull()
+            .isInstanceOf(Id.class);
     }
 
     @Test
@@ -84,7 +85,7 @@ class TransactionServiceUnitTest {
         final var amount = new Amount(5);
 
         final var createNewTransactionEvent = new CreateNewTransactionEvent(
-            UUID.randomUUID(),
+            new Id(),
             creditor.id(),
             amount.numericAmount(),
             amount.currencyCode());
@@ -101,7 +102,7 @@ class TransactionServiceUnitTest {
             createNewTransactionEvent);
 
         //THEN
-        Assertions.assertThrows(ConsumerNotFoundException.class, executable);
+        assertThrows(ConsumerNotFoundException.class, executable);
     }
 
     @Test
@@ -113,7 +114,7 @@ class TransactionServiceUnitTest {
 
         final var createNewTransactionEvent = new CreateNewTransactionEvent(
             debtor.id(),
-            UUID.randomUUID(),
+            new Id(),
             amount.numericAmount(),
             amount.currencyCode());
 
@@ -127,7 +128,7 @@ class TransactionServiceUnitTest {
             createNewTransactionEvent);
 
         //THEN
-        Assertions.assertThrows(ConsumerNotFoundException.class, executable);
+        assertThrows(ConsumerNotFoundException.class, executable);
     }
 
     @Test
@@ -156,7 +157,7 @@ class TransactionServiceUnitTest {
             createNewTransactionEvent);
 
         //THEN
-        Assertions.assertThrows(ConsumerNotActivateException.class, executable);
+        assertThrows(ConsumerNotActivateException.class, executable);
     }
 
     @Test
@@ -183,7 +184,7 @@ class TransactionServiceUnitTest {
             createNewTransactionEvent);
 
         //THEN
-        Assertions.assertThrows(ConsumerNotActivateException.class, executable);
+        assertThrows(ConsumerNotActivateException.class, executable);
     }
 
 }

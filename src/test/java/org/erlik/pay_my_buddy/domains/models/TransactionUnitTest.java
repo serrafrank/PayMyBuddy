@@ -1,11 +1,12 @@
 package org.erlik.pay_my_buddy.domains.models;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.time.LocalDateTime;
-import java.util.UUID;
 import org.erlik.pay_my_buddy.domains.exceptions.AmountCouldNotBeNegativeException;
 import org.erlik.pay_my_buddy.domains.exceptions.ConsumerNotActivateException;
 import org.erlik.pay_my_buddy.mock.ConsumerMock;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
@@ -25,14 +26,14 @@ class TransactionUnitTest {
         final var response = new Transaction(debtor, creditor, amount);
 
         //THEN
-        Assertions.assertEquals(debtor, response.debtor());
-        Assertions.assertEquals(creditor, response.creditor());
-        Assertions.assertEquals(amount, response.amount());
+        assertThat(response.debtor()).isEqualTo(debtor);
+        assertThat(response.creditor()).isEqualTo(creditor);
+        assertThat(response.amount()).isEqualTo(amount);
 
-        Assertions.assertNotNull(response.id());
-        Assertions.assertInstanceOf(UUID.class, response.id());
-        Assertions.assertNotNull(response.creationDate());
-        Assertions.assertInstanceOf(LocalDateTime.class, response.creationDate());
+        assertThat(response.id()).isNotNull()
+                .isInstanceOf(Id.class);
+        assertThat(response.creationDate()).isNotNull()
+            .isInstanceOf(LocalDateTime.class);
 
     }
 
@@ -49,7 +50,7 @@ class TransactionUnitTest {
         Executable executable = () -> new Transaction(debtor, creditor, amount);
 
         //THEN
-        Assertions.assertThrows(
+        assertThrows(
             AmountCouldNotBeNegativeException.class,
             executable
         );
@@ -68,7 +69,7 @@ class TransactionUnitTest {
         Executable executable = () -> new Transaction(debtor, creditor, amount);
 
         //THEN
-        Assertions.assertThrows(
+        assertThrows(
             ConsumerNotActivateException.class,
             executable
         );
@@ -87,7 +88,7 @@ class TransactionUnitTest {
         Executable executable = () -> new Transaction(debtor, creditor, amount);
 
         //THEN
-        Assertions.assertThrows(
+        assertThrows(
             ConsumerNotActivateException.class,
             executable
         );

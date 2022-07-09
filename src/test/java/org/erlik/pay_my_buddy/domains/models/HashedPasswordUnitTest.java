@@ -1,8 +1,10 @@
 package org.erlik.pay_my_buddy.domains.models;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import org.erlik.pay_my_buddy.domains.exceptions.PasswordFormatNotValidException;
 import org.erlik.pay_my_buddy.mock.HashedPasswordMock;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
@@ -39,9 +41,9 @@ class HashedPasswordUnitTest {
         HashedPassword response = HashedPassword.fromPlainText(password);
 
         //THEN
-        Assertions.assertNotNull(response);
-        Assertions.assertNotNull(response.hashedPassword());
-        Assertions.assertTrue(response.matchWith(password));
+        assertThat(response).isNotNull();
+        assertThat(response.hashedPassword()).isNotNull();
+        assertThat(response.matchWith(password)).isTrue();
     }
 
     @ParameterizedTest
@@ -53,7 +55,7 @@ class HashedPasswordUnitTest {
         Executable executable = () -> HashedPassword.fromPlainText(invalidPassword);
 
         //THEN
-        Assertions.assertThrows(IllegalArgumentException.class, executable);
+        assertThrows(IllegalArgumentException.class, executable);
     }
 
     @ParameterizedTest
@@ -65,7 +67,7 @@ class HashedPasswordUnitTest {
         Executable executable = () -> HashedPassword.fromPlainText(invalidPassword);
 
         //THEN
-        Assertions.assertThrows(PasswordFormatNotValidException.class, executable);
+        assertThrows(PasswordFormatNotValidException.class, executable);
     }
 
     @ParameterizedTest
@@ -77,7 +79,7 @@ class HashedPasswordUnitTest {
         Executable executable = () -> new HashedPassword(invalidPassword);
 
         //THEN
-        Assertions.assertThrows(IllegalArgumentException.class, executable);
+        assertThrows(IllegalArgumentException.class, executable);
     }
 
 }

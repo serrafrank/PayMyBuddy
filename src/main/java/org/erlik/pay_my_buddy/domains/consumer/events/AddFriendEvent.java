@@ -1,8 +1,8 @@
 package org.erlik.pay_my_buddy.domains.consumer.events;
 
-import java.util.UUID;
+import org.erlik.pay_my_buddy.domains.models.Id;
 
-public record AddFriendEvent(UUID consumerId,
+public record AddFriendEvent(Id consumerId,
                              String friendEmailAddress) {
 
 }

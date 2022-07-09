@@ -1,9 +1,12 @@
 package org.erlik.pay_my_buddy.domains.models;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import org.erlik.pay_my_buddy.domains.exceptions.InvalidEmailAddressException;
 import org.erlik.pay_my_buddy.mock.ConsumerMock;
+import org.erlik.pay_my_buddy.mock.HashedPasswordMock;
 import org.erlik.pay_my_buddy.mock.TestFaker;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
@@ -17,61 +20,61 @@ class ConsumerUnitTest {
         String firstname = TestFaker.fake().name().firstName();
         String lastname = TestFaker.fake().name().lastName();
         String login = TestFaker.fake().internet().emailAddress();
-        String password = TestFaker.validPassword();
+        String password = HashedPasswordMock.generateValidPlainTextPassword();
         HashedPassword hashedPassword = HashedPassword.fromPlainText(password);
 
         //WHEN
         final var consumer = new Consumer(firstname, lastname, login, hashedPassword);
 
         //THEN
-        Assertions.assertEquals(firstname, consumer.firstname());
-        Assertions.assertEquals(lastname, consumer.lastname());
-        Assertions.assertEquals(login, consumer.emailAddress().toString());
-        Assertions.assertEquals(hashedPassword, consumer.password());
-        Assertions.assertTrue(hashedPassword.matchWith(password));
-        Assertions.assertEquals(new Account(), consumer.account());
-        Assertions.assertTrue(consumer.friends().isEmpty());
-        Assertions.assertFalse(consumer.isActive());
+        assertThat(consumer.firstname()).isEqualTo(firstname);
+        assertThat(consumer.lastname()).isEqualTo(lastname);
+        assertThat(consumer.emailAddress().toString()).hasToString(login);
+        assertThat(consumer.password()).isEqualTo(hashedPassword);
+        assertThat(hashedPassword.matchWith(password)).isTrue();
+        assertThat(consumer.account()).isEqualTo(new Account());
+        assertThat(consumer.friends()).isEmpty();
+        assertThat(consumer.isActive()).isFalse();
     }
 
     @Test
     @DisplayName("when I update an inactive consumer then it is active")
-    public void updateConsumerToActiveTest() {
+    void updateConsumerToActiveTest() {
         //GIVEN
         final var consumer = ConsumerMock.inactive();
-        Assertions.assertFalse(consumer.isActive());
+        assertThat(consumer.isActive()).isFalse();
 
         //WHEN
         final var activatedConsumer = consumer.activate();
 
         //THEN
-        Assertions.assertEquals(consumer.firstname(), activatedConsumer.firstname());
-        Assertions.assertEquals(consumer.lastname(), activatedConsumer.lastname());
-        Assertions.assertEquals(consumer.emailAddress(), activatedConsumer.emailAddress());
-        Assertions.assertEquals(consumer.password(), activatedConsumer.password());
-        Assertions.assertEquals(consumer.account(), activatedConsumer.account());
-        Assertions.assertTrue(consumer.friends().isEmpty());
-        Assertions.assertTrue(activatedConsumer.isActive());
+        assertThat(activatedConsumer.firstname()).isEqualTo(consumer.firstname());
+        assertThat(activatedConsumer.lastname()).isEqualTo(consumer.lastname());
+        assertThat(activatedConsumer.emailAddress()).isEqualTo(consumer.emailAddress());
+        assertThat(activatedConsumer.password()).isEqualTo(consumer.password());
+        assertThat(activatedConsumer.account()).isEqualTo(consumer.account());
+        assertThat(consumer.friends().isEmpty()).isTrue();
+        assertThat(activatedConsumer.isActive()).isTrue();
     }
 
     @Test
     @DisplayName("when I update an active consumer then it is inactive")
-    public void updateConsumerToInactiveTest() {
+    void updateConsumerToInactiveTest() {
         //GIVEN
         final var consumer = ConsumerMock.active();
-        Assertions.assertTrue(consumer.isActive());
+        assertThat(consumer.isActive()).isTrue();
 
         //WHEN
         final var inactivatedConsumer = consumer.inactivate();
 
         //THEN
-        Assertions.assertEquals(consumer.firstname(), inactivatedConsumer.firstname());
-        Assertions.assertEquals(consumer.lastname(), inactivatedConsumer.lastname());
-        Assertions.assertEquals(consumer.emailAddress(), inactivatedConsumer.emailAddress());
-        Assertions.assertEquals(consumer.password(), inactivatedConsumer.password());
-        Assertions.assertEquals(consumer.account(), inactivatedConsumer.account());
-        Assertions.assertTrue(consumer.friends().isEmpty());
-        Assertions.assertFalse(inactivatedConsumer.isActive());
+        assertThat(inactivatedConsumer.firstname()).isEqualTo(consumer.firstname());
+        assertThat(inactivatedConsumer.lastname()).isEqualTo(consumer.lastname());
+        assertThat(inactivatedConsumer.emailAddress()).isEqualTo(consumer.emailAddress());
+        assertThat(inactivatedConsumer.password()).isEqualTo(consumer.password());
+        assertThat(inactivatedConsumer.account()).isEqualTo(consumer.account());
+        assertThat(consumer.friends().isEmpty()).isTrue();
+        assertThat(inactivatedConsumer.isActive()).isFalse();
     }
 
     @Test
@@ -84,9 +87,9 @@ class ConsumerUnitTest {
         Executable executable = () -> new Consumer(TestFaker.randomString(),
             TestFaker.randomString(),
             invalidEmail,
-            HashedPassword.fromPlainText(TestFaker.validPassword()));
+            HashedPassword.fromPlainText(HashedPasswordMock.generateValidPlainTextPassword()));
 
         //THEN
-        Assertions.assertThrows(InvalidEmailAddressException.class, executable);
+        assertThrows(InvalidEmailAddressException.class, executable);
     }
 }

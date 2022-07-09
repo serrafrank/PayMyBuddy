@@ -1,6 +1,5 @@
 package org.erlik.pay_my_buddy.domains.consumer;
 
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.erlik.pay_my_buddy.domains.ConsumerRepository;
 import org.erlik.pay_my_buddy.domains.consumer.events.AddFriendEvent;
@@ -13,6 +12,7 @@ import org.erlik.pay_my_buddy.domains.models.Consumer;
 import org.erlik.pay_my_buddy.domains.models.EmailAddress;
 import org.erlik.pay_my_buddy.domains.models.Friend;
 import org.erlik.pay_my_buddy.domains.models.HashedPassword;
+import org.erlik.pay_my_buddy.domains.models.Id;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,7 +23,7 @@ public class ConsumerServiceImpl
     private final ConsumerRepository consumerRepository;
 
     @Override
-    public UUID createConsumer(CreateNewConsumerEvent consumerEvent) {
+    public Id createConsumer(CreateNewConsumerEvent consumerEvent) {
         var hashedPassword = HashedPassword.fromPlainText(consumerEvent.password());
         final var newConsumer = new Consumer(consumerEvent.firstname(),
             consumerEvent.lastname(),
@@ -68,7 +68,7 @@ public class ConsumerServiceImpl
             .orElseThrow(() -> new ConsumerNotFoundException(friendEmailAddress));
     }
 
-    private Consumer getConsumerByIdOrThrowConsumerNotFoundException(UUID consumer) {
+    private Consumer getConsumerByIdOrThrowConsumerNotFoundException(Id consumer) {
         return consumerRepository.getConsumerById(consumer)
             .orElseThrow(() -> new ConsumerNotFoundException(consumer));
     }

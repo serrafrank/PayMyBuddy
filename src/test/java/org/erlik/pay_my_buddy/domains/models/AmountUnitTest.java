@@ -1,12 +1,14 @@
 package org.erlik.pay_my_buddy.domains.models;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.util.Locale;
 import javax.money.Monetary;
 import javax.money.MonetaryException;
 import javax.money.UnknownCurrencyException;
 import javax.money.format.AmountFormatQueryBuilder;
 import org.javamoney.moneta.format.CurrencyStyle;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
@@ -24,9 +26,9 @@ class AmountUnitTest {
         final var response = new Amount(amountValue);
 
         //THEN
-        Assertions.assertEquals(amountValue, response.numericAmount());
-        Assertions.assertEquals(Monetary.getCurrency(currencyCode), response.currency());
-        Assertions.assertEquals("5,00 €", response.toString());
+        assertThat(response.numericAmount()).isEqualTo(amountValue);
+        assertThat(response.currency()).isEqualTo(Monetary.getCurrency(currencyCode));
+        assertThat(response.toString()).hasToString("5,00 €");
     }
 
     @Test
@@ -40,9 +42,9 @@ class AmountUnitTest {
         final var response = new Amount(amountValue, currencyCode);
 
         //THEN
-        Assertions.assertEquals(amountValue, response.numericAmount());
-        Assertions.assertEquals(Monetary.getCurrency(currencyCode), response.currency());
-        Assertions.assertEquals("5,00 $US", response.toString());
+        assertThat(response.numericAmount()).isEqualTo(amountValue);
+        assertThat(response.currency()).isEqualTo(Monetary.getCurrency(currencyCode));
+        assertThat(response.toString()).hasToString("5,00 $US");
     }
 
     @Test
@@ -56,7 +58,7 @@ class AmountUnitTest {
         Executable executable = () -> new Amount(amountValue, invalidCurrencyCode);
 
         //THEN
-        Assertions.assertThrows(UnknownCurrencyException.class, executable);
+        assertThrows(UnknownCurrencyException.class, executable);
     }
 
     @Test
@@ -73,10 +75,10 @@ class AmountUnitTest {
         final var formattedResponse = response.format(customFormat);
 
         //THEN
-        Assertions.assertEquals(amountValue, response.numericAmount());
-        Assertions.assertEquals(Monetary.getCurrency(currencyCode), response.currency());
-        Assertions.assertEquals("55,00 €", response.toString());
-        Assertions.assertEquals("055.00 Euro", formattedResponse);
+        assertThat(response.numericAmount()).isEqualTo(amountValue);
+        assertThat(response.currency()).isEqualTo(Monetary.getCurrency(currencyCode));
+        assertThat(response.toString()).hasToString("55,00 €");
+        assertThat(formattedResponse).hasToString("055.00 Euro");
     }
 
     @Test
@@ -91,7 +93,7 @@ class AmountUnitTest {
         final var response = initialAmount.subtract(subtractAmount);
 
         //THEN
-        Assertions.assertEquals(expectedAmount.toString(), response.toString());
+        assertThat(response.toString()).hasToString(expectedAmount.toString());
     }
 
     @Test
@@ -106,7 +108,7 @@ class AmountUnitTest {
         final var response = initialAmount.add(subtractAmount);
 
         //THEN
-        Assertions.assertEquals(expectedAmount.toString(), response.toString());
+        assertThat(response.toString()).hasToString(expectedAmount.toString());
     }
 
     @Test
@@ -121,14 +123,14 @@ class AmountUnitTest {
         Executable addExecutable = () -> initialAmount.add(subtractAmount);
 
         //THEN
-        Assertions.assertThrows(MonetaryException.class, subtractExecutable);
-        Assertions.assertThrows(MonetaryException.class, addExecutable);
+        assertThrows(MonetaryException.class, subtractExecutable);
+        assertThrows(MonetaryException.class, addExecutable);
     }
 
     @Test
     @DisplayName(
         "given I init a negative Amount when I test if it's negative then it's return true " +
-            "MonetaryException")
+        "MonetaryException")
     void amountIsNegativeTest() {
         //GIVEN
         final var positiveAmount = new Amount(5);
@@ -139,8 +141,8 @@ class AmountUnitTest {
         final var negativeAmountResult = negativeAmount.isNegative();
 
         //THEN
-        Assertions.assertFalse(positiveAmountResult);
-        Assertions.assertTrue(negativeAmountResult);
+        assertThat(positiveAmountResult).isFalse();
+        assertThat(negativeAmountResult).isTrue();
     }
 
     @Test
@@ -154,6 +156,6 @@ class AmountUnitTest {
         final var response = amount.currencyCode();
 
         //THEN
-        Assertions.assertEquals(expectedCurrencyCode, response);
+        assertThat(response).isEqualTo(expectedCurrencyCode);
     }
 }

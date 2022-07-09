@@ -1,9 +1,9 @@
 package org.erlik.pay_my_buddy.domains.consumer.events;
 
-import java.util.UUID;
 import org.erlik.pay_my_buddy.domains.Event;
+import org.erlik.pay_my_buddy.domains.models.Id;
 
-public record FindConsumerByIdEvent(UUID id)
+public record FindConsumerByIdEvent(Id id)
     implements Event {
 
 }

@@ -7,10 +7,10 @@ import org.erlik.pay_my_buddy.core.PasswordEncoder;
 import org.erlik.pay_my_buddy.domains.exceptions.PasswordFormatNotValidException;
 
 /**
- *
  * @param hashedPassword The hashed password.
  */
-public record HashedPassword(String hashedPassword) {
+public record HashedPassword(String hashedPassword)
+    implements ValueObject {
 
     private static final Integer MIN_LENGTH = 8;
     private static final Integer MAX_LENGTH = 20;
@@ -111,6 +111,7 @@ public record HashedPassword(String hashedPassword) {
 
     /**
      * Generates a HashedPassword object from a hashed password.
+     *
      * @param hashedPassword The hashed password.
      */
     public HashedPassword {
