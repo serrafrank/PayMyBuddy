@@ -12,18 +12,22 @@ public class HashedPasswordMock {
     }
 
     public static String generateValidPlainTextPassword() {
-        StringBuilder randomString = new StringBuilder()
-            .append(randomString(HashedPassword.getAcceptedLowerCaseChars(), 2, 4))
-            .append(randomString(HashedPassword.getAcceptedUpperCaseChars(), 2, 4))
-            .append(randomString(HashedPassword.getAcceptedDigits(), 2, 4))
-            .append(randomString(HashedPassword.getAcceptedSpecialChars(), 2, 4));
+        List<List<CharSequence>> acceptedCharacters = getExpectedCharacters();
+
+        int minCharNumber = (int) Math.ceil(HashedPassword.getMinLength()
+                                            / (double) acceptedCharacters.size());
+        int maxCharNumber = (int) Math.floor(HashedPassword.getMaxLength()
+                                             / (double) acceptedCharacters.size());
+
+        StringBuilder randomString = new StringBuilder();
+        acceptedCharacters.forEach(charSequence -> randomString.append(randomString(charSequence,  minCharNumber, maxCharNumber)));
 
         return mixeCharactersFromString(randomString);
     }
 
-    private static String randomString(List<CharSequence> chars, int minLenght, int maxLenght) {
+    private static String randomString(List<CharSequence> chars, int minLength, int maxLength) {
         Random random = new Random();
-        return RandomStringUtils.random(random.nextInt(maxLenght - minLenght) + minLenght,
+        return RandomStringUtils.random(random.nextInt(maxLength - minLength) + minLength,
             String.join("", chars));
     }
 
@@ -36,5 +40,12 @@ public class HashedPasswordMock {
             string.deleteCharAt(index);
         }
         return randomString.toString();
+    }
+
+    private static List<List<CharSequence>> getExpectedCharacters() {
+        return List.of(HashedPassword.getAcceptedLowerCaseChars(),
+            HashedPassword.getAcceptedUpperCaseChars(),
+            HashedPassword.getAcceptedDigits(),
+            HashedPassword.getAcceptedSpecialChars());
     }
 }

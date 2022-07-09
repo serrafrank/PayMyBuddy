@@ -100,7 +100,7 @@ class ConsumerServiceUnitTest {
     @DisplayName("Given a consumer exist when I get this consumer by id then the consumer is returned")
     void getAConsumerByIdTest() {
         //GIVEN
-        final var consumer = ConsumerMock.builder().build();
+        final var consumer = ConsumerMock.generateConsumer();
         final var findConsumerByIdEvent = new FindConsumerByIdEvent(consumer.id());
 
         //WHEN
@@ -137,7 +137,7 @@ class ConsumerServiceUnitTest {
     @DisplayName("Given a consumer exist when I get this consumer by emailAddress then the consumer is returned")
     void getAConsumerByEmailTest() {
         //GIVEN
-        final var consumer = ConsumerMock.create();
+        final var consumer = ConsumerMock.generateConsumer();
         final var findConsumerByEmailEvent = new FindConsumerByEmailEvent(consumer.emailAddress()
             .email());
 
@@ -181,7 +181,7 @@ class ConsumerServiceUnitTest {
         var consumer = ConsumerMock.active();
         assertThat(consumer.friends()).isEmpty();
 
-        var friend = FriendMock.create();
+        var friend = FriendMock.generateFriend();
 
         var addFriendEvent = new AddFriendEvent(consumer.id(), friend.emailAddress().email());
 

@@ -3,7 +3,7 @@ package org.erlik.pay_my_buddy.domains.models;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.util.Set;
+import org.erlik.pay_my_buddy.domains.exceptions.FriendAlreadyExists;
 import org.erlik.pay_my_buddy.domains.exceptions.InvalidEmailAddressException;
 import org.erlik.pay_my_buddy.domains.models.accounts.ElectronicMoneyAccount;
 import org.erlik.pay_my_buddy.mock.ConsumerMock;
@@ -29,6 +29,44 @@ class ConsumerUnitTest {
         final var consumer = new Consumer(firstname, lastname, login, hashedPassword);
 
         //THEN
+        assertThat(consumer.firstname()).isEqualTo(firstname);
+        assertThat(consumer.lastname()).isEqualTo(lastname);
+        assertThat(consumer.emailAddress().toString()).hasToString(login);
+        assertThat(consumer.password()).isEqualTo(hashedPassword);
+        assertThat(hashedPassword.matchWith(password)).isTrue();
+        assertThat(consumer.accounts()).isEqualTo(Set.of(new ElectronicMoneyAccount()));
+        assertThat(consumer.friends()).isEmpty();
+        assertThat(consumer.isActive()).isFalse();
+    }
+
+    @Test
+    @DisplayName("given a consumer when I add an existing friend then it throws an exception")
+    void addFriendTest() {
+        //GIVEN
+        Consumer consumer = ConsumerMock.generateConsumer();
+        Friend friend = FriendMock.generateFriend();
+
+        //WHEN
+        consumer.addFriend(friend);
+
+        //THEN
+        assertThat(consumer.friends()).containsExactly(friend);
+    }
+
+
+    @Test
+    @DisplayName("given a consumer when I add a non existing friend it is added to the list")
+    void addNonExistingFriendTest() {
+        //GIVEN
+        Consumer consumer = ConsumerMock.generateConsumer();
+        Friend friend = FriendMock.generateFriend();
+        consumer.addFriend(friend);
+
+        //WHEN
+        Executable addFriend = () -> consumer.addFriend(friend);
+
+        //THEN
+        assertThrows(FriendAlreadyExists.class, addFriend);
         assertThat(consumer.firstname()).isEqualTo(firstname);
         assertThat(consumer.lastname()).isEqualTo(lastname);
         assertThat(consumer.emailAddress().toString()).hasToString(login);
