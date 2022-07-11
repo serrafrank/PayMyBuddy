@@ -19,7 +19,6 @@ import org.erlik.pay_my_buddy.domains.models.Consumer;
 import org.erlik.pay_my_buddy.domains.models.Id;
 import org.erlik.pay_my_buddy.fake.ConsumerFake;
 import org.erlik.pay_my_buddy.fake.FriendFake;
-import org.erlik.pay_my_buddy.fake.HashedPasswordFake;
 import org.erlik.pay_my_buddy.fake.TestFaker;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -50,7 +49,7 @@ class ConsumerServiceUnitTest {
         final var firstname = TestFaker.fake().name().firstName();
         final var lastname = TestFaker.fake().name().lastName();
         final var email = TestFaker.fake().internet().emailAddress();
-        final var password = HashedPasswordFake.generateValidPlainTextPassword();
+        final var password = TestFaker.generateValidPlainTextPassword();
 
         final var createNewConsumerEvent = new CreateNewConsumerEvent(firstname,
             lastname,
@@ -77,7 +76,7 @@ class ConsumerServiceUnitTest {
         final var firstname = TestFaker.fake().name().firstName();
         final var lastname = TestFaker.fake().name().lastName();
         final var email = TestFaker.fake().internet().emailAddress();
-        final var password = HashedPasswordFake.generateValidPlainTextPassword();
+        final var password = TestFaker.generateValidPlainTextPassword();
 
         final var createNewConsumerEvent = new CreateNewConsumerEvent(firstname,
             lastname,

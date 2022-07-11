@@ -24,7 +24,7 @@ class ConsumerUnitTest {
         String firstname = TestFaker.fake().name().firstName();
         String lastname = TestFaker.fake().name().lastName();
         String login = TestFaker.fake().internet().emailAddress();
-        String password = HashedPasswordFake.generateValidPlainTextPassword();
+        String password = TestFaker.generateValidPlainTextPassword();
         HashedPassword hashedPassword = HashedPassword.fromPlainText(password);
 
         //WHEN

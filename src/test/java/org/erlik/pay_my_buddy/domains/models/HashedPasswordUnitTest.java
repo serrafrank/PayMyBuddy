@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.erlik.pay_my_buddy.domains.exceptions.PasswordFormatNotValidException;
-import org.erlik.pay_my_buddy.fake.HashedPasswordFake;
+import org.erlik.pay_my_buddy.fake.TestFaker;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
@@ -35,7 +35,7 @@ class HashedPasswordUnitTest {
     @DisplayName("given a plain text password when the password is hashed then the hashed password match with plain text password")
     void initWithPasswordFromPlainText() {
         //GIVEN
-        String password = HashedPasswordFake.generateValidPlainTextPassword();
+        String password = TestFaker.generateValidPlainTextPassword();
 
         //WHEN
         HashedPassword response = HashedPassword.fromPlainText(password);

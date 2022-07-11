@@ -22,7 +22,7 @@ public record Consumer(Id id,
 
     public Consumer {
         if (id == null) {
-            throw new IllegalArgumentException("Firstname is null, empty or blank");
+            throw new IllegalArgumentException("Id is null, empty or blank");
         }
         if (StringUtils.isBlank(firstname)) {
             throw new IllegalArgumentException("Firstname is null, empty or blank");
