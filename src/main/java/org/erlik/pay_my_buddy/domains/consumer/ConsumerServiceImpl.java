@@ -65,19 +65,19 @@ public class ConsumerServiceImpl
     private Friend getFriendByEmailOrThrowConsumerNotFoundException(String emailAddress) {
         final var friendEmailAddress = new EmailAddress(emailAddress);
         return consumerRepository.getFriendByEmail(friendEmailAddress)
-            .orElseThrow(() -> new ConsumerNotFoundException(friendEmailAddress));
+                                 .orElseThrow(() -> new ConsumerNotFoundException(friendEmailAddress));
     }
 
     private Consumer getConsumerByIdOrThrowConsumerNotFoundException(Id consumer) {
         return consumerRepository.getConsumerById(consumer)
-            .orElseThrow(() -> new ConsumerNotFoundException(consumer));
+                                 .orElseThrow(() -> new ConsumerNotFoundException(consumer));
     }
 
     private Consumer getConsumerByEmailOrThrowConsumerNotFoundException(String emailAddress) {
         final var consumerEmailAddress = new EmailAddress(emailAddress);
         return consumerRepository.getConsumerByEmail(consumerEmailAddress)
-            .orElseThrow(() -> new ConsumerNotFoundException(
-                consumerEmailAddress));
+                                 .orElseThrow(() -> new ConsumerNotFoundException(
+                                     consumerEmailAddress));
     }
 
 }

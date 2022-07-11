@@ -3,7 +3,9 @@ package org.erlik.pay_my_buddy.domains.models;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.Set;
 import org.erlik.pay_my_buddy.domains.exceptions.InvalidEmailAddressException;
+import org.erlik.pay_my_buddy.domains.models.accounts.ElectronicMoneyAccount;
 import org.erlik.pay_my_buddy.mock.ConsumerMock;
 import org.erlik.pay_my_buddy.mock.HashedPasswordMock;
 import org.erlik.pay_my_buddy.mock.TestFaker;
@@ -32,7 +34,7 @@ class ConsumerUnitTest {
         assertThat(consumer.emailAddress().toString()).hasToString(login);
         assertThat(consumer.password()).isEqualTo(hashedPassword);
         assertThat(hashedPassword.matchWith(password)).isTrue();
-        assertThat(consumer.account()).isEqualTo(new Account());
+        assertThat(consumer.accounts()).isEqualTo(Set.of(new ElectronicMoneyAccount()));
         assertThat(consumer.friends()).isEmpty();
         assertThat(consumer.isActive()).isFalse();
     }
@@ -52,7 +54,7 @@ class ConsumerUnitTest {
         assertThat(activatedConsumer.lastname()).isEqualTo(consumer.lastname());
         assertThat(activatedConsumer.emailAddress()).isEqualTo(consumer.emailAddress());
         assertThat(activatedConsumer.password()).isEqualTo(consumer.password());
-        assertThat(activatedConsumer.account()).isEqualTo(consumer.account());
+        assertThat(activatedConsumer.accounts()).isEqualTo(consumer.accounts());
         assertThat(consumer.friends().isEmpty()).isTrue();
         assertThat(activatedConsumer.isActive()).isTrue();
     }
@@ -72,7 +74,7 @@ class ConsumerUnitTest {
         assertThat(inactivatedConsumer.lastname()).isEqualTo(consumer.lastname());
         assertThat(inactivatedConsumer.emailAddress()).isEqualTo(consumer.emailAddress());
         assertThat(inactivatedConsumer.password()).isEqualTo(consumer.password());
-        assertThat(inactivatedConsumer.account()).isEqualTo(consumer.account());
+        assertThat(inactivatedConsumer.accounts()).isEqualTo(consumer.accounts());
         assertThat(consumer.friends().isEmpty()).isTrue();
         assertThat(inactivatedConsumer.isActive()).isFalse();
     }

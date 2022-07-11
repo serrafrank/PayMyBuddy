@@ -9,6 +9,6 @@ public class FriendAlreadyExists
 
     public FriendAlreadyExists(Consumer consumer, Friend friend) {
         super("Friend already exists on the friends list. Consumer : " + consumer.id() +
-              " , friend : " + friend.id());
+            " , friend : " + friend.id());
     }
 }

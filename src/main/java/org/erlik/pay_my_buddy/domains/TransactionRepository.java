@@ -1,9 +1,9 @@
 package org.erlik.pay_my_buddy.domains;
 
-import org.erlik.pay_my_buddy.domains.models.Transaction;
+import org.erlik.pay_my_buddy.domains.models.transactions.TransferRequest;
 
 public interface TransactionRepository {
 
-    void createNewTransaction(Transaction transaction);
+    void createNewTransaction(TransferRequest transferRequest);
 
 }

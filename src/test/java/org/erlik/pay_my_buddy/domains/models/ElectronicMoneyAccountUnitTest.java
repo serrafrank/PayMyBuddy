@@ -4,17 +4,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.erlik.pay_my_buddy.domains.exceptions.BalanceCouldNotBeNegativeException;
+import org.erlik.pay_my_buddy.domains.models.accounts.ElectronicMoneyAccount;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
-class AccountUnitTest {
+class ElectronicMoneyAccountUnitTest {
 
     @Test
     @DisplayName("When I init a new Account, the balance is 0")
     void initNewAccountAtZeroTest() {
         //WHEN
-        final var account = new Account();
+        final var account = new ElectronicMoneyAccount();
 
         //THEN
         assertThat(account.balance().numericAmount()).isEqualTo(0);
@@ -27,7 +28,7 @@ class AccountUnitTest {
         final var amount = new Amount(55, "USD");
 
         //WHEN
-        final var account = new Account(amount);
+        final var account = new ElectronicMoneyAccount(amount);
 
         //THEN
         assertThat(account.balance()).isEqualTo(amount);
@@ -37,7 +38,7 @@ class AccountUnitTest {
     @DisplayName("given I init an Amount when I credit it then it is correctly calculated")
     void creditAccountTest() {
         //GIVEN
-        final var initialAccount = new Account(new Amount(50));
+        final var initialAccount = new ElectronicMoneyAccount(new Amount(50));
         final var subtractAmount = new Amount(5);
         final var expectedAmount = new Amount(55);
 
@@ -52,7 +53,7 @@ class AccountUnitTest {
     @DisplayName("given I init an Amount when I debit it then it is correctly calculated")
     void debitAccountTest() {
         //GIVEN
-        final var initialAccount = new Account(new Amount(50));
+        final var initialAccount = new ElectronicMoneyAccount(new Amount(50));
         final var subtractAmount = new Amount(5);
         final var expectedAmount = new Amount(45);
 
@@ -67,7 +68,7 @@ class AccountUnitTest {
     @DisplayName("given I init an Amount when I debit and have a negative balance then it throws a BalanceCouldNotBeNegativeException")
     void debitAccountThrowBalanceCouldNotBeNegativeExceptionTest() {
         //GIVEN
-        final var initialAccount = new Account(new Amount(5));
+        final var initialAccount = new ElectronicMoneyAccount(new Amount(5));
         final var subtractAmount = new Amount(55);
 
         //WHEN

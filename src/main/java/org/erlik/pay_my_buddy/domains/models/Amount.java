@@ -62,9 +62,9 @@ public record Amount(Number numericAmount,
      */
     public MonetaryAmount monetaryAmount() {
         return Monetary.getDefaultAmountFactory()
-            .setCurrency(currency)
-            .setNumber(numericAmount)
-            .create();
+                       .setCurrency(currency)
+                       .setNumber(numericAmount)
+                       .create();
     }
 
     /**
@@ -115,8 +115,8 @@ public record Amount(Number numericAmount,
     public String toString() {
         var amountFormatQuery =
             AmountFormatQueryBuilder.of(DEFAULT_LOCALE)
-                .set(CurrencyStyle.SYMBOL)
-                .build();
+                                    .set(CurrencyStyle.SYMBOL)
+                                    .build();
         return format(amountFormatQuery);
     }
 }

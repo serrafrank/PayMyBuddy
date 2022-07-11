@@ -6,7 +6,7 @@ import org.erlik.pay_my_buddy.domains.TransactionRepository;
 import org.erlik.pay_my_buddy.domains.exceptions.ConsumerNotFoundException;
 import org.erlik.pay_my_buddy.domains.models.Amount;
 import org.erlik.pay_my_buddy.domains.models.Id;
-import org.erlik.pay_my_buddy.domains.models.Transaction;
+import org.erlik.pay_my_buddy.domains.models.transactions.TransferRequest;
 import org.erlik.pay_my_buddy.domains.transaction.events.CreateNewTransactionEvent;
 import org.springframework.stereotype.Service;
 
@@ -23,16 +23,18 @@ public class TransactionServiceImpl
     public Id createNewTransaction(CreateNewTransactionEvent createNewTransactionEvent) {
         final var debtorId = createNewTransactionEvent.debtor();
         final var debtor = consumerRepository.getConsumerById(debtorId)
-            .orElseThrow(() -> new ConsumerNotFoundException(debtorId));
+                                             .orElseThrow(() -> new ConsumerNotFoundException(
+                                                 debtorId));
 
         final var creditorId = createNewTransactionEvent.creditor();
         final var creditor = consumerRepository.getConsumerById(creditorId)
-            .orElseThrow(() -> new ConsumerNotFoundException(creditorId));
+                                               .orElseThrow(() -> new ConsumerNotFoundException(
+                                                   creditorId));
 
         final var amount = new Amount(createNewTransactionEvent.amount(),
             createNewTransactionEvent.currency());
 
-        final var transaction = new Transaction(debtor, creditor, amount);
+        final var transaction = new TransferRequest(debtor, creditor, amount);
 
         transactionRepository.createNewTransaction(transaction);
 

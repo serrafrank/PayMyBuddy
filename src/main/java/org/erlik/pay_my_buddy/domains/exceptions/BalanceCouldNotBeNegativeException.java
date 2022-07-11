@@ -10,8 +10,8 @@ public class BalanceCouldNotBeNegativeException
     public BalanceCouldNotBeNegativeException(@NonNull Amount balance,
                                               @NonNull Amount transactionAmount) {
         super("Balance could not be negative. Current balance : "
-              + balance
-              + " , Transaction amount"
-              + transactionAmount);
+            + balance
+            + " , Transaction amount"
+            + transactionAmount);
     }
 }

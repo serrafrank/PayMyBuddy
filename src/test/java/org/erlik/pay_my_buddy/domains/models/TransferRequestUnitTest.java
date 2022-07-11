@@ -6,12 +6,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.time.LocalDateTime;
 import org.erlik.pay_my_buddy.domains.exceptions.AmountCouldNotBeNegativeException;
 import org.erlik.pay_my_buddy.domains.exceptions.ConsumerNotActivateException;
+import org.erlik.pay_my_buddy.domains.models.transactions.TransferRequest;
 import org.erlik.pay_my_buddy.mock.ConsumerMock;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
-class TransactionUnitTest {
+class TransferRequestUnitTest {
 
     @Test
     @DisplayName("a transaction is correctly init")
@@ -23,7 +24,7 @@ class TransactionUnitTest {
         final var amount = new Amount(1);
 
         //WHEN
-        final var response = new Transaction(debtor, creditor, amount);
+        final var response = new TransferRequest(debtor, creditor, amount);
 
         //THEN
         assertThat(response.debtor()).isEqualTo(debtor);
@@ -47,7 +48,7 @@ class TransactionUnitTest {
         final var amount = new Amount(-1, "USD");
 
         //WHEN
-        Executable executable = () -> new Transaction(debtor, creditor, amount);
+        Executable executable = () -> new TransferRequest(debtor, creditor, amount);
 
         //THEN
         assertThrows(
@@ -66,7 +67,7 @@ class TransactionUnitTest {
         final var amount = new Amount(1);
 
         //WHEN
-        Executable executable = () -> new Transaction(debtor, creditor, amount);
+        Executable executable = () -> new TransferRequest(debtor, creditor, amount);
 
         //THEN
         assertThrows(
@@ -85,7 +86,7 @@ class TransactionUnitTest {
         final var amount = new Amount(1);
 
         //WHEN
-        Executable executable = () -> new Transaction(debtor, creditor, amount);
+        Executable executable = () -> new TransferRequest(debtor, creditor, amount);
 
         //THEN
         assertThrows(

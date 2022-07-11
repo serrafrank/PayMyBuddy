@@ -100,7 +100,7 @@ class ConsumerServiceUnitTest {
     @DisplayName("Given a consumer exist when I get this consumer by id then the consumer is returned")
     void getAConsumerByIdTest() {
         //GIVEN
-        final var consumer = ConsumerMock.create();
+        final var consumer = ConsumerMock.builder().build();
         final var findConsumerByIdEvent = new FindConsumerByIdEvent(consumer.id());
 
         //WHEN
@@ -113,7 +113,7 @@ class ConsumerServiceUnitTest {
         assertThat(response.lastname()).isEqualTo(consumer.lastname());
         assertThat(response.emailAddress()).isEqualTo(consumer.emailAddress());
         assertThat(response.password()).isEqualTo(consumer.password());
-        assertThat(response.account()).isEqualTo(consumer.account());
+        assertThat(response.accounts()).isEqualTo(consumer.accounts());
         assertThat(response.friends()).isEqualTo(consumer.friends());
         assertThat(response.isActive()).isEqualTo(consumer.isActive());
     }
@@ -151,7 +151,7 @@ class ConsumerServiceUnitTest {
         assertThat(response.lastname()).isEqualTo(consumer.lastname());
         assertThat(response.emailAddress()).isEqualTo(consumer.emailAddress());
         assertThat(response.password()).isEqualTo(consumer.password());
-        assertThat(response.account()).isEqualTo(consumer.account());
+        assertThat(response.accounts()).isEqualTo(consumer.accounts());
         assertThat(response.friends()).isEqualTo(consumer.friends());
         assertThat(response.isActive()).isEqualTo(consumer.isActive());
     }

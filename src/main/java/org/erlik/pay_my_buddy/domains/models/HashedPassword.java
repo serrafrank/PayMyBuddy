@@ -182,8 +182,8 @@ public record HashedPassword(String hashedPassword)
 
     private static List<String> getValidationErrors(String password) {
         return rules.stream().filter(r -> !r.isValid(password))
-            .map(Rule::error)
-            .toList();
+                    .map(Rule::error)
+                    .toList();
     }
 
     private static boolean stringContainsAtLeastOneChar(String string, List<CharSequence> chars) {

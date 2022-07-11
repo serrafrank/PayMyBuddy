@@ -14,7 +14,7 @@ import org.erlik.pay_my_buddy.domains.exceptions.ConsumerNotActivateException;
 import org.erlik.pay_my_buddy.domains.exceptions.ConsumerNotFoundException;
 import org.erlik.pay_my_buddy.domains.models.Amount;
 import org.erlik.pay_my_buddy.domains.models.Id;
-import org.erlik.pay_my_buddy.domains.models.Transaction;
+import org.erlik.pay_my_buddy.domains.models.transactions.TransferRequest;
 import org.erlik.pay_my_buddy.domains.transaction.events.CreateNewTransactionEvent;
 import org.erlik.pay_my_buddy.mock.ConsumerMock;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,7 +27,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class TransactionServiceUnitTest {
+class TransferRequestServiceUnitTest {
 
     @Mock
     private TransactionRepository transactionRepository;
@@ -57,24 +57,24 @@ class TransactionServiceUnitTest {
 
         //WHEN
         lenient().when(consumerRepository.getConsumerById(createNewTransactionEvent.debtor()))
-            .thenReturn(
-                Optional.of(debtor));
+                 .thenReturn(
+                     Optional.of(debtor));
         lenient().when(consumerRepository.getConsumerById(createNewTransactionEvent.creditor()))
-            .thenReturn(
-                Optional.of(creditor));
+                 .thenReturn(
+                     Optional.of(creditor));
 
         final var createdTransaction = transactionService.createNewTransaction(
             createNewTransactionEvent);
 
-        final ArgumentCaptor<Transaction> transactionArgumentCaptor = ArgumentCaptor.forClass(
-            Transaction.class);
+        final ArgumentCaptor<TransferRequest> transactionArgumentCaptor = ArgumentCaptor.forClass(
+            TransferRequest.class);
 
         //THEN
         verify(transactionRepository,
             times(1)).createNewTransaction(transactionArgumentCaptor.capture());
 
         assertThat(createdTransaction).isNotNull()
-            .isInstanceOf(Id.class);
+                                      .isInstanceOf(Id.class);
     }
 
     @Test

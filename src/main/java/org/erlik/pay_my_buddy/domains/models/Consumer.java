@@ -1,17 +1,22 @@
 package org.erlik.pay_my_buddy.domains.models;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
+import org.erlik.pay_my_buddy.domains.exceptions.AccountTypeAlreadyExists;
 import org.erlik.pay_my_buddy.domains.exceptions.FriendAlreadyExists;
+import org.erlik.pay_my_buddy.domains.models.accounts.AccountType;
+import org.erlik.pay_my_buddy.domains.models.accounts.ElectronicMoneyAccount;
 
 public record Consumer(Id id,
                        String firstname,
                        String lastname,
                        EmailAddress emailAddress,
                        HashedPassword password,
-                       Account account,
-                       List<Friend> friends,
+                       Set<Account> accounts,
+                       Set<Friend> friends,
                        boolean isActive)
     implements ValueObject {
 
@@ -31,12 +36,15 @@ public record Consumer(Id id,
         if (password == null) {
             throw new IllegalArgumentException("Password is null");
         }
-        if (account == null) {
+        if (accounts == null) {
             throw new IllegalArgumentException("Account is null");
         }
         if (friends == null) {
             throw new IllegalArgumentException("Friends is null");
         }
+
+        accounts = Collections.unmodifiableSet(accounts);
+        friends = Collections.unmodifiableSet(friends);
     }
 
     public Consumer(String firstname,
@@ -48,13 +56,21 @@ public record Consumer(Id id,
             lastname,
             new EmailAddress(emailAddress),
             password,
-            new Account(),
-            new ArrayList<>(),
+            initAccountList(),
+            initFriendList(),
             false);
     }
 
+    private static Set<Account> initAccountList() {
+        return Set.of(new ElectronicMoneyAccount());
+    }
+
+    private static Set<Friend> initFriendList() {
+        return Set.of();
+    }
+
     /**
-     * Return an activate Consumer with isActive set to true
+     * @return Return an activated Consumer with isActive set to true
      */
     public Consumer activate() {
         return new Consumer(id,
@@ -62,18 +78,21 @@ public record Consumer(Id id,
             lastname,
             emailAddress,
             password,
-            account,
+            accounts,
             friends,
             true);
     }
 
+    /**
+     * @return Return an inactivated Consumer with isActive set to false
+     */
     public Consumer inactivate() {
         return new Consumer(id,
             firstname,
             lastname,
             emailAddress,
             password,
-            account,
+            accounts,
             friends,
             false);
     }
@@ -83,15 +102,41 @@ public record Consumer(Id id,
             throw new FriendAlreadyExists(this, friend);
         }
 
-        friends.add(friend);
+        final Set<Friend> mutableFriendList = new HashSet<>(friends);
+
+        mutableFriendList.add(friend);
 
         return new Consumer(id,
             firstname,
             lastname,
             emailAddress,
             password,
-            account,
+            accounts,
+            Collections.unmodifiableSet(mutableFriendList),
+            isActive);
+    }
+
+    public Consumer addAccount(Account account) {
+        if (accounts.stream().anyMatch(c -> c.accountType().equals(account.accountType()))) {
+            throw new AccountTypeAlreadyExists(this, account);
+        }
+
+        final Set<Account> mutableAccountList = new HashSet<>(accounts);
+
+        mutableAccountList.add(account);
+
+        return new Consumer(id,
+            firstname,
+            lastname,
+            emailAddress,
+            password,
+            Collections.unmodifiableSet(mutableAccountList),
             friends,
             isActive);
+    }
+
+    public Optional<Account> getAccountByType(AccountType accountType) {
+        return accounts.stream().filter(account -> account.accountType().equals(accountType))
+                       .findFirst();
     }
 }
