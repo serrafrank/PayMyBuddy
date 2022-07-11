@@ -27,7 +27,7 @@ public class HashedPasswordFake {
         }
 
         public HashedPassword build() {
-            return new HashedPassword(plainTextPassword);
+            return HashedPassword.fromPlainText(plainTextPassword);
         }
 
     }

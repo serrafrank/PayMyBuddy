@@ -1,7 +1,7 @@
 package org.erlik.pay_my_buddy.fake;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.With;
@@ -11,6 +11,7 @@ import org.erlik.pay_my_buddy.domains.models.EmailAddress;
 import org.erlik.pay_my_buddy.domains.models.Friend;
 import org.erlik.pay_my_buddy.domains.models.HashedPassword;
 import org.erlik.pay_my_buddy.domains.models.Id;
+import org.erlik.pay_my_buddy.domains.models.accounts.ElectronicMoneyAccount;
 
 public class ConsumerFake {
 
@@ -40,8 +41,8 @@ public class ConsumerFake {
         private String lastname;
         private String emailAddress;
         private String password;
-        private Account account;
-        private List<Friend> friends;
+        private Set<Account> accounts;
+        private Set<Friend> friends;
         private boolean isActive;
 
         private ConsumerFakeBuilder() {
@@ -50,8 +51,8 @@ public class ConsumerFake {
             lastname = TestFaker.fake().name().lastName();
             emailAddress = TestFaker.fake().internet().emailAddress();
             password = TestFaker.generateValidPlainTextPassword();
-            account = new Account();
-            friends = new ArrayList<>();
+            accounts = Set.of(new ElectronicMoneyAccount());
+            friends = new HashSet<>();
             isActive = true;
         }
 
@@ -60,8 +61,8 @@ public class ConsumerFake {
                 firstname,
                 lastname,
                 new EmailAddress(emailAddress),
-                new HashedPassword(password),
-                account,
+                HashedPassword.fromPlainText(password),
+                accounts,
                 friends,
                 isActive);
         }
