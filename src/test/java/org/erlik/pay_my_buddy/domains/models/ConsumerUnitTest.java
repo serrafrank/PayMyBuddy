@@ -3,12 +3,14 @@ package org.erlik.pay_my_buddy.domains.models;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.Set;
 import org.erlik.pay_my_buddy.domains.exceptions.FriendAlreadyExists;
 import org.erlik.pay_my_buddy.domains.exceptions.InvalidEmailAddressException;
 import org.erlik.pay_my_buddy.domains.models.accounts.ElectronicMoneyAccount;
-import org.erlik.pay_my_buddy.mock.ConsumerMock;
-import org.erlik.pay_my_buddy.mock.HashedPasswordMock;
-import org.erlik.pay_my_buddy.mock.TestFaker;
+import org.erlik.pay_my_buddy.fake.ConsumerFake;
+import org.erlik.pay_my_buddy.fake.FriendFake;
+import org.erlik.pay_my_buddy.fake.HashedPasswordFake;
+import org.erlik.pay_my_buddy.fake.TestFaker;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
@@ -22,7 +24,7 @@ class ConsumerUnitTest {
         String firstname = TestFaker.fake().name().firstName();
         String lastname = TestFaker.fake().name().lastName();
         String login = TestFaker.fake().internet().emailAddress();
-        String password = HashedPasswordMock.generateValidPlainTextPassword();
+        String password = HashedPasswordFake.generateValidPlainTextPassword();
         HashedPassword hashedPassword = HashedPassword.fromPlainText(password);
 
         //WHEN
@@ -40,48 +42,41 @@ class ConsumerUnitTest {
     }
 
     @Test
-    @DisplayName("given a consumer when I add an existing friend then it throws an exception")
+    @DisplayName("given a consumer when I add a non existing friend it is added to the list")
     void addFriendTest() {
         //GIVEN
-        Consumer consumer = ConsumerMock.generateConsumer();
-        Friend friend = FriendMock.generateFriend();
+        Consumer consumer = ConsumerFake.generateConsumer();
+        Friend friend = FriendFake.generateFriend();
 
         //WHEN
-        consumer.addFriend(friend);
+        var response = consumer.addFriend(friend);
 
         //THEN
-        assertThat(consumer.friends()).containsExactly(friend);
+        assertThat(response.friends()).isNotEmpty();
+        assertThat(response.friends()).containsExactly(friend);
     }
 
-
     @Test
-    @DisplayName("given a consumer when I add a non existing friend it is added to the list")
+    @DisplayName("given a consumer when I add an already existing friend then it throws an exception")
     void addNonExistingFriendTest() {
         //GIVEN
-        Consumer consumer = ConsumerMock.generateConsumer();
-        Friend friend = FriendMock.generateFriend();
-        consumer.addFriend(friend);
+        Consumer consumer = ConsumerFake.generateConsumer();
+        Friend friend = FriendFake.generateFriend();
+        Consumer consumerWithFriend =  consumer.addFriend(friend);
 
         //WHEN
-        Executable addFriend = () -> consumer.addFriend(friend);
+        Executable executable = () -> consumerWithFriend.addFriend(friend);
 
         //THEN
-        assertThrows(FriendAlreadyExists.class, addFriend);
-        assertThat(consumer.firstname()).isEqualTo(firstname);
-        assertThat(consumer.lastname()).isEqualTo(lastname);
-        assertThat(consumer.emailAddress().toString()).hasToString(login);
-        assertThat(consumer.password()).isEqualTo(hashedPassword);
-        assertThat(hashedPassword.matchWith(password)).isTrue();
-        assertThat(consumer.accounts()).isEqualTo(Set.of(new ElectronicMoneyAccount()));
-        assertThat(consumer.friends()).isEmpty();
-        assertThat(consumer.isActive()).isFalse();
+        assertThrows(FriendAlreadyExists.class, executable);
+
     }
 
     @Test
     @DisplayName("when I update an inactive consumer then it is active")
     void updateConsumerToActiveTest() {
         //GIVEN
-        final var consumer = ConsumerMock.inactive();
+        final var consumer = ConsumerFake.inactive();
         assertThat(consumer.isActive()).isFalse();
 
         //WHEN
@@ -101,7 +96,7 @@ class ConsumerUnitTest {
     @DisplayName("when I update an active consumer then it is inactive")
     void updateConsumerToInactiveTest() {
         //GIVEN
-        final var consumer = ConsumerMock.active();
+        final var consumer = ConsumerFake.active();
         assertThat(consumer.isActive()).isTrue();
 
         //WHEN
@@ -127,7 +122,7 @@ class ConsumerUnitTest {
         Executable executable = () -> new Consumer(TestFaker.randomString(),
             TestFaker.randomString(),
             invalidEmail,
-            HashedPassword.fromPlainText(HashedPasswordMock.generateValidPlainTextPassword()));
+            HashedPasswordFake.generateHashedPassword());
 
         //THEN
         assertThrows(InvalidEmailAddressException.class, executable);

@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import org.erlik.pay_my_buddy.domains.exceptions.AmountCouldNotBeNegativeException;
 import org.erlik.pay_my_buddy.domains.exceptions.ConsumerNotActivateException;
 import org.erlik.pay_my_buddy.domains.models.transactions.TransferRequest;
-import org.erlik.pay_my_buddy.mock.ConsumerMock;
+import org.erlik.pay_my_buddy.fake.ConsumerFake;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
@@ -19,8 +19,8 @@ class TransferRequestUnitTest {
     void initTransactionTest() {
 
         //GIVEN
-        final var debtor = ConsumerMock.active();
-        final var creditor = ConsumerMock.active();
+        final var debtor = ConsumerFake.active();
+        final var creditor = ConsumerFake.active();
         final var amount = new Amount(1);
 
         //WHEN
@@ -32,7 +32,7 @@ class TransferRequestUnitTest {
         assertThat(response.amount()).isEqualTo(amount);
 
         assertThat(response.id()).isNotNull()
-                .isInstanceOf(Id.class);
+            .isInstanceOf(Id.class);
         assertThat(response.creationDate()).isNotNull()
             .isInstanceOf(LocalDateTime.class);
 
@@ -43,8 +43,8 @@ class TransferRequestUnitTest {
     void negativeTransactionAmountThrowsAmountCouldNotBeNegativeExceptionTest() {
 
         //GIVEN
-        final var debtor = ConsumerMock.active();
-        final var creditor = ConsumerMock.active();
+        final var debtor = ConsumerFake.active();
+        final var creditor = ConsumerFake.active();
         final var amount = new Amount(-1, "USD");
 
         //WHEN
@@ -62,8 +62,8 @@ class TransferRequestUnitTest {
     void inactiveDebtorThrowsConsumerNotActivateExceptionTest() {
 
         //GIVEN
-        final var debtor = ConsumerMock.inactive();
-        final var creditor = ConsumerMock.active();
+        final var debtor = ConsumerFake.inactive();
+        final var creditor = ConsumerFake.active();
         final var amount = new Amount(1);
 
         //WHEN
@@ -81,8 +81,8 @@ class TransferRequestUnitTest {
     void inactiveCreditorThrowsConsumerNotActivateExceptionTest() {
 
         //GIVEN
-        final var debtor = ConsumerMock.active();
-        final var creditor = ConsumerMock.inactive();
+        final var debtor = ConsumerFake.active();
+        final var creditor = ConsumerFake.inactive();
         final var amount = new Amount(1);
 
         //WHEN

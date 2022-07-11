@@ -1,13 +1,13 @@
-package org.erlik.pay_my_buddy.mock;
+package org.erlik.pay_my_buddy.fake;
 
 import java.util.List;
 import java.util.Random;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.erlik.pay_my_buddy.domains.models.HashedPassword;
 
-public class HashedPasswordMock {
+public class HashedPasswordFake {
 
-    public static HashedPassword create() {
+    public static HashedPassword generateHashedPassword() {
         return new HashedPassword(generateValidPlainTextPassword());
     }
 

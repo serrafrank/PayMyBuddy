@@ -102,7 +102,7 @@ public record Consumer(Id id,
             throw new FriendAlreadyExists(this, friend);
         }
 
-        final Set<Friend> mutableFriendList = new HashSet<>(friends);
+        Set<Friend> mutableFriendList = new HashSet<>(friends);
 
         mutableFriendList.add(friend);
 

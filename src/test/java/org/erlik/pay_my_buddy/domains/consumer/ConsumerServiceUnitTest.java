@@ -17,10 +17,10 @@ import org.erlik.pay_my_buddy.domains.exceptions.ConsumerNotFoundException;
 import org.erlik.pay_my_buddy.domains.exceptions.EmailAlreadyExistsException;
 import org.erlik.pay_my_buddy.domains.models.Consumer;
 import org.erlik.pay_my_buddy.domains.models.Id;
-import org.erlik.pay_my_buddy.mock.ConsumerMock;
-import org.erlik.pay_my_buddy.mock.FriendMock;
-import org.erlik.pay_my_buddy.mock.HashedPasswordMock;
-import org.erlik.pay_my_buddy.mock.TestFaker;
+import org.erlik.pay_my_buddy.fake.ConsumerFake;
+import org.erlik.pay_my_buddy.fake.FriendFake;
+import org.erlik.pay_my_buddy.fake.HashedPasswordFake;
+import org.erlik.pay_my_buddy.fake.TestFaker;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -50,7 +50,7 @@ class ConsumerServiceUnitTest {
         final var firstname = TestFaker.fake().name().firstName();
         final var lastname = TestFaker.fake().name().lastName();
         final var email = TestFaker.fake().internet().emailAddress();
-        final var password = HashedPasswordMock.generateValidPlainTextPassword();
+        final var password = HashedPasswordFake.generateValidPlainTextPassword();
 
         final var createNewConsumerEvent = new CreateNewConsumerEvent(firstname,
             lastname,
@@ -77,7 +77,7 @@ class ConsumerServiceUnitTest {
         final var firstname = TestFaker.fake().name().firstName();
         final var lastname = TestFaker.fake().name().lastName();
         final var email = TestFaker.fake().internet().emailAddress();
-        final var password = HashedPasswordMock.generateValidPlainTextPassword();
+        final var password = HashedPasswordFake.generateValidPlainTextPassword();
 
         final var createNewConsumerEvent = new CreateNewConsumerEvent(firstname,
             lastname,
@@ -100,7 +100,7 @@ class ConsumerServiceUnitTest {
     @DisplayName("Given a consumer exist when I get this consumer by id then the consumer is returned")
     void getAConsumerByIdTest() {
         //GIVEN
-        final var consumer = ConsumerMock.generateConsumer();
+        final var consumer = ConsumerFake.generateConsumer();
         final var findConsumerByIdEvent = new FindConsumerByIdEvent(consumer.id());
 
         //WHEN
@@ -137,7 +137,7 @@ class ConsumerServiceUnitTest {
     @DisplayName("Given a consumer exist when I get this consumer by emailAddress then the consumer is returned")
     void getAConsumerByEmailTest() {
         //GIVEN
-        final var consumer = ConsumerMock.generateConsumer();
+        final var consumer = ConsumerFake.generateConsumer();
         final var findConsumerByEmailEvent = new FindConsumerByEmailEvent(consumer.emailAddress()
             .email());
 
@@ -178,10 +178,10 @@ class ConsumerServiceUnitTest {
     @DisplayName("Given a friend exists when I add his email address then his add to my friends list")
     void addFriend() {
         //GIVEN
-        var consumer = ConsumerMock.active();
+        var consumer = ConsumerFake.active();
         assertThat(consumer.friends()).isEmpty();
 
-        var friend = FriendMock.generateFriend();
+        var friend = FriendFake.generateFriend();
 
         var addFriendEvent = new AddFriendEvent(consumer.id(), friend.emailAddress().email());
 

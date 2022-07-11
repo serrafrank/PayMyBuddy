@@ -16,7 +16,7 @@ import org.erlik.pay_my_buddy.domains.models.Amount;
 import org.erlik.pay_my_buddy.domains.models.Id;
 import org.erlik.pay_my_buddy.domains.models.transactions.TransferRequest;
 import org.erlik.pay_my_buddy.domains.transaction.events.CreateNewTransactionEvent;
-import org.erlik.pay_my_buddy.mock.ConsumerMock;
+import org.erlik.pay_my_buddy.fake.ConsumerFake;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -45,8 +45,8 @@ class TransferRequestServiceUnitTest {
     @DisplayName("given a debtor and a creditor exists when I create a new transaction then the transaction is saved")
     void createANewTransactionTest() {
         //GIVEN
-        final var debtor = ConsumerMock.active();
-        final var creditor = ConsumerMock.active();
+        final var debtor = ConsumerFake.active();
+        final var creditor = ConsumerFake.active();
         final var amount = new Amount(5);
 
         final var createNewTransactionEvent = new CreateNewTransactionEvent(
@@ -81,7 +81,7 @@ class TransferRequestServiceUnitTest {
     @DisplayName("given a creditor exists when I create a new transaction with non existing debtor then it throws a ConsumerNotFoundException")
     void createATransactionWithNonExistingDebtorThrowsConsumerNotFoundExceptionTest() {
         //GIVEN
-        final var creditor = ConsumerMock.active();
+        final var creditor = ConsumerFake.active();
         final var amount = new Amount(5);
 
         final var createNewTransactionEvent = new CreateNewTransactionEvent(
@@ -109,7 +109,7 @@ class TransferRequestServiceUnitTest {
     @DisplayName("given a debtor exists when I create a new transaction with non existing creditor then it throws a ConsumerNotFoundException")
     void createATransactionWithNonExistingCreditorThrowsConsumerNotFoundExceptionTest() {
         //GIVEN
-        final var debtor = ConsumerMock.active();
+        final var debtor = ConsumerFake.active();
         final var amount = new Amount(5);
 
         final var createNewTransactionEvent = new CreateNewTransactionEvent(
@@ -135,8 +135,8 @@ class TransferRequestServiceUnitTest {
     @DisplayName("given an active creditor  when I create a new transaction with inactive debtor then it throws a ConsumerNotFoundException")
     void createATransactionWithInactiveDebtorThrowsConsumerNotFoundExceptionTest() {
         //GIVEN
-        final var debtor = ConsumerMock.inactive();
-        final var creditor = ConsumerMock.active();
+        final var debtor = ConsumerFake.inactive();
+        final var creditor = ConsumerFake.active();
         final var amount = new Amount(5);
 
         final var createNewTransactionEvent = new CreateNewTransactionEvent(
@@ -164,8 +164,8 @@ class TransferRequestServiceUnitTest {
     @DisplayName("given an active debtor when I create a new transaction with inactive creditor then it throws a ConsumerNotFoundException")
     void createATransactionWithInactiveCreditorThrowsConsumerNotFoundExceptionTest() {
         //GIVEN
-        final var debtor = ConsumerMock.active();
-        final var creditor = ConsumerMock.inactive();
+        final var debtor = ConsumerFake.active();
+        final var creditor = ConsumerFake.inactive();
         final var amount = new Amount(5);
 
         final var createNewTransactionEvent = new CreateNewTransactionEvent(

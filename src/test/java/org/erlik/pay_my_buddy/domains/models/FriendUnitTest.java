@@ -2,8 +2,8 @@ package org.erlik.pay_my_buddy.domains.models;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.erlik.pay_my_buddy.mock.EmailAddressMock;
-import org.erlik.pay_my_buddy.mock.TestFaker;
+import org.erlik.pay_my_buddy.fake.EmailAddressFake;
+import org.erlik.pay_my_buddy.fake.TestFaker;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -16,7 +16,7 @@ class FriendUnitTest {
         final var id = new Id();
         final var firstname = TestFaker.fake().name().firstName();
         final var lastname = TestFaker.fake().name().lastName();
-        final var emailAddress = EmailAddressMock.create();
+        final var emailAddress = EmailAddressFake.generateEmail();
 
         //WHEN
         final var response = new Friend(id, firstname, lastname, emailAddress);

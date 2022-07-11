@@ -1,6 +1,5 @@
-package org.erlik.pay_my_buddy.mock;
+package org.erlik.pay_my_buddy.fake;
 
-import java.util.HashSet;
 import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,24 +10,15 @@ import org.erlik.pay_my_buddy.domains.models.EmailAddress;
 import org.erlik.pay_my_buddy.domains.models.Friend;
 import org.erlik.pay_my_buddy.domains.models.HashedPassword;
 import org.erlik.pay_my_buddy.domains.models.Id;
+import org.erlik.pay_my_buddy.domains.models.accounts.ElectronicMoneyAccount;
 
-@Getter
-public class ConsumerMock {
+public class ConsumerFake {
 
-    public static ConsumerMockBuilder builder() {
-        return new ConsumerMockBuilder(
-            new Id(),
-            TestFaker.fake().name().firstName(),
-            TestFaker.fake().name().lastName(),
-            TestFaker.fake().internet().emailAddress(),
-            HashedPasswordMock.generateValidPlainTextPassword(),
-            new HashSet<>(),
-            new HashSet<>(),
-            false
-        );
+    public static ConsumerFakeBuilder builder() {
+        return new ConsumerFakeBuilder();
     }
 
-    public static Consumer create() {
+    public static Consumer generateConsumer() {
         return builder().build();
     }
 
@@ -41,29 +31,39 @@ public class ConsumerMock {
     }
 
     @With
+    @Getter
     @AllArgsConstructor
-    public static class ConsumerMockBuilder {
+    static class ConsumerFakeBuilder {
 
         private Id id;
         private String firstname;
         private String lastname;
         private String emailAddress;
-        private String plainTextPassword;
+        private String password;
         private Set<Account> accounts;
         private Set<Friend> friends;
         private boolean isActive;
 
+        private ConsumerFakeBuilder() {
+            id = new Id();
+            firstname = TestFaker.fake().name().firstName();
+            lastname = TestFaker.fake().name().lastName();
+            emailAddress = TestFaker.fake().internet().emailAddress();
+            password = TestFaker.generateValidPlainTextPassword();
+            accounts =  Set.of(new ElectronicMoneyAccount());
+            friends = Set.of();
+            isActive = true;
+        }
+
         public Consumer build() {
-            return new Consumer(
-                id,
+            return new Consumer(id,
                 firstname,
                 lastname,
                 new EmailAddress(emailAddress),
-                HashedPassword.fromPlainText(plainTextPassword),
+                HashedPassword.fromPlainText(password),
                 accounts,
                 friends,
-                isActive
-            );
+                isActive);
         }
     }
 }
