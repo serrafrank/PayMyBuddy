@@ -8,6 +8,7 @@ import javax.money.format.AmountFormatQuery;
 import javax.money.format.AmountFormatQueryBuilder;
 import javax.money.format.MonetaryAmountFormat;
 import javax.money.format.MonetaryFormats;
+import org.erlik.pay_my_buddy.core.validator.Validator;
 import org.javamoney.moneta.format.CurrencyStyle;
 
 /**
@@ -26,13 +27,13 @@ public record Amount(Number numericAmount,
      * @param currency      - currency of the amount
      */
     public Amount {
-        if (numericAmount == null) {
-            throw new IllegalArgumentException("numericAmount could not be null");
-        }
+        Validator.of(numericAmount)
+                 .isNull()
+                 .thenThrow("numericAmount could not be null");
 
-        if (currency == null) {
-            throw new IllegalArgumentException("currency could not be null");
-        }
+        Validator.of(currency)
+                 .isNull()
+                 .thenThrow("currency could not be null");
     }
 
     /**

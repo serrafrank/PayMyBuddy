@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import org.apache.commons.lang3.StringUtils;
 import org.erlik.pay_my_buddy.core.PasswordEncoder;
+import org.erlik.pay_my_buddy.core.validator.Validator;
 import org.erlik.pay_my_buddy.domains.exceptions.PasswordFormatNotValidException;
 
 /**
@@ -113,24 +114,23 @@ public record Password(HashedPassword hashedPassword)
      * Generates a HashedPassword object from a plain password.
      *
      * @param plainTextPassword The plain text password.
-     * @return The HashedPassword object.
      */
     public Password(String plainTextPassword) {
         this(getHashedPassword(plainTextPassword));
     }
 
     private static HashedPassword getHashedPassword(String plainTextPassword) {
-        if (StringUtils.isBlank(plainTextPassword)) {
-            throw new IllegalArgumentException("Hashed password could not be blank");
-        }
+        Validator.of(plainTextPassword)
+                 .isBlank()
+                 .thenThrow("Hashed password could not be blank");
 
         var errors = getValidationErrors(plainTextPassword);
-        if (!errors.isEmpty()) {
-            throw new PasswordFormatNotValidException(plainTextPassword, errors);
-        }
 
-        var hashedPassword = new HashedPassword(PasswordEncoder.encode(plainTextPassword));
-        return hashedPassword;
+        Validator.of(errors)
+                 .isNotEmpty()
+                 .thenThrow(() -> new PasswordFormatNotValidException(plainTextPassword, errors));
+
+        return new HashedPassword(PasswordEncoder.encode(plainTextPassword));
     }
 
     /**

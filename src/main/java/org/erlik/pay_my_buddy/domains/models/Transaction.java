@@ -1,6 +1,7 @@
 package org.erlik.pay_my_buddy.domains.models;
 
 import java.time.LocalDateTime;
+import org.erlik.pay_my_buddy.core.validator.Validator;
 import org.erlik.pay_my_buddy.domains.exceptions.AccountNotFoundException;
 import org.erlik.pay_my_buddy.domains.exceptions.AmountCouldNotBeNegativeException;
 import org.erlik.pay_my_buddy.domains.exceptions.ConsumerNotActivateException;
@@ -29,6 +30,7 @@ public abstract class Transaction
         consumerIsEligible(creditor, debtorAccountType, ConsumerType.CREDIOR);
         consumerIsEligible(debtor, creditorAccountType, ConsumerType.DEBTOR);
         amountIsEligible(amount);
+
         this.id = id;
         this.debtor = debtor;
         this.debtorAccountType = debtorAccountType;
@@ -41,13 +43,14 @@ public abstract class Transaction
     private static void consumerIsEligible(Consumer consumer,
                                            AccountType debtorAccountType,
                                            ConsumerType consumerType) {
-        if (!consumer.isActive()) {
-            throw new ConsumerNotActivateException(consumer, consumerType);
-        }
 
-        if (consumer.getAccountByType(debtorAccountType).isEmpty()) {
-            throw new AccountNotFoundException(consumer, debtorAccountType);
-        }
+        Validator.of(consumer.isActive())
+                 .isTrue()
+                 .orThrow(() -> new ConsumerNotActivateException(consumer, consumerType));
+
+        Validator.of(consumer.getAccountByType(debtorAccountType))
+                 .isEmpty()
+                 .thenThrow(() -> new AccountNotFoundException(consumer, debtorAccountType));
     }
 
     private static void amountIsEligible(Amount amount) {
@@ -76,14 +79,4 @@ public abstract class Transaction
         return creationDate;
     }
 
-    public Account getCreditorAccount() {
-        return creditor.getAccountByType(creditorAccountType)
-                       .orElseThrow(() -> new AccountNotFoundException(creditor,
-                           creditorAccountType));
-    }
-
-    public Account getDebtorAccount() {
-        return debtor.getAccountByType(debtorAccountType)
-                     .orElseThrow(() -> new AccountNotFoundException(debtor, debtorAccountType));
-    }
 }

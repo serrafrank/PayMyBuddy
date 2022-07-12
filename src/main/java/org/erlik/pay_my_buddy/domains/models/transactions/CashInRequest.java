@@ -1,7 +1,6 @@
 package org.erlik.pay_my_buddy.domains.models.transactions;
 
 import java.time.LocalDateTime;
-import org.erlik.pay_my_buddy.domains.models.Account;
 import org.erlik.pay_my_buddy.domains.models.Amount;
 import org.erlik.pay_my_buddy.domains.models.Consumer;
 import org.erlik.pay_my_buddy.domains.models.Id;
@@ -29,15 +28,4 @@ public class CashInRequest
         this(new Id(), consumer, amount, LocalDateTime.now());
     }
 
-    @Override
-    public Account getCreditorAccount() {
-        return creditor.getAccountByType(AccountType.ELECTRONIC_MONEY_ACCOUNT)
-                       .orElseThrow();
-    }
-
-    @Override
-    public Account getDebtorAccount() {
-        return creditor.getAccountByType(AccountType.ELECTRONIC_MONEY_ACCOUNT)
-                       .orElseThrow();
-    }
 }

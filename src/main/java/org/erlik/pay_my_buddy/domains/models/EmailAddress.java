@@ -1,8 +1,7 @@
 package org.erlik.pay_my_buddy.domains.models;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
-import org.erlik.pay_my_buddy.core.exceptions.BadRequestException;
+import org.erlik.pay_my_buddy.core.validator.Validator;
 import org.erlik.pay_my_buddy.domains.exceptions.InvalidEmailAddressException;
 
 /**
@@ -17,13 +16,14 @@ public record EmailAddress(String email)
      * @param email - email address of the consumer
      */
     public EmailAddress {
-        if (StringUtils.isBlank(email)) {
-            throw new BadRequestException("Email is null, empty or blank");
-        }
+        Validator.of(email)
+                 .isBlank()
+                 .thenThrow("email is null, empty or blank");
 
-        if (!emailValidator.isValid(email)) {
-            throw new InvalidEmailAddressException(email);
-        }
+        Validator.of(emailValidator.isValid(email))
+                 .isFalse()
+                 .thenThrow(() -> new InvalidEmailAddressException(email));
+
     }
 
     public String toString() {

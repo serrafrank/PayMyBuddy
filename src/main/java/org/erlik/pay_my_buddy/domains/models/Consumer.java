@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
-import org.apache.commons.lang3.StringUtils;
+import org.erlik.pay_my_buddy.core.validator.Validator;
 import org.erlik.pay_my_buddy.domains.exceptions.AccountTypeAlreadyExists;
 import org.erlik.pay_my_buddy.domains.exceptions.FriendAlreadyExistsException;
 import org.erlik.pay_my_buddy.domains.models.accounts.AccountType;
@@ -21,27 +21,33 @@ public record Consumer(Id id,
     implements ValueObject {
 
     public Consumer {
-        if (id == null) {
-            throw new IllegalArgumentException("Id is null, empty or blank");
-        }
-        if (StringUtils.isBlank(firstname)) {
-            throw new IllegalArgumentException("Firstname is null, empty or blank");
-        }
-        if (StringUtils.isBlank(lastname)) {
-            throw new IllegalArgumentException("Lastname is null, empty or blank");
-        }
-        if (emailAddress == null) {
-            throw new IllegalArgumentException("EmailAddress is null");
-        }
-        if (password == null) {
-            throw new IllegalArgumentException("Password is null");
-        }
-        if (accounts == null) {
-            throw new IllegalArgumentException("Account is null");
-        }
-        if (friends == null) {
-            throw new IllegalArgumentException("Friends is null");
-        }
+        Validator.of(id)
+                 .isNull()
+                 .thenThrow("Id is null");
+
+        Validator.of(firstname)
+                 .isBlank()
+                 .thenThrow("Firstname is null, empty or blank");
+
+        Validator.of(lastname)
+                 .isBlank()
+                 .thenThrow("lastname is null, empty or blank");
+
+        Validator.of(emailAddress)
+                 .isNull()
+                 .thenThrow("emailAddress is null");
+
+        Validator.of(password)
+                 .isNull()
+                 .thenThrow("Password is null");
+
+        Validator.of(accounts)
+                 .isNull()
+                 .thenThrow("accounts is null");
+
+        Validator.of(friends)
+                 .isNull()
+                 .thenThrow("friends is null");
 
         accounts = Collections.unmodifiableSet(accounts);
         friends = Collections.unmodifiableSet(friends);
@@ -136,7 +142,8 @@ public record Consumer(Id id,
     }
 
     public Optional<Account> getAccountByType(AccountType accountType) {
-        return accounts.stream().filter(account -> account.accountType().equals(accountType))
+        return accounts.stream()
+                       .filter(account -> account.accountType().equals(accountType))
                        .findFirst();
     }
 }
