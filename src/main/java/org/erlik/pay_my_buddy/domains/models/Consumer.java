@@ -6,7 +6,7 @@ import java.util.Optional;
 import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 import org.erlik.pay_my_buddy.domains.exceptions.AccountTypeAlreadyExists;
-import org.erlik.pay_my_buddy.domains.exceptions.FriendAlreadyExists;
+import org.erlik.pay_my_buddy.domains.exceptions.FriendAlreadyExistsException;
 import org.erlik.pay_my_buddy.domains.models.accounts.AccountType;
 import org.erlik.pay_my_buddy.domains.models.accounts.ElectronicMoneyAccount;
 
@@ -14,7 +14,7 @@ public record Consumer(Id id,
                        String firstname,
                        String lastname,
                        EmailAddress emailAddress,
-                       HashedPassword password,
+                       Password password,
                        Set<Account> accounts,
                        Set<Friend> friends,
                        boolean isActive)
@@ -50,7 +50,7 @@ public record Consumer(Id id,
     public Consumer(String firstname,
                     String lastname,
                     String emailAddress,
-                    HashedPassword password) {
+                    Password password) {
         this(new Id(),
             firstname,
             lastname,
@@ -99,7 +99,7 @@ public record Consumer(Id id,
 
     public Consumer addFriend(Friend friend) {
         if (friends.stream().anyMatch(c -> c.id().equals(friend.id()))) {
-            throw new FriendAlreadyExists(this, friend);
+            throw new FriendAlreadyExistsException(this, friend);
         }
 
         Set<Friend> mutableFriendList = new HashSet<>(friends);

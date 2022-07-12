@@ -4,7 +4,7 @@ import com.github.javafaker.Faker;
 import java.util.List;
 import java.util.Random;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.erlik.pay_my_buddy.domains.models.HashedPassword;
+import org.erlik.pay_my_buddy.domains.models.Password;
 
 public class TestFaker {
 
@@ -23,10 +23,10 @@ public class TestFaker {
     public static String generateValidPlainTextPassword() {
         List<List<CharSequence>> acceptedCharacters = getExpectedCharacters();
 
-        int minCharNumber = (int) Math.ceil(HashedPassword.getMinLength()
-                                            / (double) acceptedCharacters.size());
-        int maxCharNumber = (int) Math.floor(HashedPassword.getMaxLength()
-                                             / (double) acceptedCharacters.size());
+        int minCharNumber = (int) Math.ceil(Password.getMinLength()
+            / (double) acceptedCharacters.size());
+        int maxCharNumber = (int) Math.floor(Password.getMaxLength()
+            / (double) acceptedCharacters.size());
 
         StringBuilder randomString = new StringBuilder();
         acceptedCharacters.forEach(charSequence -> randomString.append(randomString(charSequence,
@@ -54,9 +54,9 @@ public class TestFaker {
     }
 
     private static List<List<CharSequence>> getExpectedCharacters() {
-        return List.of(HashedPassword.getAcceptedLowerCaseChars(),
-            HashedPassword.getAcceptedUpperCaseChars(),
-            HashedPassword.getAcceptedDigits(),
-            HashedPassword.getAcceptedSpecialChars());
+        return List.of(Password.getAcceptedLowerCaseChars(),
+            Password.getAcceptedUpperCaseChars(),
+            Password.getAcceptedDigits(),
+            Password.getAcceptedSpecialChars());
     }
 }

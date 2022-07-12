@@ -12,4 +12,7 @@ public record Friend(Id id,
                      EmailAddress emailAddress)
     implements ValueObject {
 
+    public Friend(Consumer consumer) {
+        this(consumer.id(), consumer.firstname(), consumer.lastname(), consumer.emailAddress());
+    }
 }

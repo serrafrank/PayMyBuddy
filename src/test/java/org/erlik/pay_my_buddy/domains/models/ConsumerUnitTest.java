@@ -4,12 +4,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Set;
-import org.erlik.pay_my_buddy.domains.exceptions.FriendAlreadyExists;
+import org.erlik.pay_my_buddy.domains.exceptions.FriendAlreadyExistsException;
 import org.erlik.pay_my_buddy.domains.exceptions.InvalidEmailAddressException;
 import org.erlik.pay_my_buddy.domains.models.accounts.ElectronicMoneyAccount;
 import org.erlik.pay_my_buddy.fake.ConsumerFake;
 import org.erlik.pay_my_buddy.fake.FriendFake;
-import org.erlik.pay_my_buddy.fake.HashedPasswordFake;
+import org.erlik.pay_my_buddy.fake.PasswordFake;
 import org.erlik.pay_my_buddy.fake.TestFaker;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,7 +25,7 @@ class ConsumerUnitTest {
         String lastname = TestFaker.fake().name().lastName();
         String login = TestFaker.fake().internet().emailAddress();
         String password = TestFaker.generateValidPlainTextPassword();
-        HashedPassword hashedPassword = HashedPassword.fromPlainText(password);
+        Password hashedPassword = new Password(password);
 
         //WHEN
         final var consumer = new Consumer(firstname, lastname, login, hashedPassword);
@@ -45,7 +45,8 @@ class ConsumerUnitTest {
     @DisplayName("given a consumer when I add a non existing friend it is added to the list")
     void addFriendTest() {
         //GIVEN
-        Consumer consumer = ConsumerFake.generateConsumer();
+        Consumer consumer = ConsumerFake.generateActiveConsumer();
+
         Friend friend = FriendFake.generateFriend();
 
         //WHEN
@@ -60,15 +61,16 @@ class ConsumerUnitTest {
     @DisplayName("given a consumer when I add an already existing friend then it throws an exception")
     void addNonExistingFriendTest() {
         //GIVEN
-        Consumer consumer = ConsumerFake.generateConsumer();
+        Consumer consumer = ConsumerFake.generateActiveConsumer();
+
         Friend friend = FriendFake.generateFriend();
-        Consumer consumerWithFriend =  consumer.addFriend(friend);
+        Consumer consumerWithFriend = consumer.addFriend(friend);
 
         //WHEN
         Executable executable = () -> consumerWithFriend.addFriend(friend);
 
         //THEN
-        assertThrows(FriendAlreadyExists.class, executable);
+        assertThrows(FriendAlreadyExistsException.class, executable);
 
     }
 
@@ -76,7 +78,7 @@ class ConsumerUnitTest {
     @DisplayName("when I update an inactive consumer then it is active")
     void updateConsumerToActiveTest() {
         //GIVEN
-        final var consumer = ConsumerFake.inactive();
+        final var consumer = ConsumerFake.generateInactiveConsumer();
         assertThat(consumer.isActive()).isFalse();
 
         //WHEN
@@ -96,7 +98,7 @@ class ConsumerUnitTest {
     @DisplayName("when I update an active consumer then it is inactive")
     void updateConsumerToInactiveTest() {
         //GIVEN
-        final var consumer = ConsumerFake.active();
+        final var consumer = ConsumerFake.generateActiveConsumer();
         assertThat(consumer.isActive()).isTrue();
 
         //WHEN
@@ -122,7 +124,7 @@ class ConsumerUnitTest {
         Executable executable = () -> new Consumer(TestFaker.randomString(),
             TestFaker.randomString(),
             invalidEmail,
-            HashedPasswordFake.generateHashedPassword());
+            PasswordFake.generateHashedPassword());
 
         //THEN
         assertThrows(InvalidEmailAddressException.class, executable);

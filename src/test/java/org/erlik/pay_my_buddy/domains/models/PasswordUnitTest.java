@@ -11,7 +11,7 @@ import org.junit.jupiter.api.function.Executable;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-class HashedPasswordUnitTest {
+class PasswordUnitTest {
 
     private static Object[][] blankProvider() {
         return new Object[][]{
@@ -38,7 +38,7 @@ class HashedPasswordUnitTest {
         String password = TestFaker.generateValidPlainTextPassword();
 
         //WHEN
-        HashedPassword response = HashedPassword.fromPlainText(password);
+        Password response = new Password(password);
 
         //THEN
         assertThat(response).isNotNull();
@@ -52,7 +52,7 @@ class HashedPasswordUnitTest {
     void initWithNullOrBlankTextThrowIllegalArgumentExceptionException(String invalidPassword) {
 
         //WHEN
-        Executable executable = () -> HashedPassword.fromPlainText(invalidPassword);
+        Executable executable = () -> new Password(invalidPassword);
 
         //THEN
         assertThrows(IllegalArgumentException.class, executable);
@@ -64,7 +64,7 @@ class HashedPasswordUnitTest {
     void initWithInvalidTextThrowIllegalArgumentExceptionException(String invalidPassword) {
 
         //WHEN
-        Executable executable = () -> HashedPassword.fromPlainText(invalidPassword);
+        Executable executable = () -> new Password(invalidPassword);
 
         //THEN
         assertThrows(PasswordFormatNotValidException.class, executable);
@@ -76,7 +76,7 @@ class HashedPasswordUnitTest {
     void initWithInvalidHashedPasswordThrowIllegalArgumentExceptionException(String invalidPassword) {
 
         //WHEN
-        Executable executable = () -> new HashedPassword(invalidPassword);
+        Executable executable = () -> new Password(invalidPassword);
 
         //THEN
         assertThrows(IllegalArgumentException.class, executable);

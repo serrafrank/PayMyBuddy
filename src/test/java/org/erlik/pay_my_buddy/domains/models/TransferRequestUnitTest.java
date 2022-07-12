@@ -19,8 +19,8 @@ class TransferRequestUnitTest {
     void initTransactionTest() {
 
         //GIVEN
-        final var debtor = ConsumerFake.active();
-        final var creditor = ConsumerFake.active();
+        final var debtor = ConsumerFake.generateActiveConsumer();
+        final var creditor = ConsumerFake.generateActiveConsumer();
         final var amount = new Amount(1);
 
         //WHEN
@@ -43,8 +43,8 @@ class TransferRequestUnitTest {
     void negativeTransactionAmountThrowsAmountCouldNotBeNegativeExceptionTest() {
 
         //GIVEN
-        final var debtor = ConsumerFake.active();
-        final var creditor = ConsumerFake.active();
+        final var debtor = ConsumerFake.generateActiveConsumer();
+        final var creditor = ConsumerFake.generateActiveConsumer();
         final var amount = new Amount(-1, "USD");
 
         //WHEN
@@ -62,8 +62,8 @@ class TransferRequestUnitTest {
     void inactiveDebtorThrowsConsumerNotActivateExceptionTest() {
 
         //GIVEN
-        final var debtor = ConsumerFake.inactive();
-        final var creditor = ConsumerFake.active();
+        final var debtor = ConsumerFake.generateInactiveConsumer();
+        final var creditor = ConsumerFake.generateActiveConsumer();
         final var amount = new Amount(1);
 
         //WHEN
@@ -81,8 +81,8 @@ class TransferRequestUnitTest {
     void inactiveCreditorThrowsConsumerNotActivateExceptionTest() {
 
         //GIVEN
-        final var debtor = ConsumerFake.active();
-        final var creditor = ConsumerFake.inactive();
+        final var debtor = ConsumerFake.generateActiveConsumer();
+        final var creditor = ConsumerFake.generateInactiveConsumer();
         final var amount = new Amount(1);
 
         //WHEN

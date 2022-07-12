@@ -1,27 +1,20 @@
 package org.erlik.pay_my_buddy.fake;
 
 import java.util.UUID;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.With;
+import lombok.Builder;
 import org.erlik.pay_my_buddy.domains.models.Id;
 
+@Builder
 public class IdFake {
 
-    public static IdFakeBuilder builder() {
-        return new IdFakeBuilder();
-    }
+    private UUID id;
 
     public static Id generateId() {
         return builder().build();
     }
 
-    @With
-    @Getter
-    @AllArgsConstructor
-    static class IdFakeBuilder {
 
-        private UUID id;
+    public static class IdFakeBuilder {
 
         private IdFakeBuilder() {
             id = UUID.randomUUID();

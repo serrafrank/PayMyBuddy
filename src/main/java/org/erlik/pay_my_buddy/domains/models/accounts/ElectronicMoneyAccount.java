@@ -41,6 +41,6 @@ public record ElectronicMoneyAccount(Amount balance)
 
     @Override
     public AccountType accountType() {
-        return AccountType.ELECTONIC_MONEY_ACCOUNT;
+        return AccountType.ELECTRONIC_MONEY_ACCOUNT;
     }
 }

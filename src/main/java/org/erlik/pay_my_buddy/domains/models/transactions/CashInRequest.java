@@ -17,7 +17,7 @@ public class CashInRequest
                          LocalDateTime creationDate) {
         super(id,
             consumer,
-            AccountType.ELECTONIC_MONEY_ACCOUNT,
+            AccountType.ELECTRONIC_MONEY_ACCOUNT,
             consumer,
             AccountType.BANK_ACCOUNT,
             amount,
@@ -31,13 +31,13 @@ public class CashInRequest
 
     @Override
     public Account getCreditorAccount() {
-        return creditor.getAccountByType(AccountType.ELECTONIC_MONEY_ACCOUNT)
+        return creditor.getAccountByType(AccountType.ELECTRONIC_MONEY_ACCOUNT)
                        .orElseThrow();
     }
 
     @Override
     public Account getDebtorAccount() {
-        return creditor.getAccountByType(AccountType.ELECTONIC_MONEY_ACCOUNT)
+        return creditor.getAccountByType(AccountType.ELECTRONIC_MONEY_ACCOUNT)
                        .orElseThrow();
     }
 }

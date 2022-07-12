@@ -1,26 +1,18 @@
 package org.erlik.pay_my_buddy.fake;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.With;
+import lombok.Builder;
 import org.erlik.pay_my_buddy.domains.models.EmailAddress;
 
+@Builder
 public class EmailAddressFake {
 
-    public static EmailAddressFakeBuilder builder() {
-        return new EmailAddressFakeBuilder();
-    }
+    private String email;
 
     public static EmailAddress generateEmail() {
         return builder().build();
     }
 
-    @With
-    @Getter
-    @AllArgsConstructor
-    static class EmailAddressFakeBuilder {
-
-        private String email;
+    public static class EmailAddressFakeBuilder {
 
         private EmailAddressFakeBuilder() {
             email = TestFaker.fake().internet().emailAddress();

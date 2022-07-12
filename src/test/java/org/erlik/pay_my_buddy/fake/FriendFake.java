@@ -1,34 +1,27 @@
 package org.erlik.pay_my_buddy.fake;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.With;
+import lombok.Builder;
 import org.erlik.pay_my_buddy.domains.models.EmailAddress;
 import org.erlik.pay_my_buddy.domains.models.Friend;
 import org.erlik.pay_my_buddy.domains.models.Id;
 
+@Builder
 public class FriendFake {
 
-    public static FriendFakeBuilder builder() {
-        return new FriendFakeBuilder();
-    }
+    private Id id;
+    private String firstname;
+    private String lastname;
+    private EmailAddress emailAddress;
+
 
     public static Friend generateFriend() {
         return builder().build();
     }
 
-    @With
-    @Getter
-    @AllArgsConstructor
-    static class FriendFakeBuilder {
+    public static class FriendFakeBuilder {
 
-        private Id id;
-        private String firstname;
-        private String lastname;
-        private EmailAddress emailAddress;
 
         private FriendFakeBuilder() {
-
             id = new Id();
             firstname = TestFaker.fake().name().firstName();
             lastname = TestFaker.fake().name().lastName();

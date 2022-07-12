@@ -4,10 +4,10 @@ import org.erlik.pay_my_buddy.core.exceptions.BadRequestException;
 import org.erlik.pay_my_buddy.domains.models.Consumer;
 import org.erlik.pay_my_buddy.domains.models.Friend;
 
-public class FriendAlreadyExists
+public class FriendAlreadyExistsException
     extends BadRequestException {
 
-    public FriendAlreadyExists(Consumer consumer, Friend friend) {
+    public FriendAlreadyExistsException(Consumer consumer, Friend friend) {
         super("Friend already exists on the friends list. Consumer : " + consumer.id() +
             " , friend : " + friend.id());
     }

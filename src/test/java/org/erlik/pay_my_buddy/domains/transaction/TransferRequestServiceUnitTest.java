@@ -45,8 +45,8 @@ class TransferRequestServiceUnitTest {
     @DisplayName("given a debtor and a creditor exists when I create a new transaction then the transaction is saved")
     void createANewTransactionTest() {
         //GIVEN
-        final var debtor = ConsumerFake.active();
-        final var creditor = ConsumerFake.active();
+        final var debtor = ConsumerFake.generateActiveConsumer();
+        final var creditor = ConsumerFake.generateActiveConsumer();
         final var amount = new Amount(5);
 
         final var createNewTransactionEvent = new CreateNewTransactionEvent(
@@ -81,7 +81,7 @@ class TransferRequestServiceUnitTest {
     @DisplayName("given a creditor exists when I create a new transaction with non existing debtor then it throws a ConsumerNotFoundException")
     void createATransactionWithNonExistingDebtorThrowsConsumerNotFoundExceptionTest() {
         //GIVEN
-        final var creditor = ConsumerFake.active();
+        final var creditor = ConsumerFake.generateActiveConsumer();
         final var amount = new Amount(5);
 
         final var createNewTransactionEvent = new CreateNewTransactionEvent(
@@ -109,7 +109,7 @@ class TransferRequestServiceUnitTest {
     @DisplayName("given a debtor exists when I create a new transaction with non existing creditor then it throws a ConsumerNotFoundException")
     void createATransactionWithNonExistingCreditorThrowsConsumerNotFoundExceptionTest() {
         //GIVEN
-        final var debtor = ConsumerFake.active();
+        final var debtor = ConsumerFake.generateActiveConsumer();
         final var amount = new Amount(5);
 
         final var createNewTransactionEvent = new CreateNewTransactionEvent(
@@ -135,8 +135,8 @@ class TransferRequestServiceUnitTest {
     @DisplayName("given an active creditor  when I create a new transaction with inactive debtor then it throws a ConsumerNotFoundException")
     void createATransactionWithInactiveDebtorThrowsConsumerNotFoundExceptionTest() {
         //GIVEN
-        final var debtor = ConsumerFake.inactive();
-        final var creditor = ConsumerFake.active();
+        final var debtor = ConsumerFake.generateInactiveConsumer();
+        final var creditor = ConsumerFake.generateActiveConsumer();
         final var amount = new Amount(5);
 
         final var createNewTransactionEvent = new CreateNewTransactionEvent(
@@ -164,8 +164,8 @@ class TransferRequestServiceUnitTest {
     @DisplayName("given an active debtor when I create a new transaction with inactive creditor then it throws a ConsumerNotFoundException")
     void createATransactionWithInactiveCreditorThrowsConsumerNotFoundExceptionTest() {
         //GIVEN
-        final var debtor = ConsumerFake.active();
-        final var creditor = ConsumerFake.inactive();
+        final var debtor = ConsumerFake.generateActiveConsumer();
+        final var creditor = ConsumerFake.generateInactiveConsumer();
         final var amount = new Amount(5);
 
         final var createNewTransactionEvent = new CreateNewTransactionEvent(

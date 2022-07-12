@@ -18,9 +18,9 @@ public final class TransferRequest
 
         super(id,
             debtor,
-            AccountType.ELECTONIC_MONEY_ACCOUNT,
+            AccountType.ELECTRONIC_MONEY_ACCOUNT,
             creditor,
-            AccountType.ELECTONIC_MONEY_ACCOUNT,
+            AccountType.ELECTRONIC_MONEY_ACCOUNT,
             amount,
             creationDate);
     }

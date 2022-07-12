@@ -11,8 +11,8 @@ import org.erlik.pay_my_buddy.domains.exceptions.EmailAlreadyExistsException;
 import org.erlik.pay_my_buddy.domains.models.Consumer;
 import org.erlik.pay_my_buddy.domains.models.EmailAddress;
 import org.erlik.pay_my_buddy.domains.models.Friend;
-import org.erlik.pay_my_buddy.domains.models.HashedPassword;
 import org.erlik.pay_my_buddy.domains.models.Id;
+import org.erlik.pay_my_buddy.domains.models.Password;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -24,7 +24,7 @@ public class ConsumerServiceImpl
 
     @Override
     public Id createConsumer(CreateNewConsumerEvent consumerEvent) {
-        var hashedPassword = HashedPassword.fromPlainText(consumerEvent.password());
+        var hashedPassword = new Password(consumerEvent.password());
         final var newConsumer = new Consumer(consumerEvent.firstname(),
             consumerEvent.lastname(),
             consumerEvent.emailAddress(),

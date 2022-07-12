@@ -9,7 +9,7 @@ import org.erlik.pay_my_buddy.domains.exceptions.PasswordFormatNotValidException
 /**
  * @param hashedPassword The hashed password.
  */
-public record HashedPassword(String hashedPassword)
+public record Password(HashedPassword hashedPassword)
     implements ValueObject {
 
     private static final Integer MIN_LENGTH = 8;
@@ -110,23 +110,16 @@ public record HashedPassword(String hashedPassword)
     );
 
     /**
-     * Generates a HashedPassword object from a hashed password.
-     *
-     * @param hashedPassword The hashed password.
-     */
-    public HashedPassword {
-        if (StringUtils.isBlank(hashedPassword)) {
-            throw new IllegalArgumentException("Hashed password could not be blank");
-        }
-    }
-
-    /**
      * Generates a HashedPassword object from a plain password.
      *
      * @param plainTextPassword The plain text password.
      * @return The HashedPassword object.
      */
-    public static HashedPassword fromPlainText(String plainTextPassword) {
+    public Password(String plainTextPassword) {
+        this(getHashedPassword(plainTextPassword));
+    }
+
+    private static HashedPassword getHashedPassword(String plainTextPassword) {
         if (StringUtils.isBlank(plainTextPassword)) {
             throw new IllegalArgumentException("Hashed password could not be blank");
         }
@@ -135,7 +128,9 @@ public record HashedPassword(String hashedPassword)
         if (!errors.isEmpty()) {
             throw new PasswordFormatNotValidException(plainTextPassword, errors);
         }
-        return new HashedPassword(PasswordEncoder.encode(plainTextPassword));
+
+        var hashedPassword = new HashedPassword(PasswordEncoder.encode(plainTextPassword));
+        return hashedPassword;
     }
 
     /**
@@ -191,7 +186,7 @@ public record HashedPassword(String hashedPassword)
     }
 
     public boolean matchWith(String plainTextPassword) {
-        return PasswordEncoder.matches(plainTextPassword, hashedPassword);
+        return PasswordEncoder.matches(plainTextPassword, hashedPassword.value());
     }
 
     private record Rule(Predicate<String> predicate,
@@ -201,5 +196,14 @@ public record HashedPassword(String hashedPassword)
             return predicate.test(string);
         }
 
+    }
+
+    public record HashedPassword(String value) {
+
+        public HashedPassword {
+            if (StringUtils.isBlank(value)) {
+                throw new IllegalArgumentException("Hashed password could not be blank");
+            }
+        }
     }
 }

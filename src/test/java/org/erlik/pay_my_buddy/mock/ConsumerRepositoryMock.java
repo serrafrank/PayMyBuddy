@@ -9,13 +9,15 @@ import org.erlik.pay_my_buddy.domains.models.EmailAddress;
 import org.erlik.pay_my_buddy.domains.models.Friend;
 import org.erlik.pay_my_buddy.domains.models.Id;
 
-public class ConsumerRepositoryMock implements ConsumerRepository {
+public class ConsumerRepositoryMock
+    implements ConsumerRepository {
 
     private final List<Consumer> consumers = new ArrayList<>();
 
     @Override
     public boolean emailExists(EmailAddress emailAddress) {
-        return consumers.stream().anyMatch(consumer -> consumer.emailAddress().equals(emailAddress));
+        return consumers.stream()
+                        .anyMatch(consumer -> consumer.emailAddress().equals(emailAddress));
     }
 
     @Override
@@ -30,12 +32,18 @@ public class ConsumerRepositoryMock implements ConsumerRepository {
 
     @Override
     public Optional<Consumer> getConsumerByEmail(EmailAddress emailAddress) {
-        return consumers.stream().filter(consumer -> consumer.emailAddress().equals(emailAddress)).findFirst();
+        return consumers.stream()
+                        .filter(consumer -> consumer.emailAddress().equals(emailAddress))
+                        .findFirst();
     }
 
     @Override
     public Optional<Friend> getFriendByEmail(EmailAddress friendEmailAddress) {
-        return Optional.empty();
+        return consumers
+            .stream()
+            .filter(consumer -> consumer.emailAddress().equals(friendEmailAddress))
+            .map(Friend::new)
+            .findFirst();
     }
 
     @Override
@@ -46,5 +54,10 @@ public class ConsumerRepositoryMock implements ConsumerRepository {
 
     public List<Consumer> getConsumers() {
         return consumers;
+    }
+
+    public void addFriendToConsumerFriendList(Id id, Friend friend) {
+        consumers.stream().filter(c -> c.id().equals(id))
+                 .forEach(c -> consumers.set(consumers.indexOf(c), c.addFriend(friend)));
     }
 }
