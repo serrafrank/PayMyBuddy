@@ -45,12 +45,12 @@ public abstract class Transaction
                                            ConsumerType consumerType) {
 
         Validator.of(consumer.isActive())
-                 .isTrue()
-                 .orThrow(() -> new ConsumerNotActivateException(consumer, consumerType));
+            .isTrue()
+            .orThrow(() -> new ConsumerNotActivateException(consumer, consumerType));
 
         Validator.of(consumer.getAccountByType(debtorAccountType))
-                 .isEmpty()
-                 .thenThrow(() -> new AccountNotFoundException(consumer, debtorAccountType));
+            .isEmpty()
+            .thenThrow(() -> new AccountNotFoundException(consumer, debtorAccountType));
     }
 
     private static void amountIsEligible(Amount amount) {
@@ -78,5 +78,4 @@ public abstract class Transaction
     public LocalDateTime creationDate() {
         return creationDate;
     }
-
 }

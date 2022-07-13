@@ -5,7 +5,6 @@ import java.util.Optional;
 public class OptionalAbstractValidatorCondition
     extends AbstractValidatorCondition<Optional<?>> {
 
-
     public OptionalAbstractValidatorCondition(Optional<?> actual) {
         super(actual);
     }

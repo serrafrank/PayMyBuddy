@@ -18,7 +18,7 @@ class ValidatorTest {
 
         //WHEN
         var result = Validator.of(parameter)
-                              .is(rightPredicate);
+            .is(rightPredicate);
 
         //THEN
         assertThat(result.isValid()).isTrue();
@@ -33,7 +33,7 @@ class ValidatorTest {
 
         //WHEN
         var result = Validator.of(parameter)
-                              .is(wrongPredicate);
+            .is(wrongPredicate);
 
         //THEN
         assertThat(result.isValid()).isFalse();
@@ -49,8 +49,8 @@ class ValidatorTest {
 
         //WHEN
         Executable executable = () -> Validator.of(parameter)
-                                               .is(predicate)
-                                               .thenThrow(() -> new Exception(messageException));
+            .is(predicate)
+            .thenThrow(() -> new Exception(messageException));
 
         //THEN
         var message = assertThrows(Exception.class, executable);
@@ -67,8 +67,8 @@ class ValidatorTest {
 
         //WHEN
         Executable executable = () -> Validator.of(parameter)
-                                               .is(predicate)
-                                               .orThrow(() -> new Exception(messageException));
+            .is(predicate)
+            .orThrow(() -> new Exception(messageException));
 
         //THEN
         var message = assertThrows(Exception.class, executable);
@@ -85,8 +85,8 @@ class ValidatorTest {
 
         //WHEN
         Executable executable = () -> Validator.of(parameter)
-                                               .is(rightPredicate)
-                                               .orThrow(() -> new Exception(messageException));
+            .is(rightPredicate)
+            .orThrow(() -> new Exception(messageException));
 
         //THEN
         assertDoesNotThrow(executable);
@@ -102,8 +102,8 @@ class ValidatorTest {
 
         //WHEN
         Executable executable = () -> Validator.of(parameter)
-                                               .is(rightPredicate)
-                                               .thenThrow(() -> new Exception(messageException));
+            .is(rightPredicate)
+            .thenThrow(() -> new Exception(messageException));
 
         //THEN
         assertDoesNotThrow(executable);

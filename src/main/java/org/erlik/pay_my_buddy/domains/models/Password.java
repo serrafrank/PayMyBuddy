@@ -121,14 +121,14 @@ public record Password(HashedPassword hashedPassword)
 
     private static HashedPassword getHashedPassword(String plainTextPassword) {
         Validator.of(plainTextPassword)
-                 .isBlank()
-                 .thenThrow("Hashed password could not be blank");
+            .isBlank()
+            .thenThrow("Hashed password could not be blank");
 
         var errors = getValidationErrors(plainTextPassword);
 
         Validator.of(errors)
-                 .isNotEmpty()
-                 .thenThrow(() -> new PasswordFormatNotValidException(plainTextPassword, errors));
+            .isNotEmpty()
+            .thenThrow(() -> new PasswordFormatNotValidException(plainTextPassword, errors));
 
         return new HashedPassword(PasswordEncoder.encode(plainTextPassword));
     }
@@ -177,8 +177,8 @@ public record Password(HashedPassword hashedPassword)
 
     private static List<String> getValidationErrors(String password) {
         return rules.stream().filter(r -> !r.isValid(password))
-                    .map(Rule::error)
-                    .toList();
+            .map(Rule::error)
+            .toList();
     }
 
     private static boolean stringContainsAtLeastOneChar(String string, List<CharSequence> chars) {

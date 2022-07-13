@@ -16,20 +16,20 @@ public record Friend(Id id,
 
     public Friend {
         Validator.of(id)
-                 .isNull()
-                 .thenThrow("Id is null");
+            .isNull()
+            .thenThrow("Id is null");
 
         Validator.of(firstname)
-                 .isBlank()
-                 .thenThrow("Firstname is null, empty or blank");
+            .isBlank()
+            .thenThrow("Firstname is null, empty or blank");
 
         Validator.of(lastname)
-                 .isBlank()
-                 .thenThrow("lastname is null, empty or blank");
+            .isBlank()
+            .thenThrow("lastname is null, empty or blank");
 
         Validator.of(emailAddress)
-                 .isNull()
-                 .thenThrow("emailAddress is null");
+            .isNull()
+            .thenThrow("emailAddress is null");
     }
 
     public Friend(Consumer consumer) {

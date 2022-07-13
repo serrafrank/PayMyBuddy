@@ -5,7 +5,6 @@ import org.apache.commons.lang3.StringUtils;
 public class StringAbstractValidatorCondition
     extends AbstractValidatorCondition<String> {
 
-
     public StringAbstractValidatorCondition(String actual) {
         super(actual);
     }
@@ -17,6 +16,5 @@ public class StringAbstractValidatorCondition
     public ValidatorResult isBlank() {
         return response(StringUtils.isBlank(actual));
     }
-
 
 }

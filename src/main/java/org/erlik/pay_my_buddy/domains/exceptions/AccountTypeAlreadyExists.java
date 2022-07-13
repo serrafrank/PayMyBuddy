@@ -11,6 +11,6 @@ public class AccountTypeAlreadyExists
     public AccountTypeAlreadyExists(@NonNull Consumer consumer,
                                     @NonNull Account account) {
         super("Account type already exists. Consumer : " + consumer.id() + " , Account type : " +
-            account.accountType());
+              account.accountType());
     }
 }

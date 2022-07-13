@@ -13,7 +13,6 @@ public class IdFake {
         return builder().build();
     }
 
-
     public static class IdFakeBuilder {
 
         private IdFakeBuilder() {

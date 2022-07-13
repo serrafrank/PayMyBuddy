@@ -13,13 +13,11 @@ public class FriendFake {
     private String lastname;
     private EmailAddress emailAddress;
 
-
     public static Friend generateFriend() {
         return builder().build();
     }
 
     public static class FriendFakeBuilder {
-
 
         private FriendFakeBuilder() {
             id = new Id();

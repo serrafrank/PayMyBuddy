@@ -8,14 +8,14 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
-import org.erlik.pay_my_buddy.domains.ConsumerRepository;
-import org.erlik.pay_my_buddy.domains.TransactionRepository;
 import org.erlik.pay_my_buddy.domains.exceptions.ConsumerNotActivateException;
 import org.erlik.pay_my_buddy.domains.exceptions.ConsumerNotFoundException;
 import org.erlik.pay_my_buddy.domains.models.Amount;
 import org.erlik.pay_my_buddy.domains.models.Id;
 import org.erlik.pay_my_buddy.domains.models.transactions.TransferRequest;
-import org.erlik.pay_my_buddy.domains.transaction.events.CreateNewTransactionEvent;
+import org.erlik.pay_my_buddy.domains.repositories.ConsumerRepository;
+import org.erlik.pay_my_buddy.domains.repositories.TransactionRepository;
+import org.erlik.pay_my_buddy.domains.transaction.commands.CreateNewTransactionCommand;
 import org.erlik.pay_my_buddy.fake.ConsumerFake;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -34,11 +34,12 @@ class TransferRequestServiceUnitTest {
     @Mock
     private ConsumerRepository consumerRepository;
 
-    private TransactionService transactionService;
+    private TransactionCommandService transactionService;
 
     @BeforeEach
     void init() {
-        transactionService = new TransactionServiceImpl(transactionRepository, consumerRepository);
+        transactionService = new TransactionCommandServiceImpl(transactionRepository,
+            consumerRepository);
     }
 
     @Test
@@ -49,7 +50,7 @@ class TransferRequestServiceUnitTest {
         final var creditor = ConsumerFake.generateActiveConsumer();
         final var amount = new Amount(5);
 
-        final var createNewTransactionEvent = new CreateNewTransactionEvent(
+        final var createNewTransactionEvent = new CreateNewTransactionCommand(
             debtor.id(),
             creditor.id(),
             amount.numericAmount(),
@@ -57,11 +58,11 @@ class TransferRequestServiceUnitTest {
 
         //WHEN
         lenient().when(consumerRepository.getConsumerById(createNewTransactionEvent.debtor()))
-                 .thenReturn(
-                     Optional.of(debtor));
+            .thenReturn(
+                Optional.of(debtor));
         lenient().when(consumerRepository.getConsumerById(createNewTransactionEvent.creditor()))
-                 .thenReturn(
-                     Optional.of(creditor));
+            .thenReturn(
+                Optional.of(creditor));
 
         final var createdTransaction = transactionService.createNewTransaction(
             createNewTransactionEvent);
@@ -74,7 +75,7 @@ class TransferRequestServiceUnitTest {
             times(1)).createNewTransaction(transactionArgumentCaptor.capture());
 
         assertThat(createdTransaction).isNotNull()
-                                      .isInstanceOf(Id.class);
+            .isInstanceOf(Id.class);
     }
 
     @Test
@@ -84,7 +85,7 @@ class TransferRequestServiceUnitTest {
         final var creditor = ConsumerFake.generateActiveConsumer();
         final var amount = new Amount(5);
 
-        final var createNewTransactionEvent = new CreateNewTransactionEvent(
+        final var createNewTransactionEvent = new CreateNewTransactionCommand(
             new Id(),
             creditor.id(),
             amount.numericAmount(),
@@ -112,7 +113,7 @@ class TransferRequestServiceUnitTest {
         final var debtor = ConsumerFake.generateActiveConsumer();
         final var amount = new Amount(5);
 
-        final var createNewTransactionEvent = new CreateNewTransactionEvent(
+        final var createNewTransactionEvent = new CreateNewTransactionCommand(
             debtor.id(),
             new Id(),
             amount.numericAmount(),
@@ -139,7 +140,7 @@ class TransferRequestServiceUnitTest {
         final var creditor = ConsumerFake.generateActiveConsumer();
         final var amount = new Amount(5);
 
-        final var createNewTransactionEvent = new CreateNewTransactionEvent(
+        final var createNewTransactionEvent = new CreateNewTransactionCommand(
             debtor.id(),
             creditor.id(),
             amount.numericAmount(),
@@ -168,7 +169,7 @@ class TransferRequestServiceUnitTest {
         final var creditor = ConsumerFake.generateInactiveConsumer();
         final var amount = new Amount(5);
 
-        final var createNewTransactionEvent = new CreateNewTransactionEvent(
+        final var createNewTransactionEvent = new CreateNewTransactionCommand(
             debtor.id(),
             creditor.id(),
             amount.numericAmount(),

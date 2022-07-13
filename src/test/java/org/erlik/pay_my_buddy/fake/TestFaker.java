@@ -24,9 +24,9 @@ public class TestFaker {
         List<List<CharSequence>> acceptedCharacters = getExpectedCharacters();
 
         int minCharNumber = (int) Math.ceil(Password.getMinLength()
-            / (double) acceptedCharacters.size());
+                                            / (double) acceptedCharacters.size());
         int maxCharNumber = (int) Math.floor(Password.getMaxLength()
-            / (double) acceptedCharacters.size());
+                                             / (double) acceptedCharacters.size());
 
         StringBuilder randomString = new StringBuilder();
         acceptedCharacters.forEach(charSequence -> randomString.append(randomString(charSequence,

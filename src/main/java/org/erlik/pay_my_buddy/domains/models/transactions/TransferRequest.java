@@ -25,8 +25,8 @@ public final class TransferRequest
             creationDate);
     }
 
-    public TransferRequest(Consumer creditor, Consumer debtor, Amount amount) {
-        this(new Id(), creditor, debtor, amount, LocalDateTime.now());
+    public TransferRequest(Consumer debtor, Consumer creditor, Amount amount) {
+        this(new Id(), debtor, creditor, amount, LocalDateTime.now());
     }
 
 }

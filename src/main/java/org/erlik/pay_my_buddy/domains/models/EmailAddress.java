@@ -17,12 +17,12 @@ public record EmailAddress(String email)
      */
     public EmailAddress {
         Validator.of(email)
-                 .isBlank()
-                 .thenThrow("email is null, empty or blank");
+            .isBlank()
+            .thenThrow("email is null, empty or blank");
 
         Validator.of(emailValidator.isValid(email))
-                 .isFalse()
-                 .thenThrow(() -> new InvalidEmailAddressException(email));
+            .isFalse()
+            .thenThrow(() -> new InvalidEmailAddressException(email));
 
     }
 

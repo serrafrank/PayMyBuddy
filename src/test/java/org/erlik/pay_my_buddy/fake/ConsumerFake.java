@@ -22,7 +22,6 @@ public class ConsumerFake {
     private Set<Friend> friends;
     private boolean isActive;
 
-
     public static Consumer generateInactiveConsumer() {
         return builder().isActive(false).build();
     }
@@ -58,7 +57,6 @@ public class ConsumerFake {
         private Set<Friend> defaultFriends() {
             return Set.of();
         }
-
 
         private Set<Account> defaultAccounts() {
             return Set.of(new ElectronicMoneyAccount());

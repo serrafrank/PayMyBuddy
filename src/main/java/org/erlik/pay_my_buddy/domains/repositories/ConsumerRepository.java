@@ -1,4 +1,4 @@
-package org.erlik.pay_my_buddy.domains;
+package org.erlik.pay_my_buddy.domains.repositories;
 
 import java.util.Optional;
 import org.erlik.pay_my_buddy.domains.models.Consumer;
