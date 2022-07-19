@@ -20,15 +20,15 @@ public class ConsumerQueryServiceImpl
     public Consumer findConsumerById(FindConsumerByIdQuery findConsumerByIdQuery) {
         final var consumerId = findConsumerByIdQuery.id();
         return consumerRepository.getConsumerById(consumerId)
-                                 .orElseThrow(() -> new ConsumerNotFoundException(consumerId));
+            .orElseThrow(() -> new ConsumerNotFoundException(consumerId));
     }
 
     @Override
     public Consumer findConsumerByEmail(FindConsumerByEmailQuery findConsumerByEmailQuery) {
         final var consumerEmailAddress = new EmailAddress(findConsumerByEmailQuery.email());
         return consumerRepository.getConsumerByEmail(consumerEmailAddress)
-                                 .orElseThrow(() -> new ConsumerNotFoundException(
-                                     consumerEmailAddress));
+            .orElseThrow(() -> new ConsumerNotFoundException(
+                consumerEmailAddress));
     }
 
     @Override

@@ -49,6 +49,15 @@ public class ConsumerRepositoryMock
     }
 
     @Override
+    public Optional<Friend> getFriendById(Id friendEmailId) {
+        return consumers
+            .stream()
+            .filter(consumer -> consumer.id().equals(friendEmailId))
+            .map(Friend::new)
+            .findFirst();
+    }
+
+    @Override
     public void updateConsumer(Consumer consumer) {
         consumers.removeIf(c -> c.id().equals(consumer.id()));
         consumers.add(consumer);
@@ -58,9 +67,9 @@ public class ConsumerRepositoryMock
     public List<Friend> getAllFriendsByConsumerId(Id consumerId) {
         return getConsumerById(consumerId)
             .map(value -> value.friends()
-                               .stream()
-                               .sorted(Comparator.comparing(Friend::lastname))
-                               .collect(Collectors.toList())).orElseGet(List::of);
+                .stream()
+                .sorted(Comparator.comparing(Friend::lastname))
+                .collect(Collectors.toList())).orElseGet(List::of);
     }
 
     public List<Consumer> getConsumers() {
@@ -69,6 +78,6 @@ public class ConsumerRepositoryMock
 
     public void addFriendToConsumerFriendList(Id id, Friend friend) {
         consumers.stream().filter(c -> c.id().equals(id))
-                 .forEach(c -> consumers.set(consumers.indexOf(c), c.addFriend(friend)));
+            .forEach(c -> consumers.set(consumers.indexOf(c), c.addFriend(friend)));
     }
 }

@@ -37,16 +37,16 @@ public record Consumer(Id id,
             .thenThrow("emailAddress is null");
 
         Validator.of(password)
-                 .isNull()
-                 .thenThrow("Password is null");
+            .isNull()
+            .thenThrow("Password is null");
 
         Validator.of(accounts)
-                 .isNull()
-                 .thenThrow("accounts is null");
+            .isNull()
+            .thenThrow("accounts is null");
 
         Validator.of(friends)
-                 .isNull()
-                 .thenThrow("friends is null");
+            .isNull()
+            .thenThrow("friends is null");
 
         accounts = unmodifiableList(accounts);
         friends = unmodifiableList(friends);
@@ -138,8 +138,8 @@ public record Consumer(Id id,
 
     public Optional<Account> getAccountByType(AccountType accountType) {
         return accounts.stream()
-                       .filter(account -> account.accountType().equals(accountType))
-                       .findFirst();
+            .filter(account -> account.accountType().equals(accountType))
+            .findFirst();
     }
 
     private <P> List<P> addToUnmodifiableList(List<P> list, P element) {

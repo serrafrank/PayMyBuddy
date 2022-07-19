@@ -35,10 +35,10 @@ class ConsumerQueryServiceAcceptanceTest {
 
         consumerRepository.createNewConsumer(consumer);
 
-        final var findConsumerByIdEvent = new FindConsumerByIdQuery(consumer.id());
+        final var findConsumerByIdQuery = new FindConsumerByIdQuery(consumer.id());
 
         //WHEN
-        final var foundConsumer = consumerQueryService.findConsumerById(findConsumerByIdEvent);
+        final var foundConsumer = consumerQueryService.findConsumerById(findConsumerByIdQuery);
 
         //THEN
         assertThat(foundConsumer).isNotNull().satisfies(c -> {
@@ -54,11 +54,11 @@ class ConsumerQueryServiceAcceptanceTest {
     @DisplayName("Given a consumer exist when I get a consumer with non existing id then it throws a ConsumerNotFoundException")
     void getAConsumerByNonExistsIdThrowsAConsumerNotFoundExceptionTest() {
         //GIVEN
-        final var getConsumerByIdEvent = new FindConsumerByIdQuery(new Id());
+        final var findConsumerByIdQuery = new FindConsumerByIdQuery(new Id());
 
         //WHEN
         final Executable executable = () -> consumerQueryService.findConsumerById(
-            getConsumerByIdEvent);
+            findConsumerByIdQuery);
 
         //THEN
         assertThrows(ConsumerNotFoundException.class, executable);
@@ -71,11 +71,11 @@ class ConsumerQueryServiceAcceptanceTest {
         final var consumer = ConsumerFake.generateActiveConsumer();
         consumerRepository.createNewConsumer(consumer);
 
-        final var findConsumerByEmailEvent = new FindConsumerByEmailQuery(consumer.emailAddress()
+        final var findConsumerByEmailQuery = new FindConsumerByEmailQuery(consumer.emailAddress()
             .email());
 
         //WHEN
-        final var response = consumerQueryService.findConsumerByEmail(findConsumerByEmailEvent);
+        final var response = consumerQueryService.findConsumerByEmail(findConsumerByEmailQuery);
 
         //THEN
         assertThat(response).isNotNull();
@@ -92,13 +92,13 @@ class ConsumerQueryServiceAcceptanceTest {
     @DisplayName("Given a consumer exist when I get a consumer with non existing emailAddress then it throws a ConsumerNotFoundException")
     void getAConsumerByNonExistsEmailThrowsAConsumerNotFoundExceptionTest() {
         //GIVEN
-        final var getConsumerByEmailEvent = new FindConsumerByEmailQuery(TestFaker.fake()
+        final var findConsumerByEmailQuery = new FindConsumerByEmailQuery(TestFaker.fake()
             .internet()
             .emailAddress());
 
         //WHEN
         final Executable executable = () -> consumerQueryService.findConsumerByEmail(
-            getConsumerByEmailEvent);
+            findConsumerByEmailQuery);
 
         //THEN
         assertThrows(ConsumerNotFoundException.class, executable);

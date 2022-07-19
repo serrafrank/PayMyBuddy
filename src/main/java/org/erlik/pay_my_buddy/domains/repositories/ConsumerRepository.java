@@ -19,6 +19,8 @@ public interface ConsumerRepository {
 
     Optional<Friend> getFriendByEmail(EmailAddress friendEmailAddress);
 
+    Optional<Friend> getFriendById(Id friendEmailId);
+
     void updateConsumer(Consumer consumer);
 
     List<Friend> getAllFriendsByConsumerId(Id consumerId);
