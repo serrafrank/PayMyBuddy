@@ -53,8 +53,7 @@ class TransferRequestServiceUnitTest {
         final var createNewTransactionEvent = new CreateNewTransactionCommand(
             debtor.id(),
             creditor.id(),
-            amount.numericAmount(),
-            amount.currencyCode());
+            amount);
 
         //WHEN
         lenient().when(consumerRepository.getConsumerById(createNewTransactionEvent.debtor()))
@@ -88,8 +87,7 @@ class TransferRequestServiceUnitTest {
         final var createNewTransactionEvent = new CreateNewTransactionCommand(
             new Id(),
             creditor.id(),
-            amount.numericAmount(),
-            amount.currencyCode());
+            amount);
 
         //WHEN
         lenient().when(consumerRepository.getConsumerById(createNewTransactionEvent.debtor()))
@@ -116,8 +114,7 @@ class TransferRequestServiceUnitTest {
         final var createNewTransactionEvent = new CreateNewTransactionCommand(
             debtor.id(),
             new Id(),
-            amount.numericAmount(),
-            amount.currencyCode());
+            amount);
 
         //WHEN
         when(consumerRepository.getConsumerById(createNewTransactionEvent.debtor())).thenReturn(
@@ -143,8 +140,7 @@ class TransferRequestServiceUnitTest {
         final var createNewTransactionEvent = new CreateNewTransactionCommand(
             debtor.id(),
             creditor.id(),
-            amount.numericAmount(),
-            amount.currencyCode());
+            amount);
 
         //WHEN
         lenient().when(consumerRepository.getConsumerById(createNewTransactionEvent.debtor()))
@@ -172,8 +168,7 @@ class TransferRequestServiceUnitTest {
         final var createNewTransactionEvent = new CreateNewTransactionCommand(
             debtor.id(),
             creditor.id(),
-            amount.numericAmount(),
-            amount.currencyCode());
+            amount);
 
         //WHEN
         when(consumerRepository.getConsumerById(createNewTransactionEvent.debtor())).thenReturn(

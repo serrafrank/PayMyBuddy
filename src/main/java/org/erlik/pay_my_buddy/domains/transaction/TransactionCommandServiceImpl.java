@@ -2,7 +2,6 @@ package org.erlik.pay_my_buddy.domains.transaction;
 
 import lombok.RequiredArgsConstructor;
 import org.erlik.pay_my_buddy.domains.exceptions.ConsumerNotFoundException;
-import org.erlik.pay_my_buddy.domains.models.Amount;
 import org.erlik.pay_my_buddy.domains.models.Id;
 import org.erlik.pay_my_buddy.domains.models.transactions.TransferRequest;
 import org.erlik.pay_my_buddy.domains.repositories.ConsumerRepository;
@@ -31,8 +30,7 @@ public class TransactionCommandServiceImpl
             .orElseThrow(() -> new ConsumerNotFoundException(
                 creditorId));
 
-        final var amount = new Amount(createNewTransactionCommand.amount(),
-            createNewTransactionCommand.currency());
+        final var amount = createNewTransactionCommand.amount();
 
         final var transaction = new TransferRequest(debtor, creditor, amount);
 
