@@ -2,10 +2,10 @@ package org.erlik.pay_my_buddy.core.validator.validator_condition;
 
 import org.apache.commons.lang3.StringUtils;
 
-public class StringAbstractValidatorCondition
+public class StringValidatorCondition
     extends AbstractValidatorCondition<String> {
 
-    public StringAbstractValidatorCondition(String actual) {
+    public StringValidatorCondition(String actual) {
         super(actual);
     }
 

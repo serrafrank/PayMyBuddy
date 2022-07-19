@@ -3,7 +3,7 @@ package org.erlik.pay_my_buddy.domains.models;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.util.Set;
+import java.util.List;
 import org.erlik.pay_my_buddy.domains.exceptions.FriendAlreadyExistsException;
 import org.erlik.pay_my_buddy.domains.exceptions.InvalidEmailAddressException;
 import org.erlik.pay_my_buddy.domains.models.accounts.ElectronicMoneyAccount;
@@ -36,7 +36,7 @@ class ConsumerUnitTest {
         assertThat(consumer.emailAddress().toString()).hasToString(login);
         assertThat(consumer.password()).isEqualTo(hashedPassword);
         assertThat(hashedPassword.matchWith(password)).isTrue();
-        assertThat(consumer.accounts()).isEqualTo(Set.of(new ElectronicMoneyAccount()));
+        assertThat(consumer.accounts()).isEqualTo(List.of(new ElectronicMoneyAccount()));
         assertThat(consumer.friends()).isEmpty();
         assertThat(consumer.isActive()).isFalse();
     }

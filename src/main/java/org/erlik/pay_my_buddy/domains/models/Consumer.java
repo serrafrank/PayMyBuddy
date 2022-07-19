@@ -1,9 +1,8 @@
 package org.erlik.pay_my_buddy.domains.models;
 
-import java.util.Collections;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import org.erlik.pay_my_buddy.core.validator.Validator;
 import org.erlik.pay_my_buddy.domains.exceptions.AccountTypeAlreadyExists;
 import org.erlik.pay_my_buddy.domains.exceptions.FriendAlreadyExistsException;
@@ -15,8 +14,8 @@ public record Consumer(Id id,
                        String lastname,
                        EmailAddress emailAddress,
                        Password password,
-                       Set<Account> accounts,
-                       Set<Friend> friends,
+                       List<Account> accounts,
+                       List<Friend> friends,
                        boolean isActive)
     implements ValueObject {
 
@@ -38,19 +37,19 @@ public record Consumer(Id id,
             .thenThrow("emailAddress is null");
 
         Validator.of(password)
-            .isNull()
-            .thenThrow("Password is null");
+                 .isNull()
+                 .thenThrow("Password is null");
 
         Validator.of(accounts)
-            .isNull()
-            .thenThrow("accounts is null");
+                 .isNull()
+                 .thenThrow("accounts is null");
 
         Validator.of(friends)
-            .isNull()
-            .thenThrow("friends is null");
+                 .isNull()
+                 .thenThrow("friends is null");
 
-        accounts = Collections.unmodifiableSet(accounts);
-        friends = Collections.unmodifiableSet(friends);
+        accounts = unmodifiableList(accounts);
+        friends = unmodifiableList(friends);
     }
 
     public Consumer(String firstname,
@@ -67,16 +66,16 @@ public record Consumer(Id id,
             false);
     }
 
-    private static Set<Account> initAccountList() {
-        return Set.of(new ElectronicMoneyAccount());
+    private static List<Account> initAccountList() {
+        return List.of(new ElectronicMoneyAccount());
     }
 
-    private static Set<Friend> initFriendList() {
-        return Set.of();
+    private static List<Friend> initFriendList() {
+        return List.of();
     }
 
     /**
-     * @return Return an activated Consumer with isActive set to true
+     * @return Return an activated Consumer with isActive list to true
      */
     public Consumer activate() {
         return new Consumer(id,
@@ -90,7 +89,7 @@ public record Consumer(Id id,
     }
 
     /**
-     * @return Return an inactivated Consumer with isActive set to false
+     * @return Return an inactivated Consumer with isActive list to false
      */
     public Consumer inactivate() {
         return new Consumer(id,
@@ -108,9 +107,7 @@ public record Consumer(Id id,
             throw new FriendAlreadyExistsException(this, friend);
         }
 
-        Set<Friend> mutableFriendList = new HashSet<>(friends);
-
-        mutableFriendList.add(friend);
+        var addToUnmodifiableFriendList = addToUnmodifiableList(friends, friend);
 
         return new Consumer(id,
             firstname,
@@ -118,7 +115,7 @@ public record Consumer(Id id,
             emailAddress,
             password,
             accounts,
-            Collections.unmodifiableSet(mutableFriendList),
+            addToUnmodifiableFriendList,
             isActive);
     }
 
@@ -127,23 +124,31 @@ public record Consumer(Id id,
             throw new AccountTypeAlreadyExists(this, account);
         }
 
-        final Set<Account> mutableAccountList = new HashSet<>(accounts);
-
-        mutableAccountList.add(account);
+        var addToUnmodifiableAccountList = addToUnmodifiableList(accounts, account);
 
         return new Consumer(id,
             firstname,
             lastname,
             emailAddress,
             password,
-            Collections.unmodifiableSet(mutableAccountList),
+            addToUnmodifiableAccountList,
             friends,
             isActive);
     }
 
     public Optional<Account> getAccountByType(AccountType accountType) {
         return accounts.stream()
-            .filter(account -> account.accountType().equals(accountType))
-            .findFirst();
+                       .filter(account -> account.accountType().equals(accountType))
+                       .findFirst();
+    }
+
+    private <P> List<P> addToUnmodifiableList(List<P> list, P element) {
+        var modifiableList = new ArrayList<>(list);
+        modifiableList.add(element);
+        return unmodifiableList(modifiableList);
+    }
+
+    private <P> List<P> unmodifiableList(List<P> list) {
+        return List.copyOf(list);
     }
 }

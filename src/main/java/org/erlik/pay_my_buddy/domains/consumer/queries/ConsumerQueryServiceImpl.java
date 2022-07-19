@@ -1,9 +1,11 @@
 package org.erlik.pay_my_buddy.domains.consumer.queries;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.erlik.pay_my_buddy.domains.exceptions.ConsumerNotFoundException;
 import org.erlik.pay_my_buddy.domains.models.Consumer;
 import org.erlik.pay_my_buddy.domains.models.EmailAddress;
+import org.erlik.pay_my_buddy.domains.models.Friend;
 import org.erlik.pay_my_buddy.domains.repositories.ConsumerRepository;
 import org.springframework.stereotype.Service;
 
@@ -18,14 +20,19 @@ public class ConsumerQueryServiceImpl
     public Consumer findConsumerById(FindConsumerByIdQuery findConsumerByIdQuery) {
         final var consumerId = findConsumerByIdQuery.id();
         return consumerRepository.getConsumerById(consumerId)
-            .orElseThrow(() -> new ConsumerNotFoundException(consumerId));
+                                 .orElseThrow(() -> new ConsumerNotFoundException(consumerId));
     }
 
     @Override
     public Consumer findConsumerByEmail(FindConsumerByEmailQuery findConsumerByEmailQuery) {
         final var consumerEmailAddress = new EmailAddress(findConsumerByEmailQuery.email());
         return consumerRepository.getConsumerByEmail(consumerEmailAddress)
-            .orElseThrow(() -> new ConsumerNotFoundException(
-                consumerEmailAddress));
+                                 .orElseThrow(() -> new ConsumerNotFoundException(
+                                     consumerEmailAddress));
+    }
+
+    @Override
+    public List<Friend> getAllFriendsByConsumerId(GetAllFriendsByConsumerIdQuery getAllFriendsByConsumerId) {
+        return consumerRepository.getAllFriendsByConsumerId(getAllFriendsByConsumerId.consumerId());
     }
 }

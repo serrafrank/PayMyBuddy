@@ -1,6 +1,6 @@
 package org.erlik.pay_my_buddy.fake;
 
-import java.util.Set;
+import java.util.List;
 import lombok.Builder;
 import org.erlik.pay_my_buddy.domains.models.Account;
 import org.erlik.pay_my_buddy.domains.models.Consumer;
@@ -18,8 +18,8 @@ public class ConsumerFake {
     private String lastname;
     private String emailAddress;
     private String password;
-    private Set<Account> accounts;
-    private Set<Friend> friends;
+    private List<Account> accounts;
+    private List<Friend> friends;
     private boolean isActive;
 
     public static Consumer generateInactiveConsumer() {
@@ -54,12 +54,12 @@ public class ConsumerFake {
                 isActive);
         }
 
-        private Set<Friend> defaultFriends() {
-            return Set.of();
+        private List<Friend> defaultFriends() {
+            return List.of();
         }
 
-        private Set<Account> defaultAccounts() {
-            return Set.of(new ElectronicMoneyAccount());
+        private List<Account> defaultAccounts() {
+            return List.of(new ElectronicMoneyAccount());
         }
     }
 }

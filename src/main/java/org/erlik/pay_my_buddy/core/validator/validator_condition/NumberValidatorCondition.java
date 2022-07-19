@@ -1,9 +1,9 @@
 package org.erlik.pay_my_buddy.core.validator.validator_condition;
 
-public class NumberAbstractValidatorCondition
+public class NumberValidatorCondition
     extends AbstractValidatorCondition<Number> {
 
-    public NumberAbstractValidatorCondition(Number actual) {
+    public NumberValidatorCondition(Number actual) {
         super(actual);
     }
 

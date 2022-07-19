@@ -2,10 +2,10 @@ package org.erlik.pay_my_buddy.core.validator.validator_condition;
 
 import java.util.Collection;
 
-public class CollectionAbstractValidatorCondition
+public class CollectionValidatorCondition
     extends AbstractValidatorCondition<Collection<?>> {
 
-    public CollectionAbstractValidatorCondition(Collection<?> actual) {
+    public CollectionValidatorCondition(Collection<?> actual) {
         super(actual);
     }
 

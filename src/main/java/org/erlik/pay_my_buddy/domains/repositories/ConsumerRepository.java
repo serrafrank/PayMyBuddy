@@ -1,5 +1,6 @@
 package org.erlik.pay_my_buddy.domains.repositories;
 
+import java.util.List;
 import java.util.Optional;
 import org.erlik.pay_my_buddy.domains.models.Consumer;
 import org.erlik.pay_my_buddy.domains.models.EmailAddress;
@@ -19,4 +20,6 @@ public interface ConsumerRepository {
     Optional<Friend> getFriendByEmail(EmailAddress friendEmailAddress);
 
     void updateConsumer(Consumer consumer);
+
+    List<Friend> getAllFriendsByConsumerId(Id consumerId);
 }

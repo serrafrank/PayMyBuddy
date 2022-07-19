@@ -1,8 +1,10 @@
 package org.erlik.pay_my_buddy.mock;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.erlik.pay_my_buddy.domains.models.Consumer;
 import org.erlik.pay_my_buddy.domains.models.EmailAddress;
 import org.erlik.pay_my_buddy.domains.models.Friend;
@@ -52,12 +54,21 @@ public class ConsumerRepositoryMock
         consumers.add(consumer);
     }
 
+    @Override
+    public List<Friend> getAllFriendsByConsumerId(Id consumerId) {
+        return getConsumerById(consumerId)
+            .map(value -> value.friends()
+                               .stream()
+                               .sorted(Comparator.comparing(Friend::lastname))
+                               .collect(Collectors.toList())).orElseGet(List::of);
+    }
+
     public List<Consumer> getConsumers() {
         return consumers;
     }
 
     public void addFriendToConsumerFriendList(Id id, Friend friend) {
         consumers.stream().filter(c -> c.id().equals(id))
-            .forEach(c -> consumers.set(consumers.indexOf(c), c.addFriend(friend)));
+                 .forEach(c -> consumers.set(consumers.indexOf(c), c.addFriend(friend)));
     }
 }
