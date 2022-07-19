@@ -35,8 +35,8 @@ public class ConsumerRepositoryMock
     @Override
     public Optional<Consumer> getConsumerByEmail(EmailAddress emailAddress) {
         return consumers.stream()
-            .filter(consumer -> consumer.emailAddress().equals(emailAddress))
-            .findFirst();
+                        .filter(consumer -> consumer.emailAddress().equals(emailAddress))
+                        .findFirst();
     }
 
     @Override
