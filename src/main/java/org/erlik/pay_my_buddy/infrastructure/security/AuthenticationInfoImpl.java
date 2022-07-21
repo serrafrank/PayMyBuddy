@@ -1,4 +1,4 @@
-package org.erlik.pay_my_buddy.infrastructure;
+package org.erlik.pay_my_buddy.infrastructure.security;
 
 import java.util.Optional;
 import org.erlik.pay_my_buddy.application.AuthenticationInfo;

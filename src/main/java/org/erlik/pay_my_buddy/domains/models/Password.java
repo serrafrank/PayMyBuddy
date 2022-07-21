@@ -3,7 +3,7 @@ package org.erlik.pay_my_buddy.domains.models;
 import java.util.List;
 import java.util.function.Predicate;
 import org.apache.commons.lang3.StringUtils;
-import org.erlik.pay_my_buddy.core.PasswordEncoder;
+import org.erlik.pay_my_buddy.core.HashedPasswordEncoder;
 import org.erlik.pay_my_buddy.core.validator.Validator;
 import org.erlik.pay_my_buddy.domains.exceptions.PasswordFormatNotValidException;
 
@@ -130,7 +130,7 @@ public record Password(HashedPassword hashedPassword)
             .isNotEmpty()
             .thenThrow(() -> new PasswordFormatNotValidException(plainTextPassword, errors));
 
-        return new HashedPassword(PasswordEncoder.encode(plainTextPassword));
+        return new HashedPassword(HashedPasswordEncoder.encode(plainTextPassword));
     }
 
     /**
@@ -186,7 +186,7 @@ public record Password(HashedPassword hashedPassword)
     }
 
     public boolean matchWith(String plainTextPassword) {
-        return PasswordEncoder.matches(plainTextPassword, hashedPassword.value());
+        return HashedPasswordEncoder.matches(plainTextPassword, hashedPassword.value());
     }
 
     private record Rule(Predicate<String> predicate,

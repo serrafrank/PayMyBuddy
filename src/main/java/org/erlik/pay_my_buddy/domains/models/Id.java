@@ -5,10 +5,6 @@ import java.util.UUID;
 public record Id(UUID id)
     implements ValueObject {
 
-    public Id(String id) {
-        this(UUID.fromString(id));
-    }
-
     public Id() {
         this(UUID.randomUUID());
     }

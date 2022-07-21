@@ -8,7 +8,7 @@ import org.erlik.pay_my_buddy.domains.exceptions.ConsumerNotActivateException;
 import org.erlik.pay_my_buddy.domains.models.accounts.AccountType;
 import org.erlik.pay_my_buddy.domains.models.transactions.ConsumerType;
 
-public abstract class Transaction
+public class Transaction
     implements ValueObject {
 
     protected final Id id;
@@ -20,13 +20,14 @@ public abstract class Transaction
     private final AccountType debtorAccountType;
     private final AccountType creditorAccountType;
 
-    protected Transaction(Id id,
-                          Consumer debtor,
-                          AccountType debtorAccountType,
-                          Consumer creditor,
-                          AccountType creditorAccountType,
-                          Amount amount,
-                          LocalDateTime creationDate) {
+    public Transaction(Id id,
+                       Consumer debtor,
+                       AccountType debtorAccountType,
+                       Consumer creditor,
+                       AccountType creditorAccountType,
+                       Amount amount,
+                       LocalDateTime creationDate) {
+
         consumerIsEligible(creditor, debtorAccountType, ConsumerType.CREDIOR);
         consumerIsEligible(debtor, creditorAccountType, ConsumerType.DEBTOR);
         amountIsEligible(amount);
@@ -77,5 +78,13 @@ public abstract class Transaction
 
     public LocalDateTime creationDate() {
         return creationDate;
+    }
+
+    public AccountType debtorAccountType() {
+        return debtorAccountType;
+    }
+
+    public AccountType creditorAccountType() {
+        return creditorAccountType;
     }
 }

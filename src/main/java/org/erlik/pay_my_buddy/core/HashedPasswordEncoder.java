@@ -1,10 +1,11 @@
 package org.erlik.pay_my_buddy.core;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
-public class PasswordEncoder {
+public class HashedPasswordEncoder {
 
-    private PasswordEncoder() {
+    private HashedPasswordEncoder() {
     }
 
     public static String encode(String plainTextPassword) {
@@ -15,7 +16,7 @@ public class PasswordEncoder {
         return encoder().matches(plainTextPassword, hashedPassword);
     }
 
-    private static BCryptPasswordEncoder encoder() {
+    public static PasswordEncoder encoder() {
         return new BCryptPasswordEncoder();
     }
 }

@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Optional;
 import org.erlik.pay_my_buddy.domains.models.Id;
 import org.erlik.pay_my_buddy.domains.models.Transaction;
-import org.erlik.pay_my_buddy.domains.models.transactions.TransferRequest;
 import org.erlik.pay_my_buddy.domains.repositories.TransactionRepository;
 
 public class TransactionRepositoryMock
@@ -14,7 +13,7 @@ public class TransactionRepositoryMock
     private final List<Transaction> transactions = new ArrayList<>();
 
     @Override
-    public void createNewTransaction(TransferRequest transferRequest) {
+    public void createNewTransaction(Transaction transferRequest) {
         transactions.add(transferRequest);
     }
 
