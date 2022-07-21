@@ -5,9 +5,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.erlik.pay_my_buddy.domains.consumer.commands.ConsumerCommandService;
 import org.erlik.pay_my_buddy.domains.consumer.commands.ConsumerCommandServiceImpl;
+import org.erlik.pay_my_buddy.domains.consumer.queries.ConsumerQueryService;
+import org.erlik.pay_my_buddy.domains.consumer.queries.ConsumerQueryServiceImpl;
 import org.erlik.pay_my_buddy.domains.models.Id;
 import org.erlik.pay_my_buddy.fake.ConsumerFake;
-import org.erlik.pay_my_buddy.fake.IdFake;
+import org.erlik.pay_my_buddy.fake.EmailAddressFake;
 import org.erlik.pay_my_buddy.fake.TestFaker;
 import org.erlik.pay_my_buddy.mock.AuthenticationInfoMock;
 import org.erlik.pay_my_buddy.mock.ConsumerRepositoryMock;
@@ -19,20 +21,25 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 import org.springframework.security.authentication.BadCredentialsException;
 
-class ConsumerCommandUseCaseAcceptanceTest {
+class ConsumerUseCaseAcceptanceTest {
 
     private AuthenticationInfoMock authenticationInfo;
     private ConsumerRepositoryMock consumerRepository;
-    private ConsumerCommandUseCase consumerCommandUseCase;
+
+    private ConsumerUseCase consumerUseCase;
 
     @BeforeEach
     void init() {
         authenticationInfo = new AuthenticationInfoMock();
         consumerRepository = new ConsumerRepositoryMock();
+
         ConsumerCommandService consumerCommandService = new ConsumerCommandServiceImpl(
             consumerRepository);
-        consumerCommandUseCase = new ConsumerCommandUseCaseImpl(authenticationInfo,
-            consumerCommandService);
+        ConsumerQueryService consumerQueryService = new ConsumerQueryServiceImpl(consumerRepository);
+
+        consumerUseCase = new ConsumerUseCaseImpl(authenticationInfo,
+            consumerCommandService,
+            consumerQueryService);
     }
 
     @Test
@@ -51,7 +58,7 @@ class ConsumerCommandUseCaseAcceptanceTest {
             password);
 
         //WHEN
-        final var createdConsumerId = consumerCommandUseCase.createNewConsumer(
+        final var createdConsumerId = consumerUseCase.createNewConsumer(
             createNewConsumerInput);
 
         //THEN
@@ -87,7 +94,7 @@ class ConsumerCommandUseCaseAcceptanceTest {
         authenticationInfo.isAuthenticated(consumer.id());
 
         //WHEN
-        final Executable executable = () -> consumerCommandUseCase.createNewConsumer(
+        final Executable executable = () -> consumerUseCase.createNewConsumer(
             createNewConsumerInput);
 
         //THEN
@@ -106,10 +113,10 @@ class ConsumerCommandUseCaseAcceptanceTest {
 
         authenticationInfo.isAuthenticated(consumer.id());
 
-        var addFriendInput = new AddFriendInput(friend.id());
+        var addFriendInput = new AddFriendInput(friend.emailAddress().email());
 
         //WHEN
-        consumerCommandUseCase.addFriend(addFriendInput);
+        consumerUseCase.addFriend(addFriendInput);
 
         var optionalUpdatedConsumer = consumerRepository.getConsumerById(consumer.id());
         assertThat(optionalUpdatedConsumer).isPresent();
@@ -127,10 +134,10 @@ class ConsumerCommandUseCaseAcceptanceTest {
     @DisplayName("Given i am not logged when I add a friend then this throw an Exception")
     void addFriendWhenNotLoggedThrowExceptionTest() {
         //GIVEN
-        var addFriendInput = new AddFriendInput(IdFake.generateId());
+        var addFriendInput = new AddFriendInput(EmailAddressFake.generateEmail().email());
 
         //WHEN
-        final Executable executable = () -> consumerCommandUseCase.addFriend(addFriendInput);
+        final Executable executable = () -> consumerUseCase.addFriend(addFriendInput);
 
         //THEN
         assertThrows(BadCredentialsException.class, executable);

@@ -4,7 +4,7 @@ import org.erlik.pay_my_buddy.domains.Command;
 import org.erlik.pay_my_buddy.domains.models.Id;
 
 public record AddFriendCommand(Id consumerId,
-                               Id friendId)
+                               String friendEmail)
     implements Command {
 
 }

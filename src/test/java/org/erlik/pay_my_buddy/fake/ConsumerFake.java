@@ -3,6 +3,7 @@ package org.erlik.pay_my_buddy.fake;
 import java.util.List;
 import lombok.Builder;
 import org.erlik.pay_my_buddy.domains.models.Account;
+import org.erlik.pay_my_buddy.domains.models.Amount;
 import org.erlik.pay_my_buddy.domains.models.Consumer;
 import org.erlik.pay_my_buddy.domains.models.EmailAddress;
 import org.erlik.pay_my_buddy.domains.models.Friend;
@@ -18,6 +19,7 @@ public class ConsumerFake {
     private String lastname;
     private String emailAddress;
     private String password;
+    private Number initialEMAmount;
     private List<Account> accounts;
     private List<Friend> friends;
     private boolean isActive;
@@ -38,6 +40,7 @@ public class ConsumerFake {
             lastname = TestFaker.fake().name().lastName();
             emailAddress = TestFaker.fake().internet().emailAddress();
             password = TestFaker.generateValidPlainTextPassword();
+            initialEMAmount = 150;
             accounts = defaultAccounts();
             friends = defaultFriends();
             isActive = true;
@@ -59,7 +62,8 @@ public class ConsumerFake {
         }
 
         private List<Account> defaultAccounts() {
-            return List.of(new ElectronicMoneyAccount());
+            final var amount = new Amount(initialEMAmount);
+            return List.of(new ElectronicMoneyAccount(amount));
         }
     }
 }

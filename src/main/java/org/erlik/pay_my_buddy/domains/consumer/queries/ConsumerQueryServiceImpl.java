@@ -1,11 +1,9 @@
 package org.erlik.pay_my_buddy.domains.consumer.queries;
 
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.erlik.pay_my_buddy.domains.exceptions.ConsumerNotFoundException;
 import org.erlik.pay_my_buddy.domains.models.Consumer;
 import org.erlik.pay_my_buddy.domains.models.EmailAddress;
-import org.erlik.pay_my_buddy.domains.models.Friend;
 import org.erlik.pay_my_buddy.domains.repositories.ConsumerRepository;
 import org.springframework.stereotype.Service;
 
@@ -29,10 +27,5 @@ public class ConsumerQueryServiceImpl
         return consumerRepository.getConsumerByEmail(consumerEmailAddress)
             .orElseThrow(() -> new ConsumerNotFoundException(
                 consumerEmailAddress));
-    }
-
-    @Override
-    public List<Friend> getAllFriendsByConsumerId(GetAllFriendsByConsumerIdQuery getAllFriendsByConsumerId) {
-        return consumerRepository.getAllFriendsByConsumerId(getAllFriendsByConsumerId.consumerId());
     }
 }

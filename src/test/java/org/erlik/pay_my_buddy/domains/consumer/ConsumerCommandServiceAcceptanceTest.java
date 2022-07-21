@@ -95,7 +95,7 @@ class ConsumerCommandServiceAcceptanceTest {
         var friend = ConsumerFake.generateActiveConsumer();
         consumerRepository.createNewConsumer(friend);
 
-        var addFriendCommand = new AddFriendCommand(consumer.id(), friend.id());
+        var addFriendCommand = new AddFriendCommand(consumer.id(), friend.emailAddress().email());
 
         //WHEN
         consumerCommandService.addFriend(addFriendCommand);
@@ -125,7 +125,7 @@ class ConsumerCommandServiceAcceptanceTest {
 
         consumerRepository.addFriendToConsumerFriendList(consumer.id(), new Friend(friend));
 
-        var addFriendCommand = new AddFriendCommand(consumer.id(), friend.id());
+        var addFriendCommand = new AddFriendCommand(consumer.id(), friend.emailAddress().email());
 
         //WHEN
         final Executable executable = () -> consumerCommandService.addFriend(addFriendCommand);

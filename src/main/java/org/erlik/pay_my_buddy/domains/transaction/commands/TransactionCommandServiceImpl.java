@@ -1,4 +1,4 @@
-package org.erlik.pay_my_buddy.domains.transaction;
+package org.erlik.pay_my_buddy.domains.transaction.commands;
 
 import lombok.RequiredArgsConstructor;
 import org.erlik.pay_my_buddy.domains.exceptions.ConsumerNotFoundException;
@@ -6,7 +6,6 @@ import org.erlik.pay_my_buddy.domains.models.Id;
 import org.erlik.pay_my_buddy.domains.models.transactions.TransferRequest;
 import org.erlik.pay_my_buddy.domains.repositories.ConsumerRepository;
 import org.erlik.pay_my_buddy.domains.repositories.TransactionRepository;
-import org.erlik.pay_my_buddy.domains.transaction.commands.CreateNewTransactionCommand;
 import org.springframework.stereotype.Service;
 
 @Service

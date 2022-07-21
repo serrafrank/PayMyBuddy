@@ -1,9 +1,10 @@
 package org.erlik.pay_my_buddy.domains.exceptions;
 
 import java.util.List;
+import org.erlik.pay_my_buddy.core.exceptions.BadRequestException;
 
 public class PasswordFormatNotValidException
-    extends RuntimeException {
+    extends BadRequestException {
 
     public PasswordFormatNotValidException(String plainTextPassword,
                                            List<String> validationErrors) {

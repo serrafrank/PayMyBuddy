@@ -16,6 +16,8 @@ import org.erlik.pay_my_buddy.domains.models.transactions.TransferRequest;
 import org.erlik.pay_my_buddy.domains.repositories.ConsumerRepository;
 import org.erlik.pay_my_buddy.domains.repositories.TransactionRepository;
 import org.erlik.pay_my_buddy.domains.transaction.commands.CreateNewTransactionCommand;
+import org.erlik.pay_my_buddy.domains.transaction.commands.TransactionCommandService;
+import org.erlik.pay_my_buddy.domains.transaction.commands.TransactionCommandServiceImpl;
 import org.erlik.pay_my_buddy.fake.ConsumerFake;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

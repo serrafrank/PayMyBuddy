@@ -4,7 +4,7 @@ import org.erlik.pay_my_buddy.domains.models.Id;
 import org.erlik.pay_my_buddy.presentation.consumer.AddFriendInput;
 import org.erlik.pay_my_buddy.presentation.consumer.CreateNewConsumerInput;
 
-public interface ConsumerCommandUseCase {
+public interface ConsumerUseCase {
 
     Id createNewConsumer(CreateNewConsumerInput createNewConsumerInput);
 
